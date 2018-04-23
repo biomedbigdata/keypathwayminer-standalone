@@ -1,4 +1,10 @@
+.classpath
+.idea
+.project
+logs/
 target/
+results/
+data/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
