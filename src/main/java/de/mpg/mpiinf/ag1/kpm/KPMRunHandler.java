@@ -11,10 +11,12 @@ import dk.sdu.kpm.runners.BatchRunWithPerturbationParameters;
 import dk.sdu.kpm.runners.BatchRunWithPerturbationRunner;
 import dk.sdu.kpm.runners.BatchRunner;
 import java.io.*;
+import java.nio.file.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /**
  * Class that handles the actual KPM runs, and ensures we get the results.
@@ -220,11 +222,17 @@ public class KPMRunHandler implements IKPMRunListener{
 	public void runFinished(IKPMResultSet results) {
 			int counter = 1;
 
-		File resultsFolder = new File(params.RESULTS_FOLDER);
-		if(resultsFolder.isDirectory()){
+        File resultsFolder;
+		try{
+		     Files.createDirectories(Paths.get(params.RESULTS_FOLDER));
+        } catch (IOException e){
+		    e.printStackTrace();
+        }
+
+		if(Files.exists(Paths.get(params.RESULTS_FOLDER))){
 
 
-			File resultsChartsFolder = new File(params.RESULTS_FOLDER + "\\charts\\");
+			File resultsChartsFolder = new File(params.RESULTS_FOLDER + File.separator+ "charts"+File.separator);
 
 			if(!resultsChartsFolder.exists()){
 				resultsChartsFolder.mkdir();
@@ -232,14 +240,14 @@ public class KPMRunHandler implements IKPMRunListener{
 
 			String formattedChartTime = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(Calendar.getInstance().getTime());
 
-			File resultsChartsCurrentFolder = new File(params.RESULTS_FOLDER + "\\charts\\" + formattedChartTime + "\\");
+			File resultsChartsCurrentFolder = new File(params.RESULTS_FOLDER + File.separator+"charts"+File.separator + formattedChartTime + File.separator);
 
 			if(!resultsChartsCurrentFolder.exists()){
 				resultsChartsCurrentFolder.mkdir();
 			}
 
 			for(IChart chart : results.getCharts().values()){
-				String chartFileName = resultsChartsCurrentFolder.getAbsolutePath() + "\\" + String.format("chart%d.png", counter);
+				String chartFileName = resultsChartsCurrentFolder.getAbsolutePath() + File.separator + String.format("chart%d.png", counter);
 				System.out.println(chartFileName);
 				File chartsFile = new File(chartFileName);
 				try {

@@ -30,6 +30,7 @@ public class Parameters {
         
         // If graph file has header
         public boolean GRAPH_FILE_HAS_HEADER = false;
+        //public boolean GRAPH_FILE_HAS_HEADER = true;
         
         // Separating character for columns in graph file
         public Separator GRAPH_FILE_SEPARATOR = Separator.TAB;
@@ -37,9 +38,10 @@ public class Parameters {
         // Where the datasets file is located
         public String DATASETS_FILE = "datasets_file.txt";
         
-        // If graph file has header
+        // If datasets file has header
         public boolean DATASETS_FILE_HAS_HEADER = false;
-        
+    //public boolean DATASETS_FILE_HAS_HEADER = true;
+
         // Separating character for columns in graph file
         public Separator DATASETS_FILE_SEPARATOR = Separator.TAB;
         

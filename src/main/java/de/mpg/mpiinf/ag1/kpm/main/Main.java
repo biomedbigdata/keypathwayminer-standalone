@@ -4,7 +4,9 @@
  */
 package de.mpg.mpiinf.ag1.kpm.main;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import de.mpg.mpiinf.ag1.kpm.KPMRunHandler;
 import de.mpg.mpiinf.ag1.kpm.Parameters;
@@ -33,24 +35,30 @@ public class Main {
         Runtime runtime = Runtime.getRuntime();
         System.out.println("Used Memory:" + (runtime.freeMemory()) / mb);
 
+        // Call kmpDefaultSettings
 		kpmSettings = new KPMSettings();
-		
-		
+
+
 		// parse parameters from the kpm.properties file
-		//PropertiesFileParser pfp = new PropertiesFileParser(kpmSettings);
-		//Parameters params = pfp.parse("src/main/resources/kpm.properties");
+		PropertiesFileParser pfp = new PropertiesFileParser(kpmSettings);
+		Parameters params = pfp.parse("src/main/resources/kpm.properties");
 
 		// Setting folder prefix for testing:
 		String prefix = "src/main/resources/";
-		Parameters params = new Parameters();
+		//Parameters params = new Parameters();
 		params.DATASETS_FILE = prefix + params.DATASETS_FILE;
 		params.POSITIVE_FILE = prefix + params.POSITIVE_FILE;
 		params.NEGATIVE_FILE = prefix + params.NEGATIVE_FILE;
 		params.RESULTS_FOLDER = prefix + params.RESULTS_FOLDER;
 		params.VALIDATION_FILE = prefix + params.VALIDATION_FILE;
-		
+		kpmSettings.IS_BATCH_RUN = true;
+		params.GRAPH_FILE = prefix + "sampleNetwork.sif";
+		params.DATASETS_FILE_HAS_HEADER = true;
+		//params.MIN_PERCENTAGE = 5;
+		//kpmSettings.MIN_L = new HashMap<String, Integer>()
+		kpmSettings.INCLUDE_CHARTS=true;
 
-		params.GRAPH_FILE = "data/" + params.GRAPH_FILE;
+		//params.GRAPH_FILE = params.GRAPH_FILE;
 
 		try {
 			start(args, prefix + "kpm.properties", params);
@@ -64,7 +72,9 @@ public class Main {
 
 		// parse parameters from the command line
 	//	try {
-		ArgsParametersParser argspp = new ArgsParametersParser(kpmSettings);
+		ArgsParametersParser argspp  = new ArgsParametersParser(kpmSettings);
+		//As far as I understood, this method creates the param object but also modifies
+        // kmpSettings to set up the correct values for the run.
 			params = argspp.parse(args, params);
 	//	} catch (Exception e1) {
 	//		System.out.println("An error occurred. Exiting.");

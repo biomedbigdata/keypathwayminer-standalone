@@ -21,8 +21,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.0.2</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>7</source>
+                    <target>7</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -51,6 +51,18 @@
                         </manifest>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
@@ -158,8 +170,8 @@
         <dependency>
     		<groupId>dk.sdu.kpm</groupId>
     		<artifactId>kpm-core</artifactId>
-            <version>${kpm.library.version}</version>
-    		<type>maven-plugin</type>
+            <version>5.0.0.002</version>
+    		<type>jar</type>
     	</dependency>
         <!-- https://mvnrepository.com/artifact/org.jfree/jfreechart -->
         <dependency>

@@ -256,7 +256,7 @@ public class ArgsParametersParser {
 			} else if (options[0].equals("-batch")) {
 				System.out.println("Should be batch run");
 				kpmSettings.IS_BATCH_RUN = true;
-            } else if (options[0].equals("-remove_bens")) {
+            } else if (options[0].equals("-Umove_bens")) {
                 kpmSettings.REMOVE_BENs = true;
 			} else if (options[0].equals("-validation_file")) {
 				params.VALIDATION_FILE = options[1];
@@ -299,7 +299,7 @@ public class ArgsParametersParser {
 				kpmSettings.MIN_L.put(internalID, Integer.parseInt(values[0]));
 				kpmSettings.INC_L.put(internalID, Integer.parseInt(values[1]));
 				kpmSettings.MAX_L.put(internalID, Integer.parseInt(values[2]));
-                kpmSettings.VARYING_L_ID = internalID;
+                kpmSettings.VARYING_L_ID.add(internalID);
 				
 			}else if(options[0].equals("-perturbation_technique")){
                 if (options[1].equals("edgeremove")) {
