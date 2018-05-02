@@ -46,7 +46,7 @@ public class Main {
 		// Setting folder prefix for testing:
 		String prefix = "src/main/resources/";
 		//Parameters params = new Parameters();
-		params.DATASETS_FILE = prefix + params.DATASETS_FILE;
+		/*params.DATASETS_FILE = prefix + params.DATASETS_FILE;
 		params.POSITIVE_FILE = prefix + params.POSITIVE_FILE;
 		params.NEGATIVE_FILE = prefix + params.NEGATIVE_FILE;
 		params.RESULTS_FOLDER = prefix + params.RESULTS_FOLDER;
@@ -58,7 +58,7 @@ public class Main {
 		//kpmSettings.MIN_L = new HashMap<String, Integer>()
 		kpmSettings.INCLUDE_CHARTS=true;
 
-		//params.GRAPH_FILE = params.GRAPH_FILE;
+		//params.GRAPH_FILE = params.GRAPH_FILE; */
 
 		try {
 			start(args, prefix + "kpm.properties", params);
