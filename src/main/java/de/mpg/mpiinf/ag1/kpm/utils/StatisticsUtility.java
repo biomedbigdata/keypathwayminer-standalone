@@ -22,6 +22,8 @@ import dk.sdu.kpm.graph.GeneEdge;
 import dk.sdu.kpm.graph.GeneNode;
 import dk.sdu.kpm.graph.KPMGraph;
 import dk.sdu.kpm.graph.Result;
+import dk.sdu.kpm.results.IKPMResultItem;
+import dk.sdu.kpm.results.IKPMResultSet;
 
 public class StatisticsUtility {
 
@@ -521,7 +523,7 @@ public class StatisticsUtility {
         }
     }
 
-    public static void writeSummaryFile(String file, List<Result> results, KPMSettings kpmSettings) {
+    public static void writeSummaryFile(String file, IKPMResultSet results, KPMSettings kpmSettings) {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
@@ -551,8 +553,9 @@ public class StatisticsUtility {
                 bw.write("STRATEGY: " + "\t" + "GLONE" + "\n");
                 bw.write("ALGORITHM: " + "\t" + "OPTIMAL" + "\n");
             }
-            Result best = results.get(0);
-            bw.write("SIZE OF BEST RESULT: " + "\t" + best.getVisitedNodes().size() + "\n");
+            //TODO: check whether this is actually the best result aka. if resultList is ordered
+            IKPMResultItem best = results.getResults().get(0);
+            bw.write("SIZE OF BEST RESULT: " + "\t" + best.getResultsInfoTable()[0][2] + "\n");
             bw.write("TOTAL RUNNING TIME: " + "\t" + kpmSettings.TOTAL_RUNNING_TIME + "\n");
             bw.close();
         } catch (IOException ex) {

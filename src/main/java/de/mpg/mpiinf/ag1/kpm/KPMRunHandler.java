@@ -36,7 +36,7 @@ public class KPMRunHandler implements IKPMRunListener{
 
 	/**
 	 * Starts the runs, ensures the settings are correctly set up. Assumes all other parameters has already been set.
-	 * @param params
+	 * @param paramsr
 	 */
 	public void runBatch(Parameters params){
 		this.params = params;
@@ -231,12 +231,13 @@ public class KPMRunHandler implements IKPMRunListener{
 
 		if(Files.exists(Paths.get(params.RESULTS_FOLDER))){
 
-
-			File resultsChartsFolder = new File(params.RESULTS_FOLDER + File.separator+ "charts"+File.separator);
-
-			if(!resultsChartsFolder.exists()){
-				resultsChartsFolder.mkdir();
-			}
+		    Path resultsChartsFolder = Paths.get(params.RESULTS_FOLDER + File.separator+ "charts");
+				try {
+					Files.createDirectories(resultsChartsFolder);
+				}
+				catch (IOException ioe){
+                    ioe.printStackTrace();
+				}
 
 			String formattedChartTime = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(Calendar.getInstance().getTime());
 
@@ -259,10 +260,22 @@ public class KPMRunHandler implements IKPMRunListener{
 			}
 
 			if(counter > 0){
-				System.out.println(" - Saved charts to '"+resultsChartsFolder.getAbsolutePath()+"'");
+				System.out.println(" - Saved charts to '"+resultsChartsFolder.toString()+"'");
 			}
 		}else{
 			System.out.println(" - No path found, could not save charts.");
 		}
+
+		// saving result tables to files
+
+        Path resultTableFolder = Paths.get(params.RESULTS_FOLDER+File.separator+"tables");
+		try{
+		    Files.createDirectories(resultTableFolder);
+        }catch (IOException ioe){
+		    ioe.printStackTrace();
+        }
+
+        String resultSummary = resultTableFolder.toString()+File.separator+"resultSummary.txt";
+		StatisticsUtility.writeSummaryFile(resultSummary, results, kpmSettings);
 	}
 }

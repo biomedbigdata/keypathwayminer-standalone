@@ -120,9 +120,12 @@ public class Diagnostics {
             noChoice.append(noChoiceParams.get(s));
             noChoice.append(" ");
         }
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));) {
+        System.out.print(noChoice.toString());
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile))) {
             for(String s: re){
-                bw.write(noChoice.insert(0, s).toString());
+                //System.out.println(noChoice.toString()+s);
+                //System.out.println(noChoice.insert(0, s).toString());
+                bw.write(noChoice.toString()+s);
             }
         }
         catch (IOException ioe){
@@ -136,6 +139,7 @@ public class Diagnostics {
             for(String pa: p.get(params[0])) {
                 re.add(result +params[0]+"="+pa+"\n");
             }
+            //System.out.print(re);
             return(re);
         }
         if(params.length > 1) {
@@ -144,6 +148,7 @@ public class Diagnostics {
             }
             return(re);
         }
+
         return(re);
     }
 }
