@@ -277,5 +277,6 @@ public class KPMRunHandler implements IKPMRunListener{
 
         String resultSummary = resultTableFolder.toString()+File.separator+"resultSummary.txt";
 		StatisticsUtility.writeSummaryFile(resultSummary, results, kpmSettings);
+		StatisticsUtility.w
 	}
 }

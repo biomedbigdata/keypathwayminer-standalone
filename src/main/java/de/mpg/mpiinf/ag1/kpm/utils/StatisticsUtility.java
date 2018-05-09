@@ -581,7 +581,7 @@ public class StatisticsUtility {
         return ret;
     }
     
-    public static void writeResultsStats(List<Result> results, KPMGraph g, Parameters params) {
+    public static void writeResultsStats(IKPMResultSet results, KPMGraph g, Parameters params) {
         Map<String, Integer> nodeHits = new HashMap<String, Integer>();
         Map<String, Integer> edgeHits = new HashMap<String, Integer>();
         String nodeFileName = params.RESULTS_FOLDER + params.FILE_SEPARATOR 
@@ -604,7 +604,7 @@ public class StatisticsUtility {
             edgeHits.put(edgeId, 0);
         }
 
-        for (Result result : results) {
+        for (IKPMResultItem result : results.getResults()) {
             for (String nodeId : result.getVisitedNodes().keySet()) {
                 nodeHits.put(nodeId, nodeHits.get(nodeId) + 1);
             }

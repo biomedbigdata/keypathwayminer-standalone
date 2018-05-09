@@ -1,0 +1,75 @@
+-graphFile /home/anne/Documents/Master/MA/code/keypathwayminer-standalone/src/main/resources/sampleNetwork.sif
+-isDirected
+-matrix /home/anne/Documents/Master/MA/code/keypathwayminer-standalone/src/main/resources/indicator_matrix_hd.txt
+-gfHeader
+-gfSep
+-datasetsFile /home/anne/Documents/Master/MA/code/keypathwayminer-standalone/src/main/resources/datasets_file.txt
+-dfHeader
+-dfSep
+-positiveFile
+-negativeFile
+-mfHeader
+-mfSep
+-fileExt
+-summaryFile
+-pathwaysStatsFile
+-geneStatsFile
+-resultsDir /home/anne/Documents/Master/MA/Testing/out
+-spStatsFile
+-spFile
+-spNodeStatsFile
+-soEdgeStatsFile
+-pSingeFile
+-gSummary
+-gPathways
+-gPathwayStats
+-gGeneStats
+-gDataStats
+-gSPStats
+-gSPFies
+-gSPNodes
+-gSPEdges
+runID
+-pGraphStats
+-pDataStats
+-suffix
+-program
+-spPathways
+-spMinLength
+-K 5
+-L 2
+-algo GREEDY,OPTIMAL,ACO
+-strategy INES,GLONE
+-numProc
+-nodeHeuristic
+-combineOp
+-combineFormula
+-eval
+-maxsolutions 5
+-alpha
+-beta
+-rho
+-iterations
+-seed
+-tradeoff
+-solutions
+-startnodes
+-rhodecay
+-iterationbased
+-localsearch
+-maxrunswithoutchange
+-tau_min
+-batch
+-Umove_bens
+-validation_file /home/anne/Documents/Master/MA/code/keypathwayminer-standalone/src/main/resources/COAD-VAL-ENTREZ.txt
+-perturbation
+-K_batch
+-L1_batch
+-L2_batch
+-perturbation_technique edgerewire,nodeswap,noderemove
+-help
+
+
+
+
+
