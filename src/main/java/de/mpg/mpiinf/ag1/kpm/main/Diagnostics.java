@@ -20,11 +20,12 @@ public class Diagnostics {
 
     public static void main(String[] args) {
         String possibleParamFile =  args[0];
+        System.out.println(possibleParamFile);
         String outputFile = args[1];
         String logfile = args[2];
         Diagnostics d = new Diagnostics();
         //outputfile for the Parameterscript is same as input file for commandLineEmulator
-        generateDiagnosticsParameterScript(possibleParamFile, outputFile);
+        //generateDiagnosticsParameterScript(possibleParamFile, outputFile);
         ArrayList<String[]> commandLineEmulator = d.fileReader(outputFile);
         for (String[] commandLine : commandLineEmulator) {
             try {
@@ -82,9 +83,7 @@ public class Diagnostics {
         HashMap<String,String[]> possibleParams = new HashMap<String, String[]>();
         ArrayList<String> flags = new ArrayList<String>();
         HashMap<String, String> noChoiceParams = new HashMap<String, String>();
-        try{
-
-            BufferedReader br = new BufferedReader(new FileReader(possibleParameterfile));
+        try(BufferedReader br = new BufferedReader(new FileReader(possibleParameterfile))){
             String line = br.readLine();
             while(line != null){
                 String[] paramsAndPossibleValues = line.split(" ");

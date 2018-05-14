@@ -145,6 +145,7 @@ public class ArgsParametersParser {
 				params.MINIMUM_LENGTH_SHORTEST_PATHS = Integer.valueOf(options[1]);
 			} else if (options[0].equals("-K")) {                
 				kpmSettings.GENE_EXCEPTIONS = Integer.parseInt(options[1]);
+				kpmSettings.MIN_K=kpmSettings.MAX_K=Integer.parseInt(options[1]);
 			} else if (options[0].startsWith("-L") && !options[0].contains("batch")) {
 				String id = "L" + options[0].substring(2);
 				int l = Integer.parseInt(options[1]);
@@ -286,7 +287,7 @@ public class ArgsParametersParser {
 				kpmSettings.MAX_K = Integer.parseInt(values[2]);
 			}
 			// Added possibility for batch L1 or L2
-			else if (options[0].matches("\\-L[1-2][_]+batch")) 
+			else if (options[0].matches("-L[1-2][_]+batch"))
 			{
 				String id = options[0].substring(1, options[0].indexOf('_'));
 				String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
@@ -321,9 +322,7 @@ public class ArgsParametersParser {
 				}
 				
 				System.out.println("Perturbation technique: " + params.PERTURBATION.getName());
-			}
-
-			else if (options[0].equals("-help")) {
+			} else if (options[0].equals("-help")) {
 				printHelp();
 				System.exit(0);
 			} else {

@@ -9,7 +9,7 @@ public class OutputSettings {
 
     public static String PATHWAYS_STATS_FILE = "pathways_stats.txt";
 
-    public static String GENE_STATS_FILE = "gene_stats.txt";
+    public static String GENE_STATS_FILE = "gene_stats";
 
     public static String DATASETS_STATS_FILE = "datasets_stats.txt";
 

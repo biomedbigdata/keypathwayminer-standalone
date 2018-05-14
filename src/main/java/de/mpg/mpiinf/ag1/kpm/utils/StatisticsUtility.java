@@ -24,6 +24,7 @@ import dk.sdu.kpm.graph.KPMGraph;
 import dk.sdu.kpm.graph.Result;
 import dk.sdu.kpm.results.IKPMResultItem;
 import dk.sdu.kpm.results.IKPMResultSet;
+import edu.uci.ics.jung.graph.SparseGraph;
 
 public class StatisticsUtility {
 
@@ -333,183 +334,168 @@ public class StatisticsUtility {
         }
     }
 
-    public static void writePathwaysFile(String file, List<Result> results, KPMGraph g, KPMSettings kpmSettings) {
-        BufferedWriter bw = null;
-        try {
-            int size = results.size();
+    public static void writePathwaysFile(String file, IKPMResultSet results, KPMGraph g, KPMSettings kpmSettings) {
+            int size = results.getResults().size();
             int zeros = (int) Math.floor(Math.log10(size)) + 1;
             String f = "";
             for (int i = 1; i <= zeros; i++) {
                 f += "0";
             }
             DecimalFormat df = new DecimalFormat(f);
-            bw = new BufferedWriter(new FileWriter(file));
 
             boolean isInes = kpmSettings.ALGO == Algo.GREEDY || kpmSettings.ALGO == Algo.LCG
                     || kpmSettings.ALGO == Algo.OPTIMAL;
 
-            for (int i = 0; i < results.size(); i++) {
-                Result result = results.get(i);
-                Map<String, GeneNode> nodes = result.getVisitedNodes();
-                String id = df.format(i + 1);
-                bw.write(id + "\n");
-                bw.write("NODES" + "\t" + "IS EXCEPTION?" + "\n");
-                if (isInes) {
-                    for (GeneNode node : nodes.values()) {
-                        bw.write(node.getNodeId() + "\t" + !node.isValid() + "\n");
-                    }
-                } else {
-                    for (GeneNode node : nodes.values()) {
-                        bw.write(node.getNodeId() + "\n");
-                    }
-                }
-                List<String[]> edges = g.getEdgesConnecting(nodes.values());
-                bw.write("EDGES" + "\n");
-                for (String[] edge : edges) {
-                    bw.write(edge[0] + "\t" + "pp" + "\t" + edge[1] + "\n");
-                }
 
-            }
-            bw.close();
-        } catch (IOException ex) {
-            Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                bw.close();
+            for (IKPMResultItem result: results.getResults()) {
+                int id = 1;
+                try (BufferedWriter bw = new BufferedWriter(new FileWriter(file+"PATHWAYS-k-"+result.getK()+"-l-"+result.getL()+".txt"))){
+                    for (Map<String, GeneNode> nodes : result.getAllComputedNodeSets()) {
+                        bw.write(id + "\n");
+                        bw.write("NODES" + "\t" + "IS EXCEPTION?" + "\n");
+                    if (isInes) {
+                        for (String node : nodes.keySet()) {
+                            bw.write(node + "\t" + nodes.get(node).isValid() + "\n");
+                        }
+                    } else {
+                        for (String node : nodes.keySet()) {
+                            bw.write(node + "\n");
+                        }
+                    }
+                    List<String[]> edges = g.getEdgesConnecting(nodes.values());
+                    bw.write("EDGES" + "\n");
+                    for (String[] edge : edges) {
+                        bw.write(edge[0] + "\t" + "pp" + "\t" + edge[1] + "\n");
+                    }
+                    id++;
+                }
             } catch (IOException ex) {
-                Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);
+        }
         }
     }
     
-    public static void writeIndividualPathwayFiles(String dir, List<Result> results, KPMGraph g, Parameters params) {
-        BufferedWriter bw1 = null;
-        BufferedWriter bw2 = null;
-        
-        //try {
-            int size = results.size();
-            int zeros = (int) Math.floor(Math.log10(size)) + 1;
-            String f = "";
-            for (int i = 1; i <= zeros; i++) {
-                f += "0";
-            }
-            DecimalFormat df = new DecimalFormat(f);
-            
-            for (int i = 0; i < results.size(); i++) {
-                Result result = results.get(i);
-                String id = df.format(i+1);
-                String nodeFile = dir + params.FILE_SEPARATOR + "Pathway-" + id 
+    public static void writeIndividualPathwayFiles(String dir, IKPMResultSet results, KPMGraph g, Parameters params) {
+
+            for (IKPMResultItem result: results.getResults()) { // list: order consistent
+                String nodeFile = dir + params.FILE_SEPARATOR + "-Pathway-k-" + result.getK()+"-l-"+result.getL()
                         + "-NODES-" + params.SUFFIX + params.FILE_EXTENSION;
                 nodeFile = checkFileName(nodeFile);
-                String edgeFile = dir + params.FILE_SEPARATOR + "Pathway-" + id 
+                String edgeFile = dir + params.FILE_SEPARATOR + "Pathway-k-" + result.getK()+"-l-"+result.getL()
                         + "-INTERACTIONS-" + params.SUFFIX + params.FILE_EXTENSION;
                 edgeFile = checkFileName(edgeFile);
-                
-                
-                Set<String> nodes = result.getVisitedNodes().keySet();
-                List<String[]> edges = g.getEdgesConnecting(result.getVisitedNodes().values());
-                try {
-                    bw1 = new BufferedWriter(new FileWriter(nodeFile));
-                    bw2 = new BufferedWriter(new FileWriter(edgeFile));
-                    for (String nodeId: nodes) {
-                        bw1.write(nodeId);
-                        bw1.newLine();
-                    }
-                    bw1.close(); 
-                    for (String[] edge: edges) {
-                        bw2.write(edge[0] + "\t" + edge[1]);
-                        bw2.newLine();
-                    }
-                    bw2.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);
-                } finally {
-                    try {
-                        bw1.close();
-                        bw2.close();
-                    } catch (IOException ex) {
-                        Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);
-                    }                    
-                }
-                   
-                
-                
-            }
-    }
+                int i = 0;
+                try (BufferedWriter bw = new BufferedWriter(new FileWriter(nodeFile))) {
+                    try (BufferedWriter br = new BufferedWriter(new FileWriter(edgeFile))) {
+                        for (Map<String, GeneNode> nodes : result.getAllComputedNodeSets()) { // list: order consistent
+                            List<String[]> edges = g.getEdgesConnecting(nodes.values());
+                            for (String nodeId : nodes.keySet()) { // set: order not consistent, but it does not matter
+                                bw.write(i + "\t");
+                                bw.write(nodeId);
+                                bw.newLine();
 
-    public static void writePathwaysStatsFile(String file, List<Result> results, KPMGraph g) {
+                            }
+                            for (String[] edge : edges) {
+                                br.write(i + "\t");
+                                br.write(edge[0] + "\t" + edge[1]);
+                                br.newLine();
+                            }
+                            i = i + 1;
+                        }
+                    }
+                } catch (IOException ioe) {
+                    Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ioe);
+                }
+
+                }
+            }
+
+
+    public static void writePathwaysStatsFile(String file, IKPMResultSet results, KPMGraph g) {
         DecimalFormat df = new DecimalFormat("#.###");
-        int size = results.size();
+        int size = results.getResults().size();
         int zeros = (int) Math.floor(Math.log10(size)) + 1;
         String f = "";
         for (int i = 1; i <= zeros; i++) {
             f += "0";
         }
         DecimalFormat df2 = new DecimalFormat(f);
-        try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-            bw.write("PATHWAY ID" + "\t");
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            bw.write("PATHWAY_ID" + "\t");
+            bw.write("k"+ "\t");
+            bw.write("l"+"\t");
             bw.write("# NODES" + "\t");
             bw.write("# EDGES" + "\t");
             bw.write("AVG. DIFF. EXP. CASES" + "\t");
             bw.write("AVG. INFO. CONTENT" + "\n");
-            for (int i = 0; i < size; i++) {
-                String id = df2.format(i + 1);
-                Result result = results.get(i);
-                Map<String, GeneNode> nodes = result.getVisitedNodes();
-                List<String[]> edges = g.getEdgesConnecting(nodes.values());
-                bw.write(id + "\t");
-                bw.write(nodes.size() + "\t");
-                bw.write(edges.size() + "\t");
-                bw.write(df.format(result.getAverageDiffExpressedCases()) + "\t");
-                bw.write(df.format(result.getInformationGainExpressed()) + "\n");
+            int j = 0; // Variable encoding Pathway ID
+            for (IKPMResultItem result : results.getResults()) { // List: order consistent
+                int i = 0;
+                for(Map<String, GeneNode> nodeSet: result.getAllComputedNodeSets()){ // List: order consistent
+                    String id = df2.format(j + 1);
+                    List<String[]> edges = g.getEdgesConnecting(nodeSet.values());
+                    bw.write(id + "\t");
+                    bw.write(result.getK() + "\t");
+                    bw.write(result.getL() + "\t");
+                    bw.write(nodeSet.size() + "\t");
+                    bw.write(edges.size() + "\t");
+                    bw.write(df.format(result.getResultsInfoTable()[i][3]) + "\t");
+                    bw.write(df.format(result.getResultsInfoTable()[i][4]) + "\n");
+                    i=i+1;
+                    j=j+1;
+                }
             }
-            bw.close();
         } catch (IOException ex) {
             Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public static void writeGeneStatsFile(String file, List<Result> results, KPMGraph g, KPMSettings kpmSettings) {
+    public static void writeGeneStatsFile(String file, IKPMResultSet results, KPMGraph g, KPMSettings kpmSettings) {
         DecimalFormat df = new DecimalFormat("#.00");
         boolean isInes = kpmSettings.ALGO == Algo.GREEDY || kpmSettings.ALGO == Algo.LCG
                 || kpmSettings.ALGO == Algo.OPTIMAL;
         BufferedWriter bw = null;
 
         try {
-            Map<String, Integer> nodeCount = new HashMap<String, Integer>();
-            for (Result result : results) {
-                for (String nodeId : result.getVisitedNodes().keySet()) {
+            //legacy code
+            /*Map<String, Integer> nodeCount = new HashMap<String, Integer>();
+            for (IKPMResultItem result : results.getResults()) {
+                //TODO:  unionNode set
+                for (String nodeId : result.getUnionNodeSet().keySet()) {
                     if (!nodeCount.containsKey(nodeId)) {
                         nodeCount.put(nodeId, 1);
                     } else {
                         nodeCount.put(nodeId, nodeCount.get(nodeId) + 1);
                     }
                 }
-            }
-            bw = new BufferedWriter(new FileWriter(file));
-            bw.write("ID" + "\t");
-            bw.write("# PATHWAYS CONTAINING" + "\t");
-            bw.write("AVG. DIFF. EXP. CASES" + "\t");
-            bw.write("DEGREE");
-            if (isInes) {
-                bw.write("\t" + "IS EXCEPTION?");
-            }
-            bw.write("\n");
-            for (GeneNode node : g.getVertices()) {
-                String nodeId = node.getNodeId();
-                bw.write(nodeId + "\t");
-                if (nodeCount.containsKey(nodeId)) {
-                    bw.write(nodeCount.get(nodeId) + "\t");
-                } else {
-                    bw.write("0" + "\t");
-                }
-                bw.write(df.format(node.getAverageExpressedCases()) + "\t");
-                bw.write(String.valueOf(g.degree(node)));
+            }*/
+
+            for(IKPMResultItem result: results.getResults()) {
+                // TODO variable file extension
+                bw = new BufferedWriter(new FileWriter(file+"PATHWAY-k-"+result.getK()+"-l-"+result.getL()+".txt"));
+                bw.write("ID" + "\t");
+                bw.write("# PATHWAYS CONTAINING" + "\t");
+                bw.write("AVG. DIFF. EXP. CASES" + "\t");
+                bw.write("DEGREE");
                 if (isInes) {
-                    bw.write("\t" + String.valueOf(!node.isValid()));
+                    bw.write("\t" + "IS EXCEPTION?");
                 }
                 bw.write("\n");
+                for (GeneNode node : g.getVertices()) {
+                    String nodeId = node.getNodeId();
+                    bw.write(nodeId + "\t");
+                    if (result.getUnionNodeSetCounts().containsKey(nodeId)) {
+                        bw.write(result.getUnionNodeSetCounts().get(nodeId) + "\t");
+                    } else {
+                        bw.write("0" + "\t");
+                    }
+                    bw.write(df.format(node.getAverageExpressedCases()) + "\t");
+                    bw.write(String.valueOf(g.degree(node)));
+                    if (isInes) {
+                        bw.write("\t" + String.valueOf(!node.isValid()));
+                    }
+                    bw.write("\n");
+                }
             }
             bw.close();
         } catch (IOException ex) {
@@ -605,10 +591,12 @@ public class StatisticsUtility {
         }
 
         for (IKPMResultItem result : results.getResults()) {
-            for (String nodeId : result.getVisitedNodes().keySet()) {
+            //TODO: unionNodeset
+            for (String nodeId : result.getUnionNodeSet().keySet()) {
                 nodeHits.put(nodeId, nodeHits.get(nodeId) + 1);
             }
-            List<GeneEdge> edges = g.getConnectingEdges(result.getVisitedNodes().values());
+            // TODO: check whether change from "getVisitedNodes" to getUnionNodeset is equal
+            List<GeneEdge> edges = g.getConnectingEdges(result.getUnionNodeSet().values());
             for (GeneEdge edge : edges) {
                 String edgeId = edge.getEdgeId();
                 edgeId = edgeId.replace("-", "(pp)");
