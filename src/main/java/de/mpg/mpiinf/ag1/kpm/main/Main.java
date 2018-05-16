@@ -76,6 +76,7 @@ public class Main {
 		//As far as I understood, this method creates the param object but also modifies
         // kmpSettings to set up the correct values for the run.
 			params = argspp.parse(args, params);
+			System.out.println("Arrived here");
 	//	} catch (Exception e1) {
 	//		System.out.println("An error occurred. Exiting.");
 	//		return;
@@ -83,7 +84,7 @@ public class Main {
 		// check if all input files are correct
 		InputFileParser ifp = new InputFileParser(kpmSettings);
 		params = ifp.parse(params);
-
+	System.out.println(params.PROGRAM);
 		if (params.PROGRAM == Program.SP) {
 			System.out.println("PROGRAM SELECTED: Shortest Paths");
 			ShortestPathAlgorithms.shortestPathways(params.GRAPH_FILE, params);

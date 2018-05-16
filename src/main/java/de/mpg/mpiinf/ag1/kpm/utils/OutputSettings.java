@@ -29,5 +29,5 @@ public class OutputSettings {
 
     public static boolean PRINT_DATASETS_STATS = true;
 
-    public static boolean GENERATE_DATASETS_STATS_FILE = false;
+    public static boolean GENERATE_DATASETS_STATS_FILE = true;
 }

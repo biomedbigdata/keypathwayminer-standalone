@@ -271,7 +271,8 @@ public class KPMRunHandler implements IKPMRunListener{
 
 		// saving result tables to files
 
-        Path resultTableFolder = Paths.get(params.RESULTS_FOLDER+File.separator+"tables"+File.separator+now);
+        Path resultTableFolder = Paths.get(params.RESULTS_FOLDER+File.separator+"tables"+File.separator+results.getKpmSettings().ALGO
+				+params.STRATEGY+kpmSettings.getKpmRunID()+now);
 		try{
 		    Files.createDirectories(resultTableFolder);
         }catch (IOException ioe){

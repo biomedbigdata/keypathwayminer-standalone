@@ -219,3 +219,33 @@ ADVANCED OPTIONS (ACO)
   -spEdgeStatsFile  
        The name for the file containing the edge stats
        for the shortest pathways
+
+
+  SWITCH OUTPUT OFF: the default setting is Output=True
+
+  -gSummary
+        DO NOT create a summary file
+
+  -gPathways
+        DO NOT create a pathways file
+
+  -gPathwayStats
+        DO NOT create a Pathway stats file
+
+  -gGeneStats
+        DO NOT create a Gene stats file
+
+  -gDataStats
+        DO NOT create a data stats file
+
+  -gSPStats
+        DO NOT CREATE a shortest path stats file
+
+  -gSPFiles
+        DO NOT create shortest paths files
+
+  -gSPNodes
+        DO NOT create shortest path node file
+
+  -gSPEdges
+        DO NOT create shortest path edge file

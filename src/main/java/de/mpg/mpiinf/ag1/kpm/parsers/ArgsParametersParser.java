@@ -107,24 +107,24 @@ public class ArgsParametersParser {
 				params.SHORTEST_PATHS_EDGE_STATS_FILE = options[1];            
 			} else if (options[0].equals("-pSingleFile")) {
 				params.PATHWAYS_IN_SINGLE_FILE = Boolean.parseBoolean(options[1]);
-			} else if (options[0].equals("-gSummary")) {
-				OutputSettings.GENERATE_SUMMARY_FILE = Boolean.parseBoolean(options[1]);
+			} else if (options[0].equals("-gSummary")) { //flags
+				OutputSettings.GENERATE_SUMMARY_FILE =false;
 			} else if (options[0].equals("-gPathways")) {
-				OutputSettings.GENERATE_PATHWAYS_FILE = Boolean.parseBoolean(options[1]);
+				OutputSettings.GENERATE_PATHWAYS_FILE = false;
 			} else if (options[0].equals("-gPathwayStats")) {
-				OutputSettings.GENERATE_PATHWAYS_STATS_FILE = Boolean.parseBoolean(options[1]);
+				OutputSettings.GENERATE_PATHWAYS_STATS_FILE = false;
 			} else if (options[0].equals("-gGeneStats")) {
-				OutputSettings.GENERATE_GENE_STATS_FILE = Boolean.parseBoolean(options[1]);
+				OutputSettings.GENERATE_GENE_STATS_FILE = false;
 			} else if (options[0].equals("-gDataStats")) {
-				OutputSettings.GENERATE_DATASETS_STATS_FILE = Boolean.parseBoolean(options[1]);
+				OutputSettings.GENERATE_DATASETS_STATS_FILE = false;
 			} else if (options[0].equals("-gSPStats")) {
-				params.GENERATE_SHORTEST_PATHS_STATS_FILE = Boolean.parseBoolean(options[1]);
+				params.GENERATE_SHORTEST_PATHS_STATS_FILE = false;
 			} else if (options[0].equals("-gSPFiles")) {
-				params.GENERATE_SHORTEST_PATH_FILES = Boolean.parseBoolean(options[1]);
+				params.GENERATE_SHORTEST_PATH_FILES = false;
 			} else if (options[0].equals("-gSPNodes")) {
-				params.GENERATE_SHORTEST_PATHS_NODE_STATS_FILE = Boolean.parseBoolean(options[1]);
+				params.GENERATE_SHORTEST_PATHS_NODE_STATS_FILE = false;
 			} else if (options[0].equals("-gSPEdges")) {
-				params.GENERATE_SHORTEST_PATHS_EDGE_STATS_FILE = Boolean.parseBoolean(options[1]);
+				params.GENERATE_SHORTEST_PATHS_EDGE_STATS_FILE = false;
 			} else if (options[0].equals("runID")) {
 				params.RUN_ID = options[1];
 				// OUTPUT TO TERMINAL
@@ -136,6 +136,8 @@ public class ArgsParametersParser {
 				params.SUFFIX = options[1];
 				// BASIC params
 			} else if (options[0].equals("-program")) {
+			    System.out.println(Program.valueOf(options[1]));
+			    System.out.println(Program.valueOf(options[1]));
 				params.PROGRAM = Program.valueOf(options[1]);
 			} else if (options[0].equals("-sp")) {
 				params.SHORTEST_PATHS_REPORTED = Integer.valueOf(options[1]);
@@ -287,7 +289,7 @@ public class ArgsParametersParser {
 				kpmSettings.MAX_K = Integer.parseInt(values[2]);
 			}
 			// Added possibility for batch L1 or L2
-			else if (options[0].matches("-L[1-2][_]+batch"))
+			else if (options[0].matches("-L[1-9][0-9]*[_]+batch")) //matches 1 or more datasets.
 			{
 				String id = options[0].substring(1, options[0].indexOf('_'));
 				String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
@@ -370,16 +372,18 @@ public class ArgsParametersParser {
 			DatasetsFileParser dfp = new DatasetsFileParser(kpmSettings);
 			params = dfp.parse(params.DATASETS_FILE_SEPARATOR.charValue(), params.DATASETS_FILE_HAS_HEADER, params);
 		}
-		
-		if(kpmSettings.MIN_L.keySet().size() != kpmSettings.MATRIX_FILES_MAP.size()){
-			System.out.println(String.format(
-					"\nThe were found setup for %d L-parameters, this amount does not match the %d found for the matrix files map.\n\nKPM will now terminate.",
-					kpmSettings.MIN_L.keySet().size(),
-					kpmSettings.MATRIX_FILES_MAP.size()
-					));
-			System.exit(-1);
-		}
 
+		System.out.println(params.PROGRAM==Program.SP);
+		if(params.PROGRAM!=Program.SP) {
+            if (kpmSettings.MIN_L.keySet().size() != kpmSettings.MATRIX_FILES_MAP.size()) {
+                System.out.println(String.format(
+                        "\nThe were found setup for %d L-parameters, this amount does not match the %d found for the matrix files map.\n\nKPM will now terminate.",
+                        kpmSettings.MIN_L.keySet().size(),
+                        kpmSettings.MATRIX_FILES_MAP.size()
+                ));
+                System.exit(-1);
+            }
+        }
 		if (strategy.equals("INES")) {
 			if (algorithm.equals("GREEDY")) {
 				kpmSettings.ALGO = Algo.GREEDY;
