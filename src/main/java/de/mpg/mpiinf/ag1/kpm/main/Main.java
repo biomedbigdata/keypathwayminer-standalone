@@ -59,7 +59,10 @@ public class Main {
 		kpmSettings.INCLUDE_CHARTS=true;
 
 		//params.GRAPH_FILE = params.GRAPH_FILE; */
-
+        //kpmSettings.CALCULATE_ONLY_SAME_L_VALUES=true;
+        //kpmSettings.MIN_PER=5;
+        //kpmSettings.MAX_PER=10;
+        //kpmSettings.INC_PER=5;
 		try {
 			start(args, prefix + "kpm.properties", params);
 		} catch (Exception e) {

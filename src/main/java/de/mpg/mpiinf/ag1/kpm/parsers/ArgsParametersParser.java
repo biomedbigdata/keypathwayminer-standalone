@@ -5,10 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -303,8 +300,16 @@ public class ArgsParametersParser {
 				kpmSettings.INC_L.put(internalID, Integer.parseInt(values[1]));
 				kpmSettings.MAX_L.put(internalID, Integer.parseInt(values[2]));
                 kpmSettings.VARYING_L_ID.add(internalID);
-				
-			}else if(options[0].equals("-perturbation_technique")){
+			}
+			// for which of the datasets should the L values interpreted as percentages
+			else if(options[0].matches("-percentages")){
+			    String[] datasets = options[1].split(",");
+			    for (String id : datasets){
+                    String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
+			        kpmSettings.VARYING_L_ID_IN_PERCENTAGE.put(internalID, true);
+                }
+
+            }else if(options[0].equals("-perturbation_technique")){
                 if (options[1].equals("edgeremove")) {
                     params.PERTURBATION = PerturbationService.getPerturbation(PerturbationTags.EdgeRemoval);
 
@@ -373,7 +378,7 @@ public class ArgsParametersParser {
 			params = dfp.parse(params.DATASETS_FILE_SEPARATOR.charValue(), params.DATASETS_FILE_HAS_HEADER, params);
 		}
 
-		System.out.println(params.PROGRAM==Program.SP);
+
 		if(params.PROGRAM!=Program.SP) {
             if (kpmSettings.MIN_L.keySet().size() != kpmSettings.MATRIX_FILES_MAP.size()) {
                 System.out.println(String.format(
@@ -382,6 +387,33 @@ public class ArgsParametersParser {
                         kpmSettings.MATRIX_FILES_MAP.size()
                 ));
                 System.exit(-1);
+            }
+            // if not for all matrix files percentages should be used the VARYING_L_ID_IN_PERCENTAGE needs to be filled
+            // with default values = false
+            // VARYING_L_ID contains internal ids
+            else if(kpmSettings.VARYING_L_ID.size() != kpmSettings.VARYING_L_ID_IN_PERCENTAGE.size()){
+                for(String id: kpmSettings.VARYING_L_ID ){
+                    if(!kpmSettings.VARYING_L_ID_IN_PERCENTAGE.containsKey(id)){
+                        kpmSettings.VARYING_L_ID_IN_PERCENTAGE.put(id, false);
+                    }
+                }
+            }
+            // calculate number of exception nodes if percentages are used
+            for(String internalId: kpmSettings.VARYING_L_ID_IN_PERCENTAGE.keySet()){
+                if(kpmSettings.VARYING_L_ID_IN_PERCENTAGE.get(internalId)){
+                    // put percentages
+                    // get dataset size for each dataset
+                    int dataSetSize = getDatasetSize(internalId, id2path);
+                    // calculate min_L, inc_L, max_L
+                    int new_min_L = (int) Math.ceil(((double) dataSetSize / (double) 100) * kpmSettings.MIN_L.get(internalId));
+                    kpmSettings.MIN_L.put(internalId, new_min_L);
+                    int new_inc_L = (int) Math.ceil(((double) dataSetSize / (double) 100) * kpmSettings.INC_L.get(internalId));
+                    kpmSettings.INC_L.put(internalId, new_inc_L);
+                    int new_max_L = (int) Math.ceil(((double) dataSetSize / (double) 100) * kpmSettings.MAX_L.get(internalId));
+                    kpmSettings.MAX_L.put(internalId, new_max_L);
+
+                }
+                // else: leave the integer values, that have been put in the map anyway
             }
         }
 		if (strategy.equals("INES")) {
@@ -444,4 +476,16 @@ public class ArgsParametersParser {
 
 
 	}
+	private int getDatasetSize(String internalID, HashMap<String, String> id2path){
+        int lines = 0;
+	    try(BufferedReader br = new BufferedReader(new FileReader(id2path.get(internalID)))){
+	        String [] line = br.readLine().split("\t");
+	        // First row is gene name
+	        lines = line.length-1;
+        }
+        catch (IOException ioe){
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ioe);
+        }
+        return lines;
+    }
 }
