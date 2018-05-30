@@ -25,7 +25,7 @@ public class Diagnostics {
         String logfile = args[2];
         Diagnostics d = new Diagnostics();
         //outputfile for the Parameterscript is same as input file for commandLineEmulator
-        //generateDiagnosticsParameterScript(possibleParamFile, outputFile);
+        generateDiagnosticsParameterScript(possibleParamFile, outputFile);
         ArrayList<String[]> commandLineEmulator = d.fileReader(outputFile);
         for (String[] commandLine : commandLineEmulator) {
             try {
@@ -70,8 +70,11 @@ public class Diagnostics {
     }
 
     /**
-     *
-     * @param possibleParameterfile line wise format: -paramName options,no,space,comma,separated
+     * Might create parameter combinations that are not sensible.
+     * @param possibleParameterfile line wise format: -paramName options,no,space,comma,separate
+     *                              flags must be indicated like follows: "$ -flagname1 -flagname2"
+     *                              If many flags are used consider grouping them in order to avoid combinatorial
+     *                              explosion.
      * @returns Filename of parameter file.
      */
     public static void generateDiagnosticsParameterScript(String possibleParameterfile, String outputFile){
@@ -86,15 +89,23 @@ public class Diagnostics {
         try(BufferedReader br = new BufferedReader(new FileReader(possibleParameterfile))){
             String line = br.readLine();
             while(line != null){
+
+                if(line.startsWith("#") || line.startsWith(" ")){
+                    line = br.readLine();
+                    continue;
+                }
+                if(line.startsWith("$")){
+                    flags.add(line.substring(2));
+                    line = br.readLine();
+                    continue;
+                }
+
                 String[] paramsAndPossibleValues = line.split(" ");
-                if(paramsAndPossibleValues.length==2 && paramsAndPossibleValues[1].split(",").length>1) {
-                    possibleParams.put(paramsAndPossibleValues[0], paramsAndPossibleValues[1].split(","));
+                if(paramsAndPossibleValues.length==2 && paramsAndPossibleValues[1].split(";").length>1) {
+                    possibleParams.put(paramsAndPossibleValues[0], paramsAndPossibleValues[1].split(";"));
                 }
                 else if (paramsAndPossibleValues.length==2){
                     noChoiceParams.put(paramsAndPossibleValues[0], paramsAndPossibleValues[1]);
-                }
-                else {
-                    flags.add(paramsAndPossibleValues[0]);
                 }
                 line = br.readLine();
             }
@@ -110,6 +121,9 @@ public class Diagnostics {
         // Create array with variying calls
         String[] ar = possibleParams.keySet().toArray(new String[3]);
         ArrayList<String> re =createCall(ar , possibleParams, "",  new ArrayList<String>());
+        re = addFlagsToCall(re, flags);
+
+        // add flags
 
         // put everything together, create final calls and print it into a file
         StringBuilder noChoice = new StringBuilder();
@@ -119,12 +133,12 @@ public class Diagnostics {
             noChoice.append(noChoiceParams.get(s));
             noChoice.append(" ");
         }
-        System.out.print(noChoice.toString());
+        //System.out.print(noChoice.toString());
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile))) {
             for(String s: re){
                 //System.out.println(noChoice.toString()+s);
                 //System.out.println(noChoice.insert(0, s).toString());
-                bw.write(noChoice.toString()+s);
+                bw.write(noChoice.toString()+s+"\n");
             }
         }
         catch (IOException ioe){
@@ -136,7 +150,7 @@ public class Diagnostics {
     public static ArrayList<String> createCall(String[] params, HashMap<String, String[]> p, String result, ArrayList<String> re) {
         if(params.length == 1){
             for(String pa: p.get(params[0])) {
-                re.add(result +params[0]+"="+pa+"\n");
+                re.add(result +params[0]+"="+pa);
             }
             //System.out.print(re);
             return(re);
@@ -149,5 +163,21 @@ public class Diagnostics {
         }
 
         return(re);
+    }
+
+    public static ArrayList<String> addFlagsToCall(ArrayList<String> calls, ArrayList<String> flags){
+        int counter = 1;
+        for (String s: flags){
+            calls.addAll(calls);
+            // remember truth tables: this is the same principle
+            for(int i = 0; i<calls.size()/(counter*2); i++){
+                int ind = i*counter;
+                String repla = calls.get(ind)+" "+s;
+                calls.remove(ind);
+                calls.add(ind, repla);
+            }
+            counter*=2;
+        }
+        return calls;
     }
 }

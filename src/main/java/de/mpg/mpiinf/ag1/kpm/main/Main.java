@@ -76,7 +76,7 @@ public class Main {
 		// parse parameters from the command line
 	//	try {
 		ArgsParametersParser argspp  = new ArgsParametersParser(kpmSettings);
-		//As far as I understood, this method creates the param object but also modifies
+		//This method creates the param object but also modifies
         // kmpSettings to set up the correct values for the run.
 			params = argspp.parse(args, params);
 			System.out.println("Arrived here");

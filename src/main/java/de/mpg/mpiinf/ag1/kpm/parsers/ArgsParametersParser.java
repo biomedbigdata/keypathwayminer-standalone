@@ -80,7 +80,8 @@ public class ArgsParametersParser {
 				// OUTPUT FILES 
 			} else if (options[0].equals("-fileExt")) {
 				params.FILE_EXTENSION = options[1];
-			} else if (options[0].equals("-summaryFile")) {
+			}
+			else if (options[0].equals("-summaryFile")) {
 				OutputSettings.SUMMARY_FILE = options[1];
 			} else if (options[0].equals("-pathwaysFile")) {
 				OutputSettings.PATHWAYS_FILE = options[1];
@@ -103,7 +104,7 @@ public class ArgsParametersParser {
 			} else if (options[0].equals("-spEdgeStatsFile")) {
 				params.SHORTEST_PATHS_EDGE_STATS_FILE = options[1];            
 			} else if (options[0].equals("-pSingleFile")) {
-				params.PATHWAYS_IN_SINGLE_FILE = Boolean.parseBoolean(options[1]);
+				params.PATHWAYS_IN_SINGLE_FILE = true;
 			} else if (options[0].equals("-gSummary")) { //flags
 				OutputSettings.GENERATE_SUMMARY_FILE =false;
 			} else if (options[0].equals("-gPathways")) {
@@ -126,15 +127,13 @@ public class ArgsParametersParser {
 				params.RUN_ID = options[1];
 				// OUTPUT TO TERMINAL
 			} else if (options[0].equals("-pGraphStats")) {
-				params.PRINT_GRAPH_STATS = Boolean.parseBoolean(options[1]);
+				params.PRINT_GRAPH_STATS = false;
 			} else if (options[0].equals("-pDataStats")) {
-				params.PRINT_DATASETS_STATS = Boolean.parseBoolean(options[1]);
+				params.PRINT_DATASETS_STATS = false;
 			} else if (options[0].equals("-suffix")) {
 				params.SUFFIX = options[1];
 				// BASIC params
 			} else if (options[0].equals("-program")) {
-			    System.out.println(Program.valueOf(options[1]));
-			    System.out.println(Program.valueOf(options[1]));
 				params.PROGRAM = Program.valueOf(options[1]);
 			} else if (options[0].equals("-sp")) {
 				params.SHORTEST_PATHS_REPORTED = Integer.valueOf(options[1]);
@@ -257,7 +256,7 @@ public class ArgsParametersParser {
 				System.out.println("Should be batch run");
 				kpmSettings.IS_BATCH_RUN = true;
             } else if (options[0].equals("-Umove_bens")) {
-                kpmSettings.REMOVE_BENs = true;
+                kpmSettings.REMOVE_BENs = false;
 			} else if (options[0].equals("-validation_file")) {
 				params.VALIDATION_FILE = options[1];
 			} else if (options[0].equals("-perturbation")) {

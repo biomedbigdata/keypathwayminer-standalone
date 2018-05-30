@@ -297,16 +297,16 @@ public class KPMRunHandler implements IKPMRunListener{
         if(OutputSettings.GENERATE_PATHWAYS_FILE){ // Done
             String resultIndividualPathwaysFile= resultTableFolder.toString();
             StatisticsUtility.writeIndividualPathwayFiles(resultIndividualPathwaysFile, results, kpmSettings.MAIN_GRAPH, params);
-            String resultPathwaysFile= resultTableFolder.toString()+File.separator+"pathways.txt";
+            String resultPathwaysFile= resultTableFolder.toString()+File.separator+OutputSettings.PATHWAYS_FILE;
             StatisticsUtility.writePathwaysFile(resultPathwaysFile, results, kpmSettings.MAIN_GRAPH, kpmSettings);
         }
 
         if(OutputSettings.GENERATE_PATHWAYS_STATS_FILE) { //Done
-            String resultPathwayStatsFile = resultTableFolder.toString() + File.separator + "pathwayStats.txt";
+            String resultPathwayStatsFile = resultTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_STATS_FILE;
             StatisticsUtility.writePathwaysStatsFile(resultPathwayStatsFile, results, kpmSettings.MAIN_GRAPH);
         }
 
-        String resultFile2= resultTableFolder.toString()+File.separator+"results2.txt";
+       // String resultFile2= resultTableFolder.toString()+File.separator+"results2.txt";
         //StatisticsUtility.writeResultsToFile2(resultFile2);
         //String resultMatrixStatisics= resultTableFolder.toString()+File.separator+"resultSummary.txt";
         StatisticsUtility.printMatrixStatistics(params.PARSER, kpmSettings.MAIN_GRAPH);

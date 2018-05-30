@@ -220,6 +220,10 @@ ADVANCED OPTIONS (ACO)
        The name for the file containing the edge stats
        for the shortest pathways
 
+  DEFAULT false:
+
+  -pSingleFile
+        put all pathways in one file
 
   SWITCH OUTPUT OFF: the default setting is Output=True
 
