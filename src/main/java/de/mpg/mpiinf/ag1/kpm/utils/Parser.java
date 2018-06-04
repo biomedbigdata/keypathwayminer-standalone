@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 import dk.sdu.kpm.KPMSettings;
 import dk.sdu.kpm.graph.KPMGraph;
 
@@ -28,7 +29,12 @@ public class Parser {
     HashMap<String, Double> avgExpressedCasesMap;
     HashMap<String, Double> avgExpressedGenesMap;
     HashMap<String, Integer> totalExpressedMap;
-    
+
+    // TODO not really customizable atm
+    public double threshold;
+    public boolean is_binary_matrix;
+    public Comparator comparator;
+
     public static final String TAB = "\t";
     public static final String COMMA = ",";
     public static final String SPACE = " ";
@@ -38,7 +44,8 @@ public class Parser {
         expressionFiles = new HashMap<String, String>();
     }
 
-    public Parser(String graphFile, Map<String, String> expressionFiles, String sep) {
+    public Parser(String graphFile, Map<String, String> expressionFiles, String sep,
+                  double threshold, boolean is_binary_matrix, Comparator comparator) {
         this.graphFile = graphFile;
         this.expressionFiles = new HashMap<String, String>(expressionFiles);
         backNodesMap = new HashMap<String, Set<String>>();
@@ -49,6 +56,9 @@ public class Parser {
         avgExpressedCasesMap = new HashMap<String, Double>();
         avgExpressedGenesMap = new HashMap<String, Double>();
         totalExpressedMap = new HashMap<String, Integer>();
+        this.threshold = threshold;
+        this.is_binary_matrix = is_binary_matrix;
+        this.comparator = comparator;
         
         for (String expId : expressionFiles.keySet()) {
             backGenesMap.put(expId, new HashSet());
@@ -117,7 +127,7 @@ public class Parser {
 
     public KPMGraph createGraph(KPMSettings kpmSettings) {
         HashMap<String, String> nodeId2Symbol = new HashMap<String, String>();
-        Map<String, Map<String, int[]>> expressionMap = new HashMap<String, Map<String, int[]>>();
+        Map<String, Map<String, double[]>> expressionMap = new HashMap<>();
         LinkedList<String[]> edgeList = new LinkedList<String[]>();
         HashMap<String, Integer> without_exp = new HashMap<String, Integer>();
         HashSet<String> inNetwork = new HashSet<String>();
@@ -165,27 +175,42 @@ public class Parser {
                     String nodeId = fields[0].trim();
                     inExp.add(nodeId);
  
-                    int[] exp = new int[fields.length - 1];
+                    double[] exp = new double[fields.length - 1];
 
-                    for (int i = 1; i < fields.length; i++) {
-                        String val = fields[i].trim();
-                        if (val.equals("1")) {
-                            exp[i - 1] = 1;
-                            totalExp++;
-                        } else if (val.equals("-1")) {
-                            exp[i - 1] = -1;
-                            totalExp++;
-                        } else if (val.equals("0")) {
-                            exp[i - 1] = 0;
-                        } else {
-                            exp[i - 1] = 0;
+                    // Currently any nonsensical value will be parsed to 0
+                    if(is_binary_matrix) {
+                        for (int i = 1; i < fields.length; i++) {
+                            String val = fields[i].trim();
+                            if (val.equals("1")) {
+                                exp[i - 1] = 1;
+                                totalExp++;
+                            } else if (val.equals("-1")) {
+                                exp[i - 1] = -1;
+                                totalExp++;
+                            } else if (val.equals("0")) {
+                                exp[i - 1] = 0;
+                            } else {
+                                exp[i - 1] = 0;
+                            }
+                        }
+                    }
+                    // TODO: make it work for different thresholds and different comparators. PRIO: Low
+                    else {
+                        for (int i = 1; i < fields.length; i++) {
+                            String val = fields[i].trim();
+                            if (Comparison.evalate(Double.parseDouble(val), threshold, comparator)) {
+                                exp[i - 1] = 1;
+                                totalExp++;
+                            } else {
+                                exp[i - 1] = 0;
+                            }
                         }
                     }
 
                     if (expressionMap.containsKey(nodeId)) {
                         expressionMap.get(nodeId).put(fileId, exp);
                     } else {
-                        Map<String, int[]> aux = new HashMap<String, int[]>();
+                        Map<String, double[]> aux = new HashMap<>();
                         aux.put(fileId, exp);
                         expressionMap.put(nodeId, aux);
                     }
@@ -233,7 +258,7 @@ public class Parser {
 
         for (String nodeId : inNetwork) {
             if (expressionMap.containsKey(nodeId)) {
-                Map<String, int[]> expMap = expressionMap.get(nodeId);
+                Map<String, double[]> expMap = expressionMap.get(nodeId);
                 for (String expId : expressionFiles.keySet()) {
                     if (!expMap.containsKey(expId)) {
                         if (backNodesMap.containsKey(nodeId)) {

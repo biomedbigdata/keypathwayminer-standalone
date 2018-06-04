@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.mpg.mpiinf.ag1.kpm.shortestpath.SortShortestPaths;
+import de.mpg.mpiinf.ag1.kpm.utils.Comparator;
 import de.mpg.mpiinf.ag1.kpm.utils.Parser;
 import de.mpg.mpiinf.ag1.kpm.utils.Separator;
 import dk.sdu.kpm.graph.KPMGraph;
@@ -107,7 +108,12 @@ public class Parameters {
         public Parser PARSER = null;
         
         public IPerturbation PERTURBATION = null;
-        
+
+        public double pValueCutoff = 0.05;
+
+        public Comparator comparator = Comparator.LET;
+
+        public boolean IS_BINARY_MATRIX = true;
 
         /* --------- SHORTEST PATHS PARAMETERS ---------------- */
         // Maximum number of pathways resulting from a KPM run

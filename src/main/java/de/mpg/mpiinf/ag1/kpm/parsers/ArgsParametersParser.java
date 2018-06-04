@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import de.mpg.mpiinf.ag1.kpm.Parameters;
 import de.mpg.mpiinf.ag1.kpm.Program;
 import de.mpg.mpiinf.ag1.kpm.main.Main;
+import de.mpg.mpiinf.ag1.kpm.utils.Comparator;
 import de.mpg.mpiinf.ag1.kpm.utils.OutputSettings;
 import de.mpg.mpiinf.ag1.kpm.utils.Separator;
 import dk.sdu.kpm.Algo;
@@ -328,7 +329,14 @@ public class ArgsParametersParser {
 				}
 				
 				System.out.println("Perturbation technique: " + params.PERTURBATION.getName());
-			} else if (options[0].equals("-help")) {
+			} else if(options[0].equals("-pvalue_cutoff")){
+			    // specifying a p-value threshold will automatically assume that matrix is not binary.
+			    params.pValueCutoff = Double.parseDouble(options[1]);
+			    params.IS_BINARY_MATRIX = false;
+            } else if(options[0].equals("-comparator")){
+			    params.comparator = Comparator.valueOf(options[1]);
+            }
+			else if (options[0].equals("-help")) {
 				printHelp();
 				System.exit(0);
 			} else {

@@ -25,7 +25,7 @@ public class Diagnostics {
         String logfile = args[2];
         Diagnostics d = new Diagnostics();
         //outputfile for the Parameterscript is same as input file for commandLineEmulator
-        generateDiagnosticsParameterScript(possibleParamFile, outputFile);
+        //generateDiagnosticsParameterScript(possibleParamFile, outputFile);
         ArrayList<String[]> commandLineEmulator = d.fileReader(outputFile);
         for (String[] commandLine : commandLineEmulator) {
             try {

@@ -38,7 +38,7 @@ public class KPMRunHandler implements IKPMRunListener{
 
 	/**
 	 * Starts the runs, ensures the settings are correctly set up. Assumes all other parameters has already been set.
-	 * @param paramsr
+	 * //@param paramsr (removed due to conflict)
 	 */
 	public void runBatch(Parameters params){
 		this.params = params;
@@ -51,7 +51,8 @@ public class KPMRunHandler implements IKPMRunListener{
 
 		System.out.println("\n*********** CREATING GRAPH ***************\n");
 		// Parse the graph and matrix files
-		params.PARSER = new Parser(params.GRAPH_FILE, kpmSettings.MATRIX_FILES_MAP, Parser.TAB);
+		params.PARSER = new Parser(params.GRAPH_FILE, kpmSettings.MATRIX_FILES_MAP, Parser.TAB,
+                params.pValueCutoff, params.IS_BINARY_MATRIX, params.comparator);
 
 		// Create KPM graph
 		params.INPUT_GRAPH = params.PARSER.createGraph(kpmSettings);
