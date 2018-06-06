@@ -309,7 +309,13 @@ public class ArgsParametersParser {
 			        kpmSettings.VARYING_L_ID_IN_PERCENTAGE.put(internalID, true);
                 }
 
-            }else if(options[0].equals("-perturbation_technique")){
+            }else if(options[0].matches("-L[1-9][0-9]*[_]+pvalues")){
+                String id = options[0].substring(1, options[0].indexOf('_'));
+                String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
+                kpmSettings.PVALUE_FILES_MAP.put(internalID, options[1]);
+            }
+
+            else if(options[0].equals("-perturbation_technique")){
                 if (options[1].equals("edgeremove")) {
                     params.PERTURBATION = PerturbationService.getPerturbation(PerturbationTags.EdgeRemoval);
 

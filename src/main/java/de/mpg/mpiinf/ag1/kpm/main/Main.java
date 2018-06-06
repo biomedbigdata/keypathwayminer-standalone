@@ -79,7 +79,6 @@ public class Main {
 		//This method creates the param object but also modifies
         // kmpSettings to set up the correct values for the run.
 			params = argspp.parse(args, params);
-			System.out.println("Arrived here");
 	//	} catch (Exception e1) {
 	//		System.out.println("An error occurred. Exiting.");
 	//		return;

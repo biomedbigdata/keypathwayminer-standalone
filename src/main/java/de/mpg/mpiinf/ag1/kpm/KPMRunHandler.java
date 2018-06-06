@@ -52,7 +52,7 @@ public class KPMRunHandler implements IKPMRunListener{
 		System.out.println("\n*********** CREATING GRAPH ***************\n");
 		// Parse the graph and matrix files
 		params.PARSER = new Parser(params.GRAPH_FILE, kpmSettings.MATRIX_FILES_MAP, Parser.TAB,
-                params.pValueCutoff, params.IS_BINARY_MATRIX, params.comparator);
+                params.pValueCutoff, params.IS_BINARY_MATRIX, params.comparator, kpmSettings.PVALUE_FILES_MAP);
 
 		// Create KPM graph
 		params.INPUT_GRAPH = params.PARSER.createGraph(kpmSettings);
