@@ -69,8 +69,8 @@ public class ShortestPathAlgorithms {
 				}
 				double total = 0.0;
 				for (String expId: kpmSettings.NUM_CASES_MAP.keySet()) {
-					int[] exp1 = gNode1.getDifferenceIntMap().get(expId);
-					int[] exp2 = gNode2.getDifferenceIntMap().get(expId);
+					double[] exp1 = gNode1.getDifferenceIntMap().get(expId);
+					double[] exp2 = gNode2.getDifferenceIntMap().get(expId);
 					int matches = 0;
 					int ncases = kpmSettings.NUM_CASES_MAP.get(expId);
 					for (int k = 0; k < ncases; k++) {

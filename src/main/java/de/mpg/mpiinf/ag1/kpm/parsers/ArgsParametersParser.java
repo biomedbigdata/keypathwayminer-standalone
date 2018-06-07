@@ -145,7 +145,7 @@ public class ArgsParametersParser {
 			} else if (options[0].equals("-K")) {                
 				kpmSettings.GENE_EXCEPTIONS = Integer.parseInt(options[1]);
 				kpmSettings.MIN_K=kpmSettings.MAX_K=Integer.parseInt(options[1]);
-			} else if (options[0].startsWith("-L") && !options[0].contains("batch")) {
+			} else if (options[0].startsWith("-L") && !options[0].contains("batch") && !options[0].contains("pvalue")) {
 				String id = "L" + options[0].substring(2);
 				int l = Integer.parseInt(options[1]);
 
@@ -335,11 +335,16 @@ public class ArgsParametersParser {
 				}
 				
 				System.out.println("Perturbation technique: " + params.PERTURBATION.getName());
-			} else if(options[0].equals("-pvalue_cutoff")){
-			    // specifying a p-value threshold will automatically assume that matrix is not binary.
-			    params.pValueCutoff = Double.parseDouble(options[1]);
-			    params.IS_BINARY_MATRIX = false;
-            } else if(options[0].equals("-comparator")){
+			} else if(options[0].matches("-L[1-9][0-9]*[_]+pvaluecutoff")){
+				String id = options[0].substring(1, options[0].indexOf('_'));
+				String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
+				kpmSettings.PVALUE_MAP.put(internalID, Double.parseDouble(options[1]));
+				params.IS_BINARY_MATRIX = false;
+            }else if(options[0].equals("-use_double")){
+			    kpmSettings.USE_DOUBLE_VALUES = true;
+            }
+
+            else if(options[0].equals("-comparator")){
 			    params.comparator = Comparator.valueOf(options[1]);
             }
 			else if (options[0].equals("-help")) {

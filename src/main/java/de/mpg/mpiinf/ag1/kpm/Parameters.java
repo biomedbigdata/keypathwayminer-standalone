@@ -109,8 +109,6 @@ public class Parameters {
         
         public IPerturbation PERTURBATION = null;
 
-        public double pValueCutoff = 0.05;
-
         public Comparator comparator = Comparator.LET;
 
         public boolean IS_BINARY_MATRIX = true;
@@ -128,7 +126,7 @@ public class Parameters {
         public int MINIMUM_LENGTH_SHORTEST_PATHS = 2;
         
         // Sort criteria for shortest paths (descending)
-        public SortShortestPaths SORT_SHORTEST_PATHS_BY = 
+        public SortShortestPaths SORT_SHORTEST_PATHS_BY =
                 SortShortestPaths.LENGTH;
         
         /* ------ Shortest paths output files ------ */

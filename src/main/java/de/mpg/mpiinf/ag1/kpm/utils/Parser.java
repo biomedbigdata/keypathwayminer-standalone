@@ -32,9 +32,10 @@ public class Parser {
     Map<String, String> pvalueFilesMap;
 
 
-    public double threshold;
+    Map<String, Double> threshold;
     public boolean is_binary_matrix;
     public Comparator comparator;
+    public boolean use_double_values;
 
     public static final String TAB = "\t";
     public static final String COMMA = ",";
@@ -46,8 +47,8 @@ public class Parser {
     }
 
     public Parser(String graphFile, Map<String, String> expressionFiles, String sep,
-                  double threshold, boolean is_binary_matrix, Comparator comparator,
-                  Map<String, String> pValueFiles) {
+                  Map<String, Double> pvalueCutoffs, boolean is_binary_matrix, Comparator comparator,
+                  Map<String, String> pValueFiles, boolean use_double_values) {
         this.graphFile = graphFile;
         this.expressionFiles = new HashMap<String, String>(expressionFiles);
         backNodesMap = new HashMap<String, Set<String>>();
@@ -58,10 +59,11 @@ public class Parser {
         avgExpressedCasesMap = new HashMap<String, Double>();
         avgExpressedGenesMap = new HashMap<String, Double>();
         totalExpressedMap = new HashMap<String, Integer>();
-        this.threshold = threshold;
+        this.threshold = pvalueCutoffs;
         this.is_binary_matrix = is_binary_matrix;
         this.comparator = comparator;
         this.pvalueFilesMap = pValueFiles;
+        this.use_double_values = use_double_values;
         
         for (String expId : expressionFiles.keySet()) {
             backGenesMap.put(expId, new HashSet());
@@ -134,7 +136,7 @@ public class Parser {
         LinkedList<String[]> edgeList = new LinkedList<String[]>();
         HashMap<String, Integer> without_exp = new HashMap<String, Integer>();
         HashSet<String> inNetwork = new HashSet<String>();
-        HashMap<String, Double> pvals = new HashMap<String, Double>();
+        HashMap<String, Map<String,Double>> pvals = new HashMap<String, Map<String,Double>>();
         for (String fileId : expressionFiles.keySet()) {
             numCasesMap.put(fileId, 0);
             without_exp.put(fileId, 0);
@@ -166,23 +168,22 @@ public class Parser {
                 int numCases = 0;
                 int numGenes = 0;
                 HashMap<String, int[]> nodeId2Expression = new HashMap<String, int[]>();
-                Set<String> inExp = new HashSet<String>(); 
+                Set<String> inExp = new HashSet<String>();
 
                 BufferedReader expressionReader =
                         new BufferedReader(new FileReader(expressionFiles.get(fileId)));
 
-                
 
                 while ((line = expressionReader.readLine()) != null) {
                     numGenes++;
                     String[] fields = line.split("\t");
                     String nodeId = fields[0].trim();
                     inExp.add(nodeId);
- 
+
                     double[] exp = new double[fields.length - 1];
 
                     // Currently any nonsensical value will be parsed to 0
-                    if(is_binary_matrix) {
+                    if (is_binary_matrix) {
                         for (int i = 1; i < fields.length; i++) {
                             String val = fields[i].trim();
                             if (val.equals("1")) {
@@ -198,11 +199,22 @@ public class Parser {
                             }
                         }
                     }
+                    // do not convert matrix into binary. Differential expression based on p-value
+                    // is still counted
+                    else if (use_double_values) {
+                        for (int i = 1; i < fields.length; i++) {
+                            String val = fields[i].trim();
+                            exp[i - 1] = Double.parseDouble(val);
+                            if (Comparison.evalate(Double.parseDouble(val), threshold.get(fileId), comparator)) {
+                                totalExp++;
+                            }
+                        }
+                    }
                     // TODO: make it work for different thresholds and different comparators. PRIO: Low
                     else {
                         for (int i = 1; i < fields.length; i++) {
                             String val = fields[i].trim();
-                            if (Comparison.evalate(Double.parseDouble(val), threshold, comparator)) {
+                            if (Comparison.evalate(Double.parseDouble(val),  threshold.get(fileId), comparator)) {
                                 exp[i - 1] = 1;
                                 totalExp++;
                             } else {
@@ -225,44 +237,45 @@ public class Parser {
                 double avgExpCases = 0;
                 double avgExpGenes = 0;
                 if (totalExp > 0) {
-                    avgExpCases = (double)numCases / (double)totalExp;
-                    avgExpGenes = (double)numGenes / (double)totalExp;
+                    avgExpCases = (double) numCases / (double) totalExp;
+                    avgExpGenes = (double) numGenes / (double) totalExp;
                 }
                 numGenesMap.put(fileId, inExp.size());
                 avgExpressedCasesMap.put(fileId, avgExpCases);
                 avgExpressedGenesMap.put(fileId, avgExpGenes);
                 Set<String> bckN = new HashSet(inNetwork);
                 Set<String> bckG = new HashSet(inExp);
-                for (String id: inNetwork) {
+                for (String id : inNetwork) {
                     if (inExp.contains(id)) {
                         bckN.remove(id);
                     }
                 }
-                for (String id: inExp) {
+                for (String id : inExp) {
                     if (inNetwork.contains(id)) {
                         bckG.remove(id);
                     }
                 }
-                
+
                 backNodesByExpMap.put(fileId, bckN);
                 backGenesMap.put(fileId, bckG);
                 expressionReader.close();
 
-                //TODO: currently the p-value parsing makes no sense, need to implement p-value array if using multiple files.
-                try(BufferedReader pvalReader = new BufferedReader(new FileReader(kpmSettings.PVALUE_FILES_MAP.get(fileId)))){
-                    String ll = "";
-                    while((ll = pvalReader.readLine()) != null){
-                        String[] l = line.split("\t");
-                        pvals.put(l[0], (Double)Double.parseDouble(l[1]));
+                if (!is_binary_matrix && use_double_values) {
+                    try (BufferedReader pvalReader = new BufferedReader(new FileReader(kpmSettings.PVALUE_FILES_MAP.get(fileId)))) {
+                        String ll = "";
+                        while ((ll = pvalReader.readLine()) != null) {
+                            String[] l = ll.split("\t");
+                            pvals.putIfAbsent(l[0], new HashMap<String, Double>());
+                            pvals.get(l[0]).put(fileId, Double.parseDouble(l[1]));
+                        }
+
+                    } catch (IOException ioe) {
+                        Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, "Your p-value file produced an excpetion" +
+                                "- check,if you have added a valid file", ioe);
+                    } catch (NumberFormatException nfe) {
+                        Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, "Your p-value file seems to" +
+                                "have an incorrect format", nfe);
                     }
-                }
-                catch (IOException ioe){
-                    Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, "Your p-value file produced an excpetion" +
-                            "- check,if you have added a valid file", ioe);
-                }
-                catch (NumberFormatException nfe){
-                    Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, "Your p-value file seems to" +
-                            "have an incorrect format" , nfe);
                 }
             }
  
@@ -320,7 +333,7 @@ public class Parser {
 
         kpmSettings.NUM_CASES_MAP = numCasesMap;
         kpmSettings.NUM_STUDIES = numCasesMap.size();
-        return new KPMGraph(expressionMap, edgeList, nodeId2Symbol, backNodesMap, backGenesMap, kpmSettings.NUM_CASES_MAP, pvals);
+        return new KPMGraph(expressionMap, edgeList, nodeId2Symbol, backNodesMap, backGenesMap, kpmSettings.NUM_CASES_MAP, pvals, use_double_values);
     }
 
     public boolean isNumber(String input) {

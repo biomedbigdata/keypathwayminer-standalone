@@ -14,7 +14,7 @@ import de.mpg.mpiinf.ag1.kpm.Program;
 import de.mpg.mpiinf.ag1.kpm.parsers.ArgsParametersParser;
 import de.mpg.mpiinf.ag1.kpm.parsers.InputFileParser;
 import de.mpg.mpiinf.ag1.kpm.parsers.PropertiesFileParser;
-import de.mpg.mpiinf.ag1.kpm.shortestpath.ShortestPathAlgorithms;
+//import de.mpg.mpiinf.ag1.kpm.shortestpath.ShortestPathAlgorithms;
 import dk.sdu.kpm.KPMSettings;
 
 /**
@@ -89,7 +89,7 @@ public class Main {
 	System.out.println(params.PROGRAM);
 		if (params.PROGRAM == Program.SP) {
 			System.out.println("PROGRAM SELECTED: Shortest Paths");
-			ShortestPathAlgorithms.shortestPathways(params.GRAPH_FILE, params);
+			//ShortestPathAlgorithms.shortestPathways(params.GRAPH_FILE, params);
 		} else {
 
 			KPMRunHandler kpmHandler = new KPMRunHandler(kpmSettings);
