@@ -11,6 +11,8 @@ import dk.sdu.kpm.results.IKPMRunListener;
 import dk.sdu.kpm.runners.BatchRunWithPerturbationParameters;
 import dk.sdu.kpm.runners.BatchRunWithPerturbationRunner;
 import dk.sdu.kpm.runners.BatchRunner;
+import dk.sdu.kpm.runners.ProbabilisticRunner;
+
 import java.io.*;
 import java.nio.file.*;
 import java.text.SimpleDateFormat;
@@ -131,6 +133,11 @@ public class KPMRunHandler implements IKPMRunListener{
 			params.STRATEGY = KPMStrategy.GLONE;
 			params.ALGORITHM = KPMAlgorithm.OPTIMAL;
 			break;
+
+            case FDR:
+                params.STRATEGY = KPMStrategy.FDR;
+                params.ALGORITHM = KPMAlgorithm.FDR;
+                break;
 		}
 
 		// The configurator also sets the values in the KPMParameters-class.
@@ -145,7 +152,11 @@ public class KPMRunHandler implements IKPMRunListener{
 		System.out.println("\n********* RUNNING " + params.STRATEGY + " (" + params.ALGORITHM + ") " + "... *************\n");
 		if(params.IS_PERTURBATION_RUN){
 			runBatchWithPertubation(params);
-		}else{
+		}
+		else if(params.ALGORITHM == KPMAlgorithm.FDR){
+		    runFDR(params);
+        }
+		else{
 			runStandard(params);
 		}
 
@@ -157,6 +168,11 @@ public class KPMRunHandler implements IKPMRunListener{
 		kpmSettings.TOTAL_RUNNING_TIME = time;
 	}
 
+	private void runFDR(Parameters params){
+        KPMStandaloneTaskMonitor monitor = new KPMStandaloneTaskMonitor();
+	    ProbabilisticRunner runner = new ProbabilisticRunner("standalone", monitor, this, kpmSettings);
+	    runner.run();
+    }
 	private void runBatchWithPertubation(Parameters params){
 		this.params = params;
 		KPMStandaloneTaskMonitor monitor = new KPMStandaloneTaskMonitor();

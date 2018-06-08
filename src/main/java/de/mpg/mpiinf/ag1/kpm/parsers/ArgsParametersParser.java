@@ -43,9 +43,11 @@ public class ArgsParametersParser {
 		algoList.add("GREEDY");
 		algoList.add("ACO");
 		algoList.add("OPTIMAL");
+        algoList.add("FDR");
 		final List<String> strategyList = new ArrayList<String>(2);
 		strategyList.add("INES");
 		strategyList.add("GLONE");
+        strategyList.add("FDR");
 
 		for (String arg : args) {
 			String[] options = arg.split("=");
@@ -434,7 +436,10 @@ public class ArgsParametersParser {
                 // else: leave the integer values, that have been put in the map anyway
             }
         }
-		if (strategy.equals("INES")) {
+        if( strategy.equals("FDR")){
+		    kpmSettings.ALGO = Algo.FDR;
+        }
+		else if (strategy.equals("INES")) {
 			if (algorithm.equals("GREEDY")) {
 				kpmSettings.ALGO = Algo.GREEDY;
 			} else if (algorithm.equals("ACO")) {

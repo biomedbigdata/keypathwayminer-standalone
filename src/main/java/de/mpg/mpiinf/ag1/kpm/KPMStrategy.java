@@ -1,5 +1,5 @@
 package de.mpg.mpiinf.ag1.kpm;
 
 public enum KPMStrategy {
-	INES, GLONE
+	INES, GLONE, FDR
 }
