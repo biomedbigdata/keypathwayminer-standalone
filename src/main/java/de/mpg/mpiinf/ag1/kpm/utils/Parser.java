@@ -174,6 +174,9 @@ public class Parser {
                         new BufferedReader(new FileReader(expressionFiles.get(fileId)));
 
 
+                if(kpmSettings.MATRIX_FILES_HAVE_HEADER){
+                    expressionReader.readLine();
+                }
                 while ((line = expressionReader.readLine()) != null) {
                     numGenes++;
                     String[] fields = line.split("\t");

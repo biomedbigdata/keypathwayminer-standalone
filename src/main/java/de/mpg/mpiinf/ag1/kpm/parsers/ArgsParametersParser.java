@@ -77,7 +77,7 @@ public class ArgsParametersParser {
 			} else if (options[0].equals("-negativeFile")) {
 				params.NEGATIVE_FILE = options[1];
 			} else if (options[0].equals("-mfHeader")) {
-				params.MATRIX_FILES_HAVE_HEADER = Boolean.parseBoolean(options[1]);
+				kpmSettings.MATRIX_FILES_HAVE_HEADER = true;
 			} else if (options[0].equals("-mfSep")) {
 				params.MATRIX_FILES_SEPARATOR = Separator.valueOf(options[1]);
 				// OUTPUT FILES 
