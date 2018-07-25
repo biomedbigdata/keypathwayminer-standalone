@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.mpg.mpiinf.ag1.kpm.shortestpath.SortShortestPaths;
-import de.mpg.mpiinf.ag1.kpm.utils.Comparator;
 import de.mpg.mpiinf.ag1.kpm.utils.Parser;
 import de.mpg.mpiinf.ag1.kpm.utils.Separator;
 import dk.sdu.kpm.graph.KPMGraph;
 import dk.sdu.kpm.perturbation.IPerturbation;
+import dk.sdu.kpm.utils.Comparator;
 
 public class Parameters {
   
@@ -104,12 +104,12 @@ public class Parameters {
         public KPMAlgorithm ALGORITHM = KPMAlgorithm.GREEDY;
         
         public KPMGraph INPUT_GRAPH = null;
+        public KPMGraph INPUT_GRAPH2 = null;
 
         public Parser PARSER = null;
+        public Parser PARSER2 = null;
         
         public IPerturbation PERTURBATION = null;
-
-        public Comparator comparator = Comparator.LET;
 
         public boolean IS_BINARY_MATRIX = true;
 
@@ -149,6 +149,10 @@ public class Parameters {
         
         public boolean GENERATE_SHORTEST_PATHS_EDGE_STATS_FILE = 
                 true;
+
+        // Tests
+
+    public String PERTURBED_GRAPH_FILE = "";
         
 }
 

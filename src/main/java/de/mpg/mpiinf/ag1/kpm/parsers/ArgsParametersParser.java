@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 import de.mpg.mpiinf.ag1.kpm.Parameters;
 import de.mpg.mpiinf.ag1.kpm.Program;
 import de.mpg.mpiinf.ag1.kpm.main.Main;
-import de.mpg.mpiinf.ag1.kpm.utils.Comparator;
 import de.mpg.mpiinf.ag1.kpm.utils.OutputSettings;
 import de.mpg.mpiinf.ag1.kpm.utils.Separator;
 import dk.sdu.kpm.Algo;
@@ -23,6 +22,8 @@ import dk.sdu.kpm.algo.glone.LocalSearch;
 import dk.sdu.kpm.algo.glone.RhoDecay;
 import dk.sdu.kpm.perturbation.PerturbationService;
 import dk.sdu.kpm.perturbation.IPerturbation.PerturbationTags;
+import dk.sdu.kpm.utils.Comparison;
+import dk.sdu.kpm.utils.Comparator;
 
 public class ArgsParametersParser {
 
@@ -342,13 +343,25 @@ public class ArgsParametersParser {
 				String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
 				kpmSettings.PVALUE_MAP.put(internalID, Double.parseDouble(options[1]));
 				params.IS_BINARY_MATRIX = false;
+
             }else if(options[0].equals("-use_double")){
+			    // use double values in matrix
 			    kpmSettings.USE_DOUBLE_VALUES = true;
             }
 
             else if(options[0].equals("-comparator")){
-			    params.comparator = Comparator.valueOf(options[1]);
+			    kpmSettings.COMPARATOR = Comparator.valueOf(options[1]);
+			    //comparator to decide how the matrix should be binarized
             }
+			else if (options[0].equals("-significance_level")) {
+				kpmSettings.SIGNIFICANCE_LEVEL = Double.parseDouble(options[1]);
+			}
+			else if (options[0].equals("-aggregation_method")) {
+				kpmSettings.AGGREGATION_METHOD = options[1];
+			}
+			else if (options[0].equals("-randomized_graph_file")) {
+				params.PERTURBED_GRAPH_FILE = options[1];
+			}
 			else if (options[0].equals("-help")) {
 				printHelp();
 				System.exit(0);

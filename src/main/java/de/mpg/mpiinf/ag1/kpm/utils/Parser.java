@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 
 import dk.sdu.kpm.KPMSettings;
 import dk.sdu.kpm.graph.KPMGraph;
+import dk.sdu.kpm.utils.Comparator;
+import dk.sdu.kpm.utils.Comparison;
 
 /**
  *
@@ -34,7 +36,7 @@ public class Parser {
 
     Map<String, Double> threshold;
     public boolean is_binary_matrix;
-    public Comparator comparator;
+    public dk.sdu.kpm.utils.Comparator comparator;
     public boolean use_double_values;
 
     public static final String TAB = "\t";

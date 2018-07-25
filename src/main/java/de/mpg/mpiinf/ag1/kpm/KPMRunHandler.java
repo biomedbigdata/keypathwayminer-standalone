@@ -54,10 +54,17 @@ public class KPMRunHandler implements IKPMRunListener{
 		System.out.println("\n*********** CREATING GRAPH ***************\n");
 		// Parse the graph and matrix files
 		params.PARSER = new Parser(params.GRAPH_FILE, kpmSettings.MATRIX_FILES_MAP, Parser.TAB,
-                kpmSettings.PVALUE_MAP, params.IS_BINARY_MATRIX, params.comparator, kpmSettings.PVALUE_FILES_MAP, kpmSettings.USE_DOUBLE_VALUES);
+                kpmSettings.PVALUE_MAP, params.IS_BINARY_MATRIX, kpmSettings.COMPARATOR, kpmSettings.PVALUE_FILES_MAP, kpmSettings.USE_DOUBLE_VALUES);
+
+		//Test
+		params.PARSER2 = new Parser(params.GRAPH_FILE, kpmSettings.MATRIX_FILES_MAP, Parser.TAB,
+				kpmSettings.PVALUE_MAP, params.IS_BINARY_MATRIX, kpmSettings.COMPARATOR, kpmSettings.PVALUE_FILES_MAP, kpmSettings.USE_DOUBLE_VALUES);
 
 		// Create KPM graph
 		params.INPUT_GRAPH = params.PARSER.createGraph(kpmSettings);
+
+		//Test
+		params.INPUT_GRAPH2 = params.PARSER2.createGraph(kpmSettings);
 
 		// Print graph statistics
 		if (params.PRINT_GRAPH_STATS) {
@@ -170,7 +177,7 @@ public class KPMRunHandler implements IKPMRunListener{
 
 	private void runFDR(Parameters params){
         KPMStandaloneTaskMonitor monitor = new KPMStandaloneTaskMonitor();
-	    ProbabilisticRunner runner = new ProbabilisticRunner("standalone", monitor, this, kpmSettings);
+	    ProbabilisticRunner runner = new ProbabilisticRunner("standalone", monitor, this, kpmSettings, params.INPUT_GRAPH2);
 	    runner.run();
     }
 	private void runBatchWithPertubation(Parameters params){
