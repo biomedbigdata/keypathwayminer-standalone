@@ -1,5 +1,6 @@
 package de.mpg.mpiinf.ag1.kpm;
 
+import EDU.oswego.cs.dl.util.concurrent.FJTask;
 import de.mpg.mpiinf.ag1.kpm.parsers.PriorityFileParser;
 import de.mpg.mpiinf.ag1.kpm.utils.OutputSettings;
 import de.mpg.mpiinf.ag1.kpm.utils.Parser;
@@ -177,7 +178,7 @@ public class KPMRunHandler implements IKPMRunListener{
 
 	private void runFDR(Parameters params){
         KPMStandaloneTaskMonitor monitor = new KPMStandaloneTaskMonitor();
-	    ProbabilisticRunner runner = new ProbabilisticRunner("standalone", monitor, this, kpmSettings, params.INPUT_GRAPH2);
+	    ProbabilisticRunner runner = new ProbabilisticRunner("standalone", monitor, this, kpmSettings, params.INPUT_GRAPH2, params.RESULTS_FOLDER);
 	    runner.run();
     }
 	private void runBatchWithPertubation(Parameters params){

@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import de.mpg.mpiinf.ag1.kpm.Parameters;
 import de.mpg.mpiinf.ag1.kpm.Program;
 import de.mpg.mpiinf.ag1.kpm.main.Main;
@@ -362,6 +363,12 @@ public class ArgsParametersParser {
 			else if (options[0].equals("-randomized_graph_file")) {
 				params.PERTURBED_GRAPH_FILE = options[1];
 			}
+			else if (options[0].equals("-fdr_cutoff")) {
+                kpmSettings.FDR_CUTOFF = Double.parseDouble(options[1]);
+			}
+            else if (options[0].equals("-use_individual_pvalues")) {
+                kpmSettings.USE_INDIVIDUAL_PVALUES = Boolean.parseBoolean(options[1]);
+            }
 			else if (options[0].equals("-help")) {
 				printHelp();
 				System.exit(0);
