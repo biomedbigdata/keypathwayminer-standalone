@@ -357,6 +357,9 @@ public class ArgsParametersParser {
 			else if (options[0].equals("-significance_level")) {
 				kpmSettings.SIGNIFICANCE_LEVEL = Double.parseDouble(options[1]);
 			}
+			else if (options[0].equals("-fdr_cutoff")) {
+				kpmSettings.FDR_CUTOFF = Double.parseDouble(options[1]);
+			}
 			else if (options[0].equals("-aggregation_method")) {
 				kpmSettings.AGGREGATION_METHOD = options[1];
 			}
