@@ -321,16 +321,16 @@ public class ArgsParametersParser {
 
             else if(options[0].equals("-perturbation_technique")){
                 if (options[1].equals("edgeremove")) {
-                    params.PERTURBATION = PerturbationService.getPerturbation(PerturbationTags.EdgeRemoval);
+                    params.PERTURBATION = PerturbationService.getPerturbation(PerturbationTags.EdgeRemoval, this.kpmSettings);
 
                 } else if (options[1].equals("edgerewire")) {
-                    params.PERTURBATION = PerturbationService.getPerturbation(PerturbationTags.EdgeRewire);
+                    params.PERTURBATION = PerturbationService.getPerturbation(PerturbationTags.EdgeRewire,this.kpmSettings);
 
                 } else if (options[1].equals("nodeswap")) {
-                    params.PERTURBATION = PerturbationService.getPerturbation(PerturbationTags.NodeSwap);
+                    params.PERTURBATION = PerturbationService.getPerturbation(PerturbationTags.NodeSwap, this.kpmSettings);
 
                 } else if (options[1].equals("noderemove")) {
-                    params.PERTURBATION = PerturbationService.getPerturbation(PerturbationTags.NodeRemoval);
+                    params.PERTURBATION = PerturbationService.getPerturbation(PerturbationTags.NodeRemoval,this.kpmSettings);
 
                 }
 				
@@ -371,6 +371,15 @@ public class ArgsParametersParser {
 			}
             else if (options[0].equals("-use_individual_pvalues")) {
                 kpmSettings.USE_INDIVIDUAL_PVALUES = Boolean.parseBoolean(options[1]);
+            }
+			else if (options[0].equals("-perc_perturbation")) {
+				kpmSettings.PERC_PERTURBATION = Integer.parseInt(options[1]);
+			}
+            else if (options[0].equals("-max_network_size")) {
+                kpmSettings.MAX_NETWORK_SIZE = Integer.parseInt(options[1]);
+            }
+            else if (options[0].equals("-min_network_size")) {
+                kpmSettings.MIN_NETWORK_SIZE = Integer.parseInt(options[1]);
             }
 			else if (options[0].equals("-help")) {
 				printHelp();
