@@ -388,6 +388,9 @@ public class ArgsParametersParser {
 			else if (options[0].equals("-ranking_method")) {
 				kpmSettings.RANKING_METHOD = options[1];
 			}
+			else if (options[0].equals("-high_degree_nodes")) {
+				kpmSettings.HIGH_DEGREE_NODES = Integer.parseInt(options[1]);
+			}
 			else if (options[0].equals("-help")) {
 				printHelp();
 				System.exit(0);
