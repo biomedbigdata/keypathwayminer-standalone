@@ -333,6 +333,10 @@ public class ArgsParametersParser {
                     params.PERTURBATION = PerturbationService.getPerturbation(PerturbationTags.NodeRemoval,this.kpmSettings);
 
                 }
+				else if (options[1].equals("degreeawarenodeswap")) {
+					params.PERTURBATION = PerturbationService.getPerturbation(PerturbationTags.DegreeAwareNodeSwap,this.kpmSettings);
+
+				}
 				
 				if(params.PERTURBATION == null){
 					throw new Exception("Invalid perturbation technique.");
@@ -381,6 +385,9 @@ public class ArgsParametersParser {
             else if (options[0].equals("-min_network_size")) {
                 kpmSettings.MIN_NETWORK_SIZE = Integer.parseInt(options[1]);
             }
+			else if (options[0].equals("-ranking_method")) {
+				kpmSettings.RANKING_METHOD = options[1];
+			}
 			else if (options[0].equals("-help")) {
 				printHelp();
 				System.exit(0);
