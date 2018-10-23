@@ -178,6 +178,7 @@ public class KPMRunHandler implements IKPMRunListener{
 
 	private void runFDR(Parameters params){
         KPMStandaloneTaskMonitor monitor = new KPMStandaloneTaskMonitor();
+
 	    ProbabilisticRunner runner = new ProbabilisticRunner("standalone",
 				monitor, this, kpmSettings, params.INPUT_GRAPH2, params.RESULTS_FOLDER, params.PERTURBATION.getTag());
 	    runner.run();
