@@ -146,8 +146,8 @@ public class PropertiesFileParser {
 			params.MINIMUM_LENGTH_SHORTEST_PATHS = 
 					Integer.parseInt(props.getProperty("minimum_length_shortest_paths"));
 
-			params.SORT_SHORTEST_PATHS_BY = 
-					de.mpg.mpiinf.ag1.kpm.shortestpath.SortShortestPaths.valueOf(props.getProperty("sort_shortest_paths_by"));
+		//	params.SORT_SHORTEST_PATHS_BY =
+		//			de.mpg.mpiinf.ag1.kpm.shortestpath.SortShortestPaths.valueOf(props.getProperty("sort_shortest_paths_by"));
 			/* ------ ADVANCED params (GENERAL) ------------ */
 
 			int max = Runtime.getRuntime().availableProcessors();

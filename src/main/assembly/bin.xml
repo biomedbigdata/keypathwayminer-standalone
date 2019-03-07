@@ -33,7 +33,7 @@
   </fileSets>
   <files>
         <file>
-            <source>target/KPM-4.5-jar-with-dependencies.jar</source>
+            <source>target/KPM-5-jar-with-dependencies.jar</source>
             <outputDirectory>/</outputDirectory>
             <destName>KPM-4.5.jar</destName>            
         </file>

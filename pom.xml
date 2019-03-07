@@ -23,6 +23,10 @@
                 <configuration>
                     <source>8</source>
                     <target>8</target>
+                        <excludes>
+                            <exclude>**/shortestpath/*.java</exclude>
+                            <exclude>**/FloydMarshallAlgorithm.java</exclude>
+                        </excludes>
                 </configuration>
             </plugin>
             <plugin>

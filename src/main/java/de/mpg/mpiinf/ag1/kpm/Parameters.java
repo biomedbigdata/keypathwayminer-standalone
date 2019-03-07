@@ -3,7 +3,7 @@ package de.mpg.mpiinf.ag1.kpm;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.mpg.mpiinf.ag1.kpm.shortestpath.SortShortestPaths;
+//import de.mpg.mpiinf.ag1.kpm.shortestpath.SortShortestPaths;
 import de.mpg.mpiinf.ag1.kpm.utils.Comparator;
 import de.mpg.mpiinf.ag1.kpm.utils.Parser;
 import de.mpg.mpiinf.ag1.kpm.utils.Separator;
@@ -128,8 +128,8 @@ public class Parameters {
         public int MINIMUM_LENGTH_SHORTEST_PATHS = 2;
         
         // Sort criteria for shortest paths (descending)
-        public SortShortestPaths SORT_SHORTEST_PATHS_BY = 
-                SortShortestPaths.LENGTH;
+     //   public SortShortestPaths SORT_SHORTEST_PATHS_BY =
+       //         SortShortestPaths.LENGTH;
         
         /* ------ Shortest paths output files ------ */
         public String SHORTEST_PATHS_STATS_FILE = "shortest_path_stats";
