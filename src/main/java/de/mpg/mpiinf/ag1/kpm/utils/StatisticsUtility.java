@@ -454,10 +454,8 @@ public class StatisticsUtility {
         DecimalFormat df = new DecimalFormat("#.00");
         boolean isInes = kpmSettings.ALGO == Algo.GREEDY || kpmSettings.ALGO == Algo.LCG
                 || kpmSettings.ALGO == Algo.OPTIMAL;
-        BufferedWriter bw = null;
 
-        try {
-            //legacy code
+        //legacy code
             /*Map<String, Integer> nodeCount = new HashMap<String, Integer>();
             for (IKPMResultItem result : results.getResults()) {
                 //TODO:  unionNode set
@@ -470,9 +468,9 @@ public class StatisticsUtility {
                 }
             }*/
 
-            for(IKPMResultItem result: results.getResults()) {
+        for (IKPMResultItem result : results.getResults()) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file + "PATHWAY-k-" + result.getK() + "-l-" + result.getL() + ".txt"))) {
                 // TODO variable file extension
-                bw = new BufferedWriter(new FileWriter(file+"PATHWAY-k-"+result.getK()+"-l-"+result.getL()+".txt"));
                 bw.write("ID" + "\t");
                 bw.write("# PATHWAYS CONTAINING" + "\t");
                 bw.write("AVG. DIFF. EXP. CASES" + "\t");
@@ -496,12 +494,6 @@ public class StatisticsUtility {
                     }
                     bw.write("\n");
                 }
-            }
-            bw.close();
-        } catch (IOException ex) {
-            Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
                 bw.close();
             } catch (IOException ex) {
                 Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);
@@ -540,9 +532,14 @@ public class StatisticsUtility {
                 bw.write("ALGORITHM: " + "\t" + "OPTIMAL" + "\n");
             }
             //TODO: check whether this is actually the best result aka. if resultList is ordered
-            IKPMResultItem best = results.getResults().get(0);
-            bw.write("SIZE OF BEST RESULT: " + "\t" + best.getResultsInfoTable()[0][2] + "\n");
-            bw.write("TOTAL RUNNING TIME: " + "\t" + kpmSettings.TOTAL_RUNNING_TIME + "\n");
+            try {
+                IKPMResultItem best = results.getResults().get(0);
+                bw.write("SIZE OF BEST RESULT: " + "\t" + best.getResultsInfoTable()[0][2] + "\n");
+                bw.write("TOTAL RUNNING TIME: " + "\t" + kpmSettings.TOTAL_RUNNING_TIME + "\n");
+            }
+            catch (IndexOutOfBoundsException e){
+                bw.write("No sensible result found!");
+            }
             bw.close();
         } catch (IOException ex) {
             Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);

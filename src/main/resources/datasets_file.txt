@@ -1,2 +1,2 @@
 ID	L	PATH
-1	8	src/main/resources/indicator_matrix_hd.txt
+1	8	/home/anne/Documents/keypathwayminer/keypathwayminer-standalone/src/main/resources/indicator_matrix_hd.txt

@@ -41,7 +41,7 @@ public class Main {
 
 		// parse parameters from the kpm.properties file
 		PropertiesFileParser pfp = new PropertiesFileParser(kpmSettings);
-		Parameters params = pfp.parse("src/main/resources/kpm.properties");
+		Parameters params = pfp.parse("/home/anne/Documents/keypathwayminer/keypathwayminer-standalone/src/main/resources/kpm.properties");
 
 		// Setting folder prefix for testing:
 		String prefix = "src/main/resources/";
@@ -87,7 +87,7 @@ public class Main {
 		// check if all input files are correct
 		InputFileParser ifp = new InputFileParser(kpmSettings);
 		params = ifp.parse(params);
-	System.out.println(params.PROGRAM);
+		System.out.println(params.PROGRAM);
 		if (params.PROGRAM == Program.SP) {
 			System.out.println("PROGRAM SELECTED: Shortest Paths");
 		//	ShortestPathAlgorithms.shortestPathways(params.GRAPH_FILE, params);

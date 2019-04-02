@@ -58,7 +58,7 @@ public class Parameters {
         
         public String FILE_SEPARATOR = System.getProperty("file.separator");
         
-        public String VALIDATION_FILE = "COAD-VAL-ENTREZ.txt";
+        public String VALIDATION_FILE = "/home/anne/Documents/keypathwayminer/keypathwayminer-standalone/src/main/resources/COAD-VAL-ENTREZ.txt";
         
         /* ------ KPM OUTPUT FILES ------------ */
         

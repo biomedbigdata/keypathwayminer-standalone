@@ -4,7 +4,7 @@
  */
 package de.mpg.mpiinf.ag1.kpm.graph;
 
-import de.mpg.mpiinf.ag1.kpm.shortestpath.ShortestPathways;
+//import de.mpg.mpiinf.ag1.kpm.shortestpath.ShortestPathways;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 
