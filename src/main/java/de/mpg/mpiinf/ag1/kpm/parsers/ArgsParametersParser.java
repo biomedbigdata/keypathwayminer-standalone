@@ -393,7 +393,19 @@ public class ArgsParametersParser {
                 }
             } else if (options[0].equals("-background")) {
                 kpmSettings.BACKGROUND = options[1];
-            } else if (options[0].equals("-help")) {
+            } else if (options[0].equals("-print_background")) {
+                kpmSettings.PRINT_BACKGROUND = true;
+            }
+            else if (options[0].equals("-sample_only")) {
+                kpmSettings.GENERATE_SAMPLES=true;
+            }
+            else if (options[0].equals("-sliding_window_size")) {
+                kpmSettings.SLIDING_WINDOW_SIZE=Integer.parseInt(options[1]);
+            }
+            else if (options[0].equals("-samples_background")) {
+                kpmSettings.NR_SAMPLES_BACKROUND = Integer.parseInt(options[1]);
+            }
+            else if (options[0].equals("-help")) {
                 printHelp();
                 System.exit(0);
             } else {

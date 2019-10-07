@@ -5,6 +5,7 @@ import de.mpg.mpiinf.ag1.kpm.parsers.PriorityFileParser;
 import de.mpg.mpiinf.ag1.kpm.utils.OutputSettings;
 import de.mpg.mpiinf.ag1.kpm.utils.Parser;
 import de.mpg.mpiinf.ag1.kpm.utils.StatisticsUtility;
+import dk.sdu.kpm.Algo;
 import dk.sdu.kpm.KPMSettings;
 import dk.sdu.kpm.charts.IChart;
 import dk.sdu.kpm.results.IKPMResultSet;
@@ -95,6 +96,10 @@ public class KPMRunHandler implements IKPMRunListener{
 			if(!params.VALIDATION_FILE.isEmpty()){
 				params = setValidationFile(params);
 			}
+			else if (kpmSettings.ALGO.equals(Algo.FDR)){
+			    System.out.println(String.format("No validaton file selected, not necessary: FDR"));
+            }
+
 		}catch(FileNotFoundException e){
 			System.out.println(String.format("\nValidation file could not be found: '%s'.\n\nKPM will now terminate.", params.VALIDATION_FILE));
 			return;
