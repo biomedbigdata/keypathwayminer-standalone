@@ -18,7 +18,9 @@ import dk.sdu.kpm.KPMSettings;
 /**
  *
  * @author nalcaraz
+ *
  */
+
 public class Main {
 
     private volatile KPMSettings kpmSettings;
@@ -41,16 +43,14 @@ public class Main {
 		//Parameters params = pfp.parse("src/main/resources/kpm.properties");
 
 		// Setting folder prefix for testing:
-		String prefix = "src/main/resources/";
+		String prefix = "resources/";
 		Parameters params = new Parameters();
 		params.DATASETS_FILE = prefix + params.DATASETS_FILE;
 		params.POSITIVE_FILE = prefix + params.POSITIVE_FILE;
 		params.NEGATIVE_FILE = prefix + params.NEGATIVE_FILE;
 		params.RESULTS_FOLDER = prefix + params.RESULTS_FOLDER;
 		params.VALIDATION_FILE = prefix + params.VALIDATION_FILE;
-		
-
-		params.GRAPH_FILE = "data/" + params.GRAPH_FILE;
+		params.GRAPH_FILE = prefix+ params.GRAPH_FILE;
 
 		try {
 			start(args, prefix + "kpm.properties", params);
@@ -62,14 +62,9 @@ public class Main {
 
 	public void start(String[] args, String propertiesFile, Parameters params) throws Exception {
 
-		// parse parameters from the command line
-	//	try {
 		ArgsParametersParser argspp = new ArgsParametersParser(kpmSettings);
-			params = argspp.parse(args, params);
-	//	} catch (Exception e1) {
-	//		System.out.println("An error occurred. Exiting.");
-	//		return;
-	//	}
+		params = argspp.parse(args, params);
+
 		// check if all input files are correct
 		InputFileParser ifp = new InputFileParser(kpmSettings);
 		params = ifp.parse(params);
@@ -78,102 +73,8 @@ public class Main {
 			System.out.println("PROGRAM SELECTED: Shortest Paths");
 			ShortestPathAlgorithms.shortestPathways(params.GRAPH_FILE, params);
 		} else {
-
 			KPMRunHandler kpmHandler = new KPMRunHandler(kpmSettings);
 			kpmHandler.runBatch(params);
-			
-			/*for(List<Integer> kl_values : KPMParameters.STATS_MAP.keySet()){
-				String param = "";
-				for(Integer val : kl_values){
-					param +=  val + " ";
-				}
-				System.out.println("param = " + param);
-				List<Result> results = KPMParameters.STATS_MAP.get(kl_values).getResults();
-
-				if (results.size() > 1) {
-					System.out.println("PERFORMING POST-PROCESSING OPERATIONS...");
-
-					try {
-						Collections.sort(results);
-					} catch (UnsupportedOperationException e) {
-						// do nothing; this list was already sorted
-					}
-
-					if (KPMParameters.NUM_SOLUTIONS >= 0) {
-						List<Result> filter = new ArrayList<Result>();
-						int toAdd = 1;
-						for (Result result : results) {
-							if (toAdd > KPMParameters.NUM_SOLUTIONS) {
-								break;
-							} else {
-								filter.add(result);
-								toAdd++;
-							}
-						}
-						results = filter;
-					}
-
-					System.out.println("BEST FITNESS: " + results.get(0).getFitness());
-				} else {
-					System.out.println("NO PATHWAYS EXIST FOR THE GIVEN PARAMETERS !");
-				}
-			 */
-
-
-
-			/*System.out.println("\n********* GENERATING STATS AND WRITING SOLUTIONS TO FILES *******\n");
-
-				File theDir = new File(Globals.RESULTS_FOLDER);
-
-				// if the directory does not exist, create it
-				if (!theDir.exists()) {
-					System.out.println("creating directory: " + Globals.RESULTS_FOLDER);
-					boolean created = theDir.mkdir();
-					if (created) {
-						System.out.println("Results folder created");
-					}
-				}
-
-				StatisticsUtility.writeResultsStats(results, g);
-				if (KPMParameters.GENERATE_SUMMARY_FILE) {
-					System.out.println("Generating summary file... ");
-					StatisticsUtility.writeSummaryFile(Globals.RESULTS_FOLDER + 
-							Globals.FILE_SEPARATOR + KPMParameters.SUMMARY_FILE + "-"
-							+ Globals.SUFFIX + Globals.FILE_EXTENSION, results);
-				}
-				if (KPMParameters.GENERATE_PATHWAYS_FILE) {
-					System.out.println("Generating pathway file(s)... ");
-					if (!Globals.PATHWAYS_IN_SINGLE_FILE) {
-						StatisticsUtility.writeIndividualPathwayFiles(Globals.RESULTS_FOLDER,
-								results, g);
-					} else {
-						StatisticsUtility.writePathwaysFile(Globals.RESULTS_FOLDER + 
-								Globals.FILE_SEPARATOR + KPMParameters.PATHWAYS_FILE + "-"
-								+ Globals.SUFFIX + Globals.FILE_EXTENSION, results, g);
-					}
-				}
-				if (KPMParameters.GENERATE_PATHWAYS_STATS_FILE) {
-					System.out.println("Generating pathways stats file... ");
-					StatisticsUtility.writePathwaysStatsFile(Globals.RESULTS_FOLDER + 
-							Globals.FILE_SEPARATOR + KPMParameters.PATHWAYS_STATS_FILE + "-"
-							+ Globals.SUFFIX + Globals.FILE_EXTENSION, results, g);
-				}
-				if (KPMParameters.GENERATE_GENE_STATS_FILE) {
-					System.out.println("Generating gene stats file... ");
-					StatisticsUtility.writeGeneStatsFile(Globals.RESULTS_FOLDER + 
-							Globals.FILE_SEPARATOR + KPMParameters.GENE_STATS_FILE + "-"
-							+ Globals.SUFFIX + Globals.FILE_EXTENSION, results, g);
-				}
-				if (KPMParameters.GENERATE_DATASETS_STATS_FILE) {
-					System.out.println("Generating datasets stats file... ");
-					StatisticsUtility.writeDatasetsStats(Globals.RESULTS_FOLDER + 
-							Globals.FILE_SEPARATOR + KPMParameters.DATASETS_STATS_FILE + "-"
-							+ Globals.SUFFIX + Globals.FILE_EXTENSION, p, g);
-				}            
-
-				if (Globals.PROGRAM == Program.KPM_SP) {
-					shortestPathways(results, g);
-				}*/
 		}
 	}
 }

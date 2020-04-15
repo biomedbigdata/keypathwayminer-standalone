@@ -100,8 +100,7 @@ public class KPMParameterConfigurator {
         HashMap<String, Integer> checkedStepSizeCaseExceptionsMap = new HashMap<String, Integer>();
 		for (String dataSetID : kpmSettings.INC_L .keySet()) {
 				int lStepTemp = kpmSettings.INC_L .get(dataSetID);
-				int maxStepSize = kpmSettings.MAX_L.get(dataSetID)
-						- kpmSettings.MIN_L.get(dataSetID);
+				int maxStepSize = kpmSettings.MAX_L.get(dataSetID) - kpmSettings.MIN_L.get(dataSetID);
 				if (lStepTemp > maxStepSize) {
 					checkedStepSizeCaseExceptionsMap
 					.put(dataSetID, maxStepSize);

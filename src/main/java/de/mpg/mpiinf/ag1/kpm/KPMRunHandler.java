@@ -218,13 +218,12 @@ public class KPMRunHandler implements IKPMRunListener{
 
 	@Override
 	public void runFinished(IKPMResultSet results) {
-			int counter = 1;
-
+		int counter = 1;
 		File resultsFolder = new File(params.RESULTS_FOLDER);
 		if(resultsFolder.isDirectory()){
 
 
-			File resultsChartsFolder = new File(params.RESULTS_FOLDER + "\\charts\\");
+			File resultsChartsFolder = new File(params.RESULTS_FOLDER + "/charts/");
 
 			if(!resultsChartsFolder.exists()){
 				resultsChartsFolder.mkdir();
@@ -232,14 +231,14 @@ public class KPMRunHandler implements IKPMRunListener{
 
 			String formattedChartTime = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(Calendar.getInstance().getTime());
 
-			File resultsChartsCurrentFolder = new File(params.RESULTS_FOLDER + "\\charts\\" + formattedChartTime + "\\");
+			File resultsChartsCurrentFolder = new File(params.RESULTS_FOLDER + "/charts/" + formattedChartTime + "/");
 
 			if(!resultsChartsCurrentFolder.exists()){
 				resultsChartsCurrentFolder.mkdir();
 			}
 
 			for(IChart chart : results.getCharts().values()){
-				String chartFileName = resultsChartsCurrentFolder.getAbsolutePath() + "\\" + String.format("chart%d.png", counter);
+				String chartFileName = resultsChartsCurrentFolder.getAbsolutePath() + "/" + String.format("chart%d.png", counter);
 				System.out.println(chartFileName);
 				File chartsFile = new File(chartFileName);
 				try {
