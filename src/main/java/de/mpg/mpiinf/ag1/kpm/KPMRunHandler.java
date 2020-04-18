@@ -3,6 +3,8 @@ package de.mpg.mpiinf.ag1.kpm;
 import de.mpg.mpiinf.ag1.kpm.parsers.PriorityFileParser;
 import de.mpg.mpiinf.ag1.kpm.utils.Parser;
 import de.mpg.mpiinf.ag1.kpm.utils.StatisticsUtility;
+import de.mpg.mpiinf.ag1.kpm.utils.OutputSettings;
+
 import dk.sdu.kpm.KPMSettings;
 import dk.sdu.kpm.charts.IChart;
 import dk.sdu.kpm.results.IKPMResultSet;
@@ -11,7 +13,11 @@ import dk.sdu.kpm.runners.BatchRunWithPerturbationParameters;
 import dk.sdu.kpm.runners.BatchRunWithPerturbationRunner;
 import dk.sdu.kpm.runners.BatchRunner;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -217,28 +223,38 @@ public class KPMRunHandler implements IKPMRunListener{
 	}
 
 	@Override
+
 	public void runFinished(IKPMResultSet results) {
+		LocalDateTime now = LocalDateTime.now();
 		int counter = 1;
-		File resultsFolder = new File(params.RESULTS_FOLDER);
-		if(resultsFolder.isDirectory()){
 
+		File resultsFolder;
+		try{
+			Files.createDirectories(Paths.get(params.RESULTS_FOLDER));
+		} catch (IOException e){
+			e.printStackTrace();
+		}
 
-			File resultsChartsFolder = new File(params.RESULTS_FOLDER + "/charts/");
+		if(Files.exists(Paths.get(params.RESULTS_FOLDER))){
 
-			if(!resultsChartsFolder.exists()){
-				resultsChartsFolder.mkdir();
+			Path resultsChartsFolder = Paths.get(params.RESULTS_FOLDER + File.separator+ "charts");
+			try {
+				Files.createDirectories(resultsChartsFolder);
+			}
+			catch (IOException ioe){
+				ioe.printStackTrace();
 			}
 
-			String formattedChartTime = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(Calendar.getInstance().getTime());
+			//String formattedChartTime = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(Calendar.getInstance().getTime());
 
-			File resultsChartsCurrentFolder = new File(params.RESULTS_FOLDER + "/charts/" + formattedChartTime + "/");
+			File resultsChartsCurrentFolder = new File(params.RESULTS_FOLDER + File.separator+"charts"+File.separator + now + File.separator);
 
 			if(!resultsChartsCurrentFolder.exists()){
 				resultsChartsCurrentFolder.mkdir();
 			}
 
 			for(IChart chart : results.getCharts().values()){
-				String chartFileName = resultsChartsCurrentFolder.getAbsolutePath() + "/" + String.format("chart%d.png", counter);
+				String chartFileName = resultsChartsCurrentFolder.getAbsolutePath() + File.separator + String.format("chart%d.png", counter);
 				System.out.println(chartFileName);
 				File chartsFile = new File(chartFileName);
 				try {
@@ -250,10 +266,56 @@ public class KPMRunHandler implements IKPMRunListener{
 			}
 
 			if(counter > 0){
-				System.out.println(" - Saved charts to '"+resultsChartsFolder.getAbsolutePath()+"'");
+				System.out.println(" - Saved charts to '"+resultsChartsFolder.toString()+"'");
 			}
 		}else{
 			System.out.println(" - No path found, could not save charts.");
 		}
+
+		// saving result tables to files
+
+		Path resultTableFolder = Paths.get(params.RESULTS_FOLDER+File.separator+"tables"+File.separator+results.getKpmSettings().ALGO
+				+params.STRATEGY+kpmSettings.getKpmRunID()+now);
+		try{
+			Files.createDirectories(resultTableFolder);
+		}catch (IOException ioe){
+			ioe.printStackTrace();
+		}
+
+
+		if(OutputSettings.GENERATE_SUMMARY_FILE){ //(Done)
+			String resultSummary = resultTableFolder.toString()+File.separator+ OutputSettings.SUMMARY_FILE;
+			StatisticsUtility.writeSummaryFile(resultSummary, results, kpmSettings);
+		}
+		if(OutputSettings.GENERATE_DATASETS_STATS_FILE){ //(Done)
+			String resultDatasetStats = resultTableFolder.toString()+File.separator+OutputSettings.DATASETS_STATS_FILE;
+			StatisticsUtility.writeDatasetsStats(resultDatasetStats, params.PARSER, kpmSettings.MAIN_GRAPH );
+		}
+
+		if(OutputSettings.GENERATE_GENE_STATS_FILE){ //Done
+			String resultGeneStats = resultTableFolder.toString()+File.separator+OutputSettings.GENE_STATS_FILE;
+			StatisticsUtility.writeGeneStatsFile(resultGeneStats, results, kpmSettings.MAIN_GRAPH, kpmSettings);
+		}
+
+		if(OutputSettings.GENERATE_PATHWAYS_FILE){ // Done
+			String resultIndividualPathwaysFile= resultTableFolder.toString();
+			StatisticsUtility.writeIndividualPathwayFiles(resultIndividualPathwaysFile, results, kpmSettings.MAIN_GRAPH, params);
+			String resultPathwaysFile= resultTableFolder.toString()+File.separator+OutputSettings.PATHWAYS_FILE;
+			StatisticsUtility.writePathwaysFile(resultPathwaysFile, results, kpmSettings.MAIN_GRAPH, kpmSettings);
+		}
+
+		if(OutputSettings.GENERATE_PATHWAYS_STATS_FILE) { //Done
+			String resultPathwayStatsFile = resultTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_STATS_FILE;
+			StatisticsUtility.writePathwaysStatsFile(resultPathwayStatsFile, results, kpmSettings.MAIN_GRAPH);
+		}
+
+		// String resultFile2= resultTableFolder.toString()+File.separator+"results2.txt";
+		//StatisticsUtility.writeResultsToFile2(resultFile2);
+		//String resultMatrixStatisics= resultTableFolder.toString()+File.separator+"resultSummary.txt";
+		StatisticsUtility.printMatrixStatistics(params.PARSER, kpmSettings.MAIN_GRAPH);
+		//String resultGraphicsStatistics= resultTableFolder.toString()+File.separator+"resultSummary.txt";
+		//StatisticsUtility.printGraphStatistics(resultGraphicsStatistics,);
+		//StatisticsUtility.generateHistogramLValues();
 	}
+
 }
