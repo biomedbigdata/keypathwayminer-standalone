@@ -421,7 +421,7 @@ public class ArgsParametersParser {
 	private static void printHelp() {
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader("README.txt"));
+			br = new BufferedReader(new FileReader("README.md"));
 			String line = "";
 			while ((line = br.readLine()) != null) {
 				System.out.println(line);
@@ -438,7 +438,5 @@ public class ArgsParametersParser {
 				Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
-
-
 	}
 }
