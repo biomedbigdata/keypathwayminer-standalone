@@ -1,26 +1,29 @@
-SUMMARY
-    This program extracts key-pathways from a biological network
-    and a series of indicator matrices for activity/differential 
-    produced from OMICS studies.
 
-ABOUT
-    KeyPathwayMiner version 4.0
-    Copyright 2013 by
+KeyPathwayMiner 5.0
+============
+Given a biological network and a set of case-control studies, KeyPathwayMiner efficiently extracts all maximal connected sub-networks. These sub-networks contain the genes that are mainly dysregulated, e.g., differentially expressed, in most cases studied.
+
+For more informaiton please visit our website [(Key Pathway Miner website)](https://keypathwayminer.compbio.sdu.dk/keypathwayminer/).
+
+## ABOUT
+    KeyPathwayMiner version 5.0
+    Copyright 2016 by
     Nicolas Alcaraz: nalcaraz@mpi-inf.mpg.de and
     Jan Baumbach: jan.baumbach@imada.sdu.dk
 
-USAGE
-   java -jar [jvm options] kpm.jar [-KEY1=VAL1] .... [-KEYN=VALN] 
+## USAGE
+   General structure:
+      
+      java -jar [jvm options] KPM-5.0.jar [-KEY1=VAL1] .... [-KEYN=VALN] 
 
-   Note: If the input is large and/or complex then the java virtual machine 
-	     options must be set.
+   Execution examples:
 
-   Example:
+      java -jar -Xmx2G KPM-5.0.jar -strategy=INES -algo=GREEDY -K=2 -L1=5
+      java -jar -strategy=GLONE -algo=GREEDY -L1=5
 
-   java -jar -Xmx2G KPM4.0.jar -strategy=INES -algo=GREEDY -K=1 -matrix1=data/BRCA-expression.txt -L1=420
+   Note: If the input is large and/or complex then the java virtual machine options must be set.
 
-
-PARAMETERS
+### PARAMETERS
 
     All parameters can be defined in the "kpm.properties" file
     and most through command line arguments. In case the same parameter
@@ -29,7 +32,7 @@ PARAMETERS
     and override the value in the properties file. 
 
 
-INPUT FILES
+#### INPUT FILES
 
     KPM takes as input several files
 
@@ -73,83 +76,89 @@ INPUT FILES
     ...
     ...
 
-BASIC OPTIONS
+#### BASIC OPTIONS
 
-  -K {'integer'} 
-        Gene exceptions (only used for INES)
+      -K {'integer'}                
+      Gene exceptions (only used for INES)
   
-  -graphFile {graph.sif}   
-        The path to the graph file
-  
-  -matrixN   The path to matrix N 
+      -graphFile {graph.sif}   
+      The path to the graph file
 
-  -LN {'integer'} The case (L) exceptions for matrix N
+      -matrixN
+      The path to matrix N 
+      
+      -LN {'integer'} The case (L) exceptions for matrix N
 
-  -datasetsFile  
-        The matrix files and their L parameters can also 
-        be specified in the datasets file. 
-  
-  -positiveFile  
-        The path to the file with the positive gene list
-  
-  -negativeFile  
-        The path to the file with the negative gene list
+      -datasetsFile  
+      The matrix files and their L parameters can also 
+      be specified in the datasets file. 
 
-  -strategy {'INES','GLONE'}  
-        The strategy that will be used to extract pathways:
-           INES: Will extract maximal pathways where all but at most K nodes
-                 are NOT active/diff. expressed in at most L cases.
-           GLONE: Will extract maximal pathways where the total sum of 
-                NOT-active/diff. exp. cases is at most L.
+      -positiveFile  
+      The path to the file with the positive gene list
+  
+      -negativeFile  
+      The path to the file with the negative gene list
+
+      -strategy {'INES','GLONE'}  
+      The strategy that will be used to extract pathways:
+
+      INES: Will extract maximal pathways where all but at most K nodes
+            are NOT active/diff. expressed in at most L cases.
+
+      GLONE: Will extract maximal pathways where the total sum of 
+             NOT-active/diff. exp. cases is at most L.
               
-  -algo {'ACO','GREEDY','OPTIMAL'} 
+      -algo {'ACO','GREEDY','OPTIMAL'} 
       The algorithm that will be used to extract the pathways:
-          GREEDY: A simple greedy algorithm, performs fast
-          ACO: Ant-colony-optimization algorithm. Convergence times
-               can vary depending on input size and parameters (see advanced
-               options section).
-          OPTIMAL: An exact fixed-parameter-tracktability algorithm. 
-                 Running times increase exponentially with input size (GLONE)
-                 and parameter K (INES). Note: due to large running times, this
-                 will only extract the best pathway. 
+
+      GREEDY: A simple greedy algorithm, performs fast
+
+      ACO: Ant-colony-optimization algorithm. Convergence times
+               can vary depending on input size and parameters 
+               (see advanced options section).
+
+      OPTIMAL: An exact fixed-parameter-tracktability algorithm. 
+               Running times increase exponentially with input size(GLONE)
+               and parameter K (INES). Note: due to large running times,
+               this will only extract the best pathway. 
 
 	  
-ADVANCED OPTIONS
-  -numProc  {'integer'}
-            Number of threads to use (for parallel computing)
+#### ADVANCED OPTIONS
+      -numProc  {'integer'}
+      Number of threads to use (for parallel computing)
 
-  -combineOp {OR,AND,CUSTOM}
-             How to combine multiple matrices using boolean operators.
-             If CUSTOM is chosen then the logical predicate
-             defined in the kpm.properties file will be used. 
+      -combineOp {OR,AND,CUSTOM}
+      How to combine multiple matrices using boolean operators.
+      If CUSTOM is chosen then the logical predicate
+      defined in the kpm.properties file will be used. 
 
-  -maxSolutions {'integer'}
-             Maximum number of reported pathways 
-             (default is 20). Ignored if
-             OPTIMAL algorithm is selected.
+      -maxSolutions {'integer'}
+       Maximum number of reported pathways 
+      (default is 20). Ignored if
+      OPTIMAL algorithm is selected.
 
-ADVANCED OPTIONS (ACO)
-  -alpha {'double'}
-        Parameter to control the importance given 
-        to the pheromone.
+##### ADVANCED OPTIONS (ACO)
+      -alpha {'double'}
+      Parameter to control the importance given 
+      to the pheromone.
 
-  -beta {'double'}
-        Parameter to control the importance given to the
-        heuristic value of the node
+      -beta {'double'}
+      Parameter to control the importance given to the
+      heuristic value of the node
 
-  -rho {'double'}
-        Parameter that controls the pheromone decay rate
+      -rho {'double'}
+      Parameter that controls the pheromone decay rate
 
-  -iterations {'integer'} 
-        Maximum number of iterations
+      -iterations {'integer'} 
+      Maximum number of iterations
 
-  -maxrunswithoutchange {'integer'}
-        Maximum number of iterations allowed without
-        improvement in the best solution.
+      -maxrunswithoutchange {'integer'}
+      Maximum number of iterations allowed without
+      improvement in the best solution.
 
-  -iterationbased {'true','false'}
-            If iteration or global best ACO strategy should be used 
-            (only for GLONE). 
+      -iterationbased {'true','false'}
+      If iteration or global best ACO strategy should be used 
+      (only for GLONE). 
              
 
  
