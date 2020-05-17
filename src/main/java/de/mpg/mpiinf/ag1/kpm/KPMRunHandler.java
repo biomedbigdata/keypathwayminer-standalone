@@ -224,7 +224,7 @@ public class KPMRunHandler implements IKPMRunListener {
 
     @Override
     public void runFinished(IKPMResultSet results) {
-        String time = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(Calendar.getInstance().getTime());
+        String time = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(Calendar.getInstance().getTime());
         int counter = 1;
 
         try {
@@ -268,7 +268,8 @@ public class KPMRunHandler implements IKPMRunListener {
 
         // saving result tables to files
 
-        Path resultTableFolder = Paths.get(params.RESULTS_FOLDER + File.separator + "tables" + File.separator + results.getKpmSettings().ALGO + params.STRATEGY + kpmSettings.getKpmRunID() + time);
+        Path resultTableFolder = Paths.get(params.RESULTS_FOLDER + File.separator + "tables" + File.separator + results.getKpmSettings().ALGO +"_"+ params.STRATEGY+"_" + kpmSettings.getKpmRunID() + "_"+time);
+        System.out.println(resultTableFolder.toString());
         try {
             Files.createDirectories(resultTableFolder);
         } catch (IOException ioe) {
@@ -280,6 +281,7 @@ public class KPMRunHandler implements IKPMRunListener {
             String resultSummary = resultTableFolder.toString() + File.separator + OutputSettings.SUMMARY_FILE;
             StatisticsUtility.writeSummaryFile(resultSummary, results, kpmSettings);
         }
+
         if (OutputSettings.GENERATE_DATASETS_STATS_FILE) { //(Done)
             String resultDatasetStats = resultTableFolder.toString() + File.separator + OutputSettings.DATASETS_STATS_FILE;
             StatisticsUtility.writeDatasetsStats(resultDatasetStats, params.PARSER, kpmSettings.MAIN_GRAPH);
@@ -300,6 +302,10 @@ public class KPMRunHandler implements IKPMRunListener {
         if (OutputSettings.GENERATE_PATHWAYS_STATS_FILE) { //Done
             String resultPathwayStatsFile = resultTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_STATS_FILE;
             StatisticsUtility.writePathwaysStatsFile(resultPathwayStatsFile, results, kpmSettings.MAIN_GRAPH);
+        }
+
+        if(OutputSettings.GENERATE_GENERAL_STATS_FILE){
+            StatisticsUtility.writeResultsStats(resultTableFolder.toString(),results,kpmSettings.MAIN_GRAPH,params);
         }
 
         // String resultFile2= resultTableFolder.toString()+File.separator+"results2.txt";

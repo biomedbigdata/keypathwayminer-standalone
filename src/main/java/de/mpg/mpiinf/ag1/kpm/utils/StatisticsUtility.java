@@ -97,6 +97,7 @@ public class StatisticsUtility {
     /**
      * Prints the results of the ACO algorithm into a file.
      */
+
 //    public static void writeResultsToFile(List<Result> results, KPMGraph g) {
 //        java.util.Date today = new java.util.Date();
 //        String stamp = new java.sql.Timestamp(today.getTime()).toString().replaceAll(" ", "_");
@@ -198,6 +199,7 @@ public class StatisticsUtility {
 //        }
 //
 //    }
+
     /**
      * Prints the results of the ACO algorithm into a file.
      */
@@ -270,7 +272,7 @@ public class StatisticsUtility {
             System.out.print(String.valueOf(avgGenesMap.get(expId)) + "\t");
             int backNodes = backNodesMap.get(expId).size();
             int mappedNodes = totalNodes - backNodes;
-            double mappedNodesP = ((double)mappedNodes / (double)totalNodes) * 100.0;
+            double mappedNodesP = ((double) mappedNodes / (double) totalNodes) * 100.0;
             String mappedNodesPS = df.format(mappedNodesP);
             System.out.print(String.valueOf(mappedNodes) + " (" + mappedNodesPS + "%)" + "\n");
 //            int backGenes = backGenesMap.get(expId).size();
@@ -279,7 +281,6 @@ public class StatisticsUtility {
 //            String mappedGenesPS = df.format(mappedGenesP);
 //            System.out.print(String.valueOf(mappedGenes) + " (" + mappedGenesPS + "%)" + "\n");
         }
-
 
 
     }
@@ -302,7 +303,7 @@ public class StatisticsUtility {
             bw.write("AVG_EXP_CASES_p_GENE" + "\t");
             bw.write("AVG_EXP_GENES_p_CASE" + "\t");
             bw.write("NODES_WITH_EXPRESSION_MAPPINGS" + "\n");
-//            bw.write("GENES_NOT_MAPPED" + "\n");
+//          bw.write("GENES_NOT_MAPPED" + "\n");
 
             DecimalFormat df = new DecimalFormat("#.00");
 
@@ -347,9 +348,9 @@ public class StatisticsUtility {
                 || kpmSettings.ALGO == Algo.OPTIMAL;
 
 
-        for (IKPMResultItem result: results.getResults()) {
+        for (IKPMResultItem result : results.getResults()) {
             int id = 1;
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file+"PATHWAYS-k-"+result.getK()+"-l-"+result.getL()+".txt"))){
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file + "-k-" + result.getK() + "-l-" + result.getL() + ".txt"))) {
                 for (Map<String, GeneNode> nodes : result.getAllComputedNodeSets()) {
                     bw.write(id + "\n");
                     bw.write("NODES" + "\t" + "IS EXCEPTION?" + "\n");
@@ -377,11 +378,11 @@ public class StatisticsUtility {
 
     public static void writeIndividualPathwayFiles(String dir, IKPMResultSet results, KPMGraph g, Parameters params) {
 
-        for (IKPMResultItem result: results.getResults()) { // list: order consistent
-            String nodeFile = dir + params.FILE_SEPARATOR + "-Pathway-k-" + result.getK()+"-l-"+result.getL()
+        for (IKPMResultItem result : results.getResults()) { // list: order consistent
+            String nodeFile = dir + params.FILE_SEPARATOR + "Pathway-k-" + result.getK() + "-l-" + result.getL()
                     + "-NODES-" + params.SUFFIX + params.FILE_EXTENSION;
             nodeFile = checkFileName(nodeFile);
-            String edgeFile = dir + params.FILE_SEPARATOR + "Pathway-k-" + result.getK()+"-l-"+result.getL()
+            String edgeFile = dir + params.FILE_SEPARATOR + "Pathway-k-" + result.getK() + "-l-" + result.getL()
                     + "-INTERACTIONS-" + params.SUFFIX + params.FILE_EXTENSION;
             edgeFile = checkFileName(edgeFile);
             int i = 0;
@@ -410,7 +411,6 @@ public class StatisticsUtility {
         }
     }
 
-
     public static void writePathwaysStatsFile(String file, IKPMResultSet results, KPMGraph g) {
         DecimalFormat df = new DecimalFormat("#.###");
         int size = results.getResults().size();
@@ -422,8 +422,8 @@ public class StatisticsUtility {
         DecimalFormat df2 = new DecimalFormat(f);
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
             bw.write("PATHWAY_ID" + "\t");
-            bw.write("k"+ "\t");
-            bw.write("l"+"\t");
+            bw.write("k" + "\t");
+            bw.write("l" + "\t");
             bw.write("# NODES" + "\t");
             bw.write("# EDGES" + "\t");
             bw.write("AVG. DIFF. EXP. CASES" + "\t");
@@ -431,7 +431,7 @@ public class StatisticsUtility {
             int j = 0; // Variable encoding Pathway ID
             for (IKPMResultItem result : results.getResults()) { // List: order consistent
                 int i = 0;
-                for(Map<String, GeneNode> nodeSet: result.getAllComputedNodeSets()){ // List: order consistent
+                for (Map<String, GeneNode> nodeSet : result.getAllComputedNodeSets()) { // List: order consistent
                     String id = df2.format(j + 1);
                     List<String[]> edges = g.getEdgesConnecting(nodeSet.values());
                     bw.write(id + "\t");
@@ -441,8 +441,8 @@ public class StatisticsUtility {
                     bw.write(edges.size() + "\t");
                     bw.write(df.format(result.getResultsInfoTable()[i][3]) + "\t");
                     bw.write(df.format(result.getResultsInfoTable()[i][4]) + "\n");
-                    i=i+1;
-                    j=j+1;
+                    i = i + 1;
+                    j = j + 1;
                 }
             }
         } catch (IOException ex) {
@@ -470,9 +470,9 @@ public class StatisticsUtility {
                 }
             }*/
 
-            for(IKPMResultItem result: results.getResults()) {
+            for (IKPMResultItem result : results.getResults()) {
                 // TODO variable file extension
-                bw = new BufferedWriter(new FileWriter(file+"PATHWAY-k-"+result.getK()+"-l-"+result.getL()+".txt"));
+                bw = new BufferedWriter(new FileWriter(file + "_" + "PATHWAY-k-" + result.getK() + "-l-" + result.getL() + ".txt"));
                 bw.write("ID" + "\t");
                 bw.write("# PATHWAYS CONTAINING" + "\t");
                 bw.write("AVG. DIFF. EXP. CASES" + "\t");
@@ -514,12 +514,15 @@ public class StatisticsUtility {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
             bw.write("GENE EXCEPTIONS: " + kpmSettings.GENE_EXCEPTIONS + "\n");
+
             bw.write("CASE EXCEPTIONS" + "\t" + "MATRIX" + "\n");
 
             for (String expId : kpmSettings.CASE_EXCEPTIONS_MAP.keySet()) {
-                bw.write(kpmSettings.CASE_EXCEPTIONS_MAP.get(expId)
-                        + kpmSettings.MATRIX_FILES_MAP.get(expId) + "\n");
+                bw.write("Case exceptions: " + kpmSettings.CASE_EXCEPTIONS_MAP.get(expId)
+                        + "\tMatrix: " + kpmSettings.MATRIX_FILES_MAP.get(expId) + "\n");
             }
+
+
             if (kpmSettings.ALGO == Algo.GREEDY) {
                 bw.write("STRATEGY: " + "\t" + "INES" + "\n");
                 bw.write("ALGORITHM: " + "\t" + "GREEDY" + "\n");
@@ -567,13 +570,11 @@ public class StatisticsUtility {
         return ret;
     }
 
-    public static void writeResultsStats(IKPMResultSet results, KPMGraph g, Parameters params) {
+    public static void writeResultsStats(String tableFolder, IKPMResultSet results, KPMGraph g, Parameters params) {
         Map<String, Integer> nodeHits = new HashMap<String, Integer>();
         Map<String, Integer> edgeHits = new HashMap<String, Integer>();
-        String nodeFileName = params.RESULTS_FOLDER + params.FILE_SEPARATOR
-                + "node_pathway_hits-" + params.SUFFIX + params.FILE_EXTENSION;
-        String edgeFileName = params.RESULTS_FOLDER + params.FILE_SEPARATOR
-                + "edge_pathway_hits-" + params.SUFFIX + params.FILE_EXTENSION;
+        String nodeFileName = tableFolder + params.FILE_SEPARATOR + "node_pathway_hits-" + params.SUFFIX + params.FILE_EXTENSION;
+        String edgeFileName = tableFolder + params.FILE_SEPARATOR + "edge_pathway_hits-" + params.SUFFIX + params.FILE_EXTENSION;
         nodeFileName = checkFileName(nodeFileName);
         edgeFileName = checkFileName(edgeFileName);
 
@@ -663,8 +664,8 @@ public class StatisticsUtility {
             Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println("MAX NODE HITS: " + maxNode + "\n");
-        System.out.println("MAX EDGE HITS: " + maxEdge + "\n");
+        System.out.println("MAX NODE HITS: " + maxNode);
+        System.out.println("MAX EDGE HITS: " + maxEdge);
 
     }
 

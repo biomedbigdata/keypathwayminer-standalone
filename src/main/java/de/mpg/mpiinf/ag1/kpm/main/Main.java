@@ -58,7 +58,7 @@ public class Main {
         }
     }
 
-    public void start(Parameters params) throws Exception {
+    public void start(Parameters params) {
         if (params.PROGRAM == Program.SP) {
             System.out.println("PROGRAM SELECTED: Shortest Paths");
             ShortestPathAlgorithms.shortestPathways(params.GRAPH_FILE, params);
