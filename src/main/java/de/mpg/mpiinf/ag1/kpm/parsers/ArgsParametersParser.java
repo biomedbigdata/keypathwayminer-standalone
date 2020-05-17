@@ -368,6 +368,9 @@ public class ArgsParametersParser {
 			System.out.println("Datasets file " + params.DATASETS_FILE + " does not exist.");
 			System.exit(-1);
 		} else {
+
+
+
 			DatasetsFileParser dfp = new DatasetsFileParser(kpmSettings);
 			params = dfp.parse(params.DATASETS_FILE_SEPARATOR.charValue(), params.DATASETS_FILE_HAS_HEADER, params);
 		}
@@ -414,7 +417,10 @@ public class ArgsParametersParser {
 			}
 		}
 
-		System.out.println("Combine Formula : " + kpmSettings.COMBINE_FORMULA);
+		if(kpmSettings.COMBINE_OPERATOR.toString().equals("CUSTOM")){
+			System.out.println("Combine Formula : " + kpmSettings.COMBINE_FORMULA);
+		}
+
 		return params;
 	}
 
