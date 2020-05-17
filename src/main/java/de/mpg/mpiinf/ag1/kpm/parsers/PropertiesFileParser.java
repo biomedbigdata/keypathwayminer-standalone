@@ -33,7 +33,7 @@ public class PropertiesFileParser {
     public Parameters parse(String datasetFolder) {
         Parameters params = new Parameters();
         try {
-            InputStream is = new FileInputStream(datasetFolder + "kpm.properties");
+            InputStream is = new FileInputStream("kpm.properties");
             //Properties props = new Properties(setDefaultProperties());
             Properties props = new Properties();
             props.load(is);

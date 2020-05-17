@@ -30,9 +30,9 @@ public class Main {
         //Used memory in mb
         System.out.println("Used Memory:" + (Runtime.getRuntime().freeMemory()) / (1024 * 1024));
 
-        //Path to folder with input files, output files and properties.
+        //Path to folder with input files, output files .
         String datasetFolder = "resources/";
-        System.out.println("Properties file:" + datasetFolder + "kpm.properties");
+        System.out.println("Properties file:" + "kpm.properties");
 
         //KPM default settings
         kpmSettings = new KPMSettings();
