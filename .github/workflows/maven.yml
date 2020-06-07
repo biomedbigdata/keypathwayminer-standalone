@@ -20,5 +20,5 @@ jobs:
         run: mvn -B package --file pom.xml
         
       - name: Run testing script
-        run: sh /resources/testing.sh
+        run: sh /home/runner/work/keypathwayminer-standalone/keypathwayminer-standalone/resources/testing.sh
 
