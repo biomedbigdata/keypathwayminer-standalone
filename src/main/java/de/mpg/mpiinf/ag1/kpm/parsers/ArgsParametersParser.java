@@ -299,8 +299,8 @@ public class ArgsParametersParser {
 				kpmSettings.MIN_L.put(internalID, Integer.parseInt(values[0]));
 				kpmSettings.INC_L.put(internalID, Integer.parseInt(values[1]));
 				kpmSettings.MAX_L.put(internalID, Integer.parseInt(values[2]));
-                kpmSettings.VARYING_L_ID = internalID;
-				
+				kpmSettings.VARYING_L_ID.add(internalID);
+
 			}else if(options[0].equals("-perturbation_technique")){
                 if (options[1].equals("edgeremove")) {
                     params.PERTURBATION = PerturbationService.getPerturbation(PerturbationTags.EdgeRemoval);
@@ -368,6 +368,9 @@ public class ArgsParametersParser {
 			System.out.println("Datasets file " + params.DATASETS_FILE + " does not exist.");
 			System.exit(-1);
 		} else {
+
+
+
 			DatasetsFileParser dfp = new DatasetsFileParser(kpmSettings);
 			params = dfp.parse(params.DATASETS_FILE_SEPARATOR.charValue(), params.DATASETS_FILE_HAS_HEADER, params);
 		}
@@ -414,14 +417,17 @@ public class ArgsParametersParser {
 			}
 		}
 
-		System.out.println("Combine Formula : " + kpmSettings.COMBINE_FORMULA);
+		if(kpmSettings.COMBINE_OPERATOR.toString().equals("CUSTOM")){
+			System.out.println("Combine Formula : " + kpmSettings.COMBINE_FORMULA);
+		}
+
 		return params;
 	}
 
 	private static void printHelp() {
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader("README.txt"));
+			br = new BufferedReader(new FileReader("README.md"));
 			String line = "";
 			while ((line = br.readLine()) != null) {
 				System.out.println(line);
@@ -438,7 +444,5 @@ public class ArgsParametersParser {
 				Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
-
-
 	}
 }

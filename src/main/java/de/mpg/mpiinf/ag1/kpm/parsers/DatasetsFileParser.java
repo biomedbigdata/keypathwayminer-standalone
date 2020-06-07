@@ -74,6 +74,11 @@ public class DatasetsFileParser {
 				}
 				id2param.put(id, lParam);
 				id2path.put(id, filePath);
+
+				kpmSettings.MIN_L.put(id, lParam);
+				kpmSettings.INC_L.put(id, lParam);
+				kpmSettings.MAX_L.put(id, lParam);
+
 				row++;
 			}
 

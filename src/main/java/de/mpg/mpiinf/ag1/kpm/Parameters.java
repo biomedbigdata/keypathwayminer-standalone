@@ -20,10 +20,10 @@ public class Parameters {
     // NOTE1: The key ID's must be the same as the key ID's in
     // CASE_EXCEPTIONS_MAP
     // NOTE2: Will only be used if MULTI == True
-    public volatile Map<String, String> MATRIX_FILES_MAP = new HashMap<String, String>();
+        public volatile Map<String, String> MATRIX_FILES_MAP = new HashMap<String, String>();
 	
         // Where the graph file is located
-        public String GRAPH_FILE = "graph-ulitsky-entrez.sif";
+        public String GRAPH_FILE = "sampleNetwork.sif";
         
         // If graph should be considered directed
         public boolean IS_GRAPH_DIRECTED = false;
@@ -38,7 +38,7 @@ public class Parameters {
         public String DATASETS_FILE = "datasets_file.txt";
         
         // If graph file has header
-        public boolean DATASETS_FILE_HAS_HEADER = false;
+        public boolean DATASETS_FILE_HAS_HEADER = true;
         
         // Separating character for columns in graph file
         public Separator DATASETS_FILE_SEPARATOR = Separator.TAB;
@@ -87,8 +87,6 @@ public class Parameters {
  
         
         /* ------ BASIC PARAMETERS ------------ */
-        
-                
 
         // The program to execute: KPM - KeyPathwayMiner, SP - Shortest paths, 
         // KPM_SP - KPM followed by SP of the resulting pathways
@@ -105,7 +103,6 @@ public class Parameters {
         public Parser PARSER = null;
         
         public IPerturbation PERTURBATION = null;
-        
 
         /* --------- SHORTEST PATHS PARAMETERS ---------------- */
         // Maximum number of pathways resulting from a KPM run
@@ -120,29 +117,24 @@ public class Parameters {
         public int MINIMUM_LENGTH_SHORTEST_PATHS = 2;
         
         // Sort criteria for shortest paths (descending)
-        public SortShortestPaths SORT_SHORTEST_PATHS_BY = 
-                SortShortestPaths.LENGTH;
+        public SortShortestPaths SORT_SHORTEST_PATHS_BY = SortShortestPaths.LENGTH;
         
         /* ------ Shortest paths output files ------ */
         public String SHORTEST_PATHS_STATS_FILE = "shortest_path_stats";
         
         public String SHORTEST_PATH_FILE = "shortest_path";
         
-        public String SHORTEST_PATHS_NODE_STATS_FILE = 
-                "shortest_path_node_stats";
+        public String SHORTEST_PATHS_NODE_STATS_FILE =  "shortest_path_node_stats";
         
-        public String SHORTEST_PATHS_EDGE_STATS_FILE = 
-                "shortest_path_edge_stats";
+        public String SHORTEST_PATHS_EDGE_STATS_FILE =  "shortest_path_edge_stats";
         
         public boolean GENERATE_SHORTEST_PATHS_STATS_FILE = true;
         
         public boolean GENERATE_SHORTEST_PATH_FILES = true;
         
-        public boolean GENERATE_SHORTEST_PATHS_NODE_STATS_FILE = 
-                true;
+        public boolean GENERATE_SHORTEST_PATHS_NODE_STATS_FILE = true;
         
-        public boolean GENERATE_SHORTEST_PATHS_EDGE_STATS_FILE = 
-                true;
+        public boolean GENERATE_SHORTEST_PATHS_EDGE_STATS_FILE =  true;
         
 }
 
