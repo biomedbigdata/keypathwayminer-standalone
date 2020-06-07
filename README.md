@@ -3,13 +3,15 @@ KeyPathwayMiner 5.0
 ============
 Given a biological network and a set of case-control studies, KeyPathwayMiner efficiently extracts all maximal connected sub-networks. These sub-networks contain the genes that are mainly dysregulated, e.g., differentially expressed, in most cases studied.
 
-For more informaiton please visit our website [(Key Pathway Miner website)](https://exbio.wzw.tum.de/keypathwayminer/).
+For more information please visit our website [(Key Pathway Miner website)](https://exbio.wzw.tum.de/keypathwayminer/).
 
 ## ABOUT
     KeyPathwayMiner version 5.0
     Copyright 2016 by
-    Nicolas Alcaraz: nalcaraz@mpi-inf.mpg.de and
-    Jan Baumbach: jan.baumbach@imada.sdu.dk
+    Nicolas Alcaraz: nalcaraz@binf.ku.dk 
+    Jan Baumbach: jan.baumbach@wzw.tum.de
+    Markus List: markus.list@wzw.tum.de
+    Standalone version adapted for KPM 5.0: Konstantinos Mechteridis
 
 ## USAGE
    General structure:
