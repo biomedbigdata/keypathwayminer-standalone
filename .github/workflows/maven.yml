@@ -18,7 +18,3 @@ jobs:
           java-version: ${{matrix.java}}
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-        
-      - name: Run testing script
-        run: sh /home/runner/work/keypathwayminer-standalone/keypathwayminer-standalone/resources/testing.sh
-
