@@ -5,7 +5,8 @@ Given a biological network and a set of case-control studies, KeyPathwayMiner ef
 
 For more information please visit our website [(Key Pathway Miner website)](https://exbio.wzw.tum.de/keypathwayminer/).
 
-## About
+About
+=================
     KeyPathwayMiner version 5.0
     Copyright 2016 by
     Nicolas Alcaraz: nalcaraz@binf.ku.dk 
@@ -13,7 +14,21 @@ For more information please visit our website [(Key Pathway Miner website)](http
     Markus List: markus.list@wzw.tum.de
     Standalone version adapted for KPM 5.0: Konstantinos Mechteridis
 
-## Usage
+Overview
+=================
+<!--ts-->
+   * [About](#about)
+   * [Usage](#usage)
+   * [Input files format](#input-files-format)
+   * [Parameters](#parameters)
+      * [Input file parameters](#input-file-parameters)
+      * [Input options basic parameters](#input-options-basic-parameters)
+      * [Output parameters](#output-parameters)
+      * [Advanced options](#advanced-options)
+<!--te-->
+
+Usage
+=================
    General structure:
       
       java -jar [jvm options] KPM-5.0.jar [-KEY1=VAL1] .... [-KEYN=VALN] 
@@ -33,7 +48,8 @@ For more information please visit our website [(Key Pathway Miner website)](http
 
    Note: If the input is large and/or complex then the java virtual machine options must be set.
 
-## Input files format
+Input files format
+=====================
 
     KPM takes as input several files
 
@@ -77,8 +93,8 @@ For more information please visit our website [(Key Pathway Miner website)](http
     ...
     ...
 
-
-## Parameters
+Parameters
+=================
 
     All parameters can be defined in the "kpm.properties" file
     and most through command line arguments. In case the same parameter
@@ -86,8 +102,9 @@ For more information please visit our website [(Key Pathway Miner website)](http
     line argument, then the command line argument will have preference
     and override the value in the properties file. 
 
-### 1. Input file parameters
-#### Graph File
+Input file parameters
+-----
+### Graph File
 
       -graphFile {string}   
        The path to the graph file. Must be in sif format
@@ -102,7 +119,7 @@ For more information please visit our website [(Key Pathway Miner website)](http
      -isDirected {boolean}
        If graph should be considered directed or not
 
-#### Matrix File
+### Matrix File
 
       -matrixN {string}
        The path to the n-th matrix 
@@ -114,7 +131,7 @@ For more information please visit our website [(Key Pathway Miner website)](http
        The separating character for the columns
        in the matrix file: TAB, SPACE or COMMA 
 
-#### Datasets File
+### Datasets File
 
       -datasetsFile {string}  
        Path to the file containing the list of
@@ -128,7 +145,7 @@ For more information please visit our website [(Key Pathway Miner website)](http
        The separating character for the columns
        in the datasets file: TAB, SPACE or COMMA 
 
-#### Positive & negative list file
+### Positive & negative list file
 
       -positiveFile  {string}
        The path to the file with the positive gene list
@@ -136,13 +153,14 @@ For more information please visit our website [(Key Pathway Miner website)](http
       -negativeFile {string} 
         The path to the file with the negative gene list
 
-#### Validation file
+### Validation file
      -validationFile {string}
       Gold-standard set to determine how enriched extracted pathways
       are with relevant genes compared to randomized version of the
       original network
 
-### 2. Input options basic parameters
+Input options basic parameters
+-----
 
      -K {integer}                
       Gene exceptions (only used for INES)
@@ -191,7 +209,8 @@ For more information please visit our website [(Key Pathway Miner website)](http
       -spMinLength {integer}
        Minimum length of reported shortest paths
 
-### 3. Output parameters
+Output parameters
+-----
 
      -fileExt {string}                
       Default file extension for output files
@@ -272,7 +291,9 @@ For more information please visit our website [(Key Pathway Miner website)](http
       Run ID
 
 	  
-### 4. Advanced options
+Advanced options
+-----
+
      -numProc  {integer}
       Number of threads to use (for parallel computing)
 
@@ -314,7 +335,7 @@ For more information please visit our website [(Key Pathway Miner website)](http
      -removeBens {flag}
       If set  border exception nodes will be removed
 
-#### Advanced options ACO
+### Advanced options ACO
      -alpha {double}
       Parameter to control the importance given 
       to the pheromone.
@@ -369,7 +390,7 @@ For more information please visit our website [(Key Pathway Miner website)](http
      -maxRunsWithoutChange {integer}
       Maximum number of iterations allowed without improvement
 
-#### Advanced options for network robustness 
+### Advanced options for network robustness 
      -perturbation {quadruple of integers}
       Quadruple with parameters in this order:
         startPercent: Perturbation percentage range lower value
@@ -386,7 +407,7 @@ For more information please visit our website [(Key Pathway Miner website)](http
         3. nodeswap
         4. noderemove
 
-#### Advanced options for batch runs
+### Advanced options for batch runs
      -batch {flag}
       If set a batch run will be performed
       
