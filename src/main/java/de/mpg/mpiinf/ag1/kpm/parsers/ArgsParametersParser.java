@@ -49,6 +49,7 @@ public class ArgsParametersParser {
 		strategyList.add("INES");
 		strategyList.add("GLONE");
 
+		//Read command line arguments
 		for (String arg : args) {
 			String[] options = arg.split("=");
 			// INPUT FILES
@@ -59,7 +60,6 @@ public class ArgsParametersParser {
 			} else if (options[0].startsWith("-matrix")) {
 				String id = "L" + options[0].substring(7);
 				String path = options[1];
-
 				String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
 				id2path.put(internalID, path);
 			} else if (options[0].equals("-gfHeader")) {
@@ -145,7 +145,8 @@ public class ArgsParametersParser {
 				params.MINIMUM_LENGTH_SHORTEST_PATHS = Integer.valueOf(options[1]);
 			} else if (options[0].equals("-K")) {                
 				kpmSettings.GENE_EXCEPTIONS = Integer.parseInt(options[1]);
-			} else if (options[0].startsWith("-L") && !options[0].contains("batch")) {
+			}
+			else if (options[0].startsWith("-L") && !options[0].contains("batch")) {
 				String id = "L" + options[0].substring(2);
 				int l = Integer.parseInt(options[1]);
 
@@ -194,7 +195,7 @@ public class ArgsParametersParser {
 				kpmSettings.COMBINE_FORMULA = options[1];
 			} else if (options[0].equals("-eval")) {
 				kpmSettings.EVAL = Boolean.parseBoolean(options[1]);
-			} else if (options[0].equals("-maxsolutions")) {
+			} else if (options[0].equals("-maxSolutions")) {
 				kpmSettings.NUM_SOLUTIONS = Integer.parseInt(options[1]);
 			} else if (options[0].equals("-doubleSolutions")) {
 				kpmSettings.DOUBLE_SOLUTIONS_ALLOWED = Boolean.parseBoolean(options[1]);
@@ -223,9 +224,9 @@ public class ArgsParametersParser {
 				kpmSettings.MULTIPLICATIVE_TRADEOFF = false;
 			} else if (options[0].equals("-solutions")) {
 				kpmSettings.NUMBER_OF_SOLUTIONS_PER_ITERATION = Integer.parseInt(options[1]);
-			} else if (options[0].equals("-startnodes")) {
+			} else if (options[0].equals("-startNodes")) {
 				kpmSettings.NUM_STARTNODES = Integer.parseInt(options[1]);
-			} else if (options[0].equals("-rhodecay")) {
+			} else if (options[0].equals("-rhoDecay")) {
 				try {
 					kpmSettings.RHO_DECAY = RhoDecay.valueOf(options[1]);
 				} catch (IllegalArgumentException e) {
@@ -234,7 +235,7 @@ public class ArgsParametersParser {
 							+ Algo.values());
 					System.exit(-1);
 				}
-			} else if (options[0].equals("-iterationbased")) {
+			} else if (options[0].equals("-iterationBased")) {
 				try {
 					kpmSettings.ITERATION_BASED = Boolean.parseBoolean(options[1]);
 				} catch (IllegalArgumentException e) {
@@ -243,22 +244,22 @@ public class ArgsParametersParser {
 							+ LocalSearch.values());
 					System.exit(-1);
 				}
-			} else if (options[0].equals("-localsearch")) {
+			} else if (options[0].equals("-localSearch")) {
 				kpmSettings.L_SEARCH = LocalSearch.valueOf(options[1]);
-			} else if (options[0].equals("-maxrunswithoutchange")) {
+			} else if (options[0].equals("-maxRunsWithoutChange")) {
 				if (Integer.parseInt(options[1]) == 0) {
 					kpmSettings.MAX_RUNS_WITHOUT_CHANGE = Integer.MAX_VALUE;
 				} else {
 					kpmSettings.MAX_RUNS_WITHOUT_CHANGE = Integer.parseInt(options[1]);
 				}
-			} else if (options[0].equals("-tau_min")) {
+			} else if (options[0].equals("-tauMin")) {
 				kpmSettings.TAU_MIN = Double.parseDouble(options[1]);
 			} else if (options[0].equals("-batch")) {
 				System.out.println("Should be batch run");
 				kpmSettings.IS_BATCH_RUN = true;
-            } else if (options[0].equals("-remove_bens")) {
+            } else if (options[0].equals("-removeBens")) {
                 kpmSettings.REMOVE_BENs = true;
-			} else if (options[0].equals("-validation_file")) {
+			} else if (options[0].equals("-validationFile")) {
 				params.VALIDATION_FILE = options[1];
 			} else if (options[0].equals("-perturbation")) {
 				params.IS_PERTURBATION_RUN = true;
@@ -273,8 +274,7 @@ public class ArgsParametersParser {
 				params.GRAPHS_PER_STEP = Integer.parseInt(values[3]);
 			}
 			// Added setting for batch K
-			else if (options[0].equals("-K_batch")) 
-			{
+			else if (options[0].equals("-kBatch")) {
 				String[] values = options[1].split(",");
 
 				if(values.length != 3){
@@ -286,8 +286,7 @@ public class ArgsParametersParser {
 				kpmSettings.MAX_K = Integer.parseInt(values[2]);
 			}
 			// Added possibility for batch L1 or L2
-			else if (options[0].matches("\\-L[1-2][_]+batch")) 
-			{
+			else if (options[0].matches("\\-L[1-2][_]+batch")) {
 				String id = options[0].substring(1, options[0].indexOf('_'));
 				String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
 				String[] values = options[1].split(",");
@@ -321,9 +320,7 @@ public class ArgsParametersParser {
 				}
 				
 				System.out.println("Perturbation technique: " + params.PERTURBATION.getName());
-			}
-
-			else if (options[0].equals("-help")) {
+			} else if (options[0].equals("-help")) {
 				printHelp();
 				System.exit(0);
 			} else {
@@ -333,6 +330,7 @@ public class ArgsParametersParser {
 				System.exit(-1);
 			}
 		}
+		//End of reading command line arguments
 
 
 		if (params.PROGRAM == Program.SP) {
@@ -404,7 +402,6 @@ public class ArgsParametersParser {
 			} else {
 				kpmSettings.ALGO = Algo.EXCEPTIONSUMGREEDY;
 			}
-
 		} else {
 			if (algorithm.equals("GREEDY")) {
 				kpmSettings.ALGO = Algo.GREEDY;
