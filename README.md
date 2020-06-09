@@ -1,5 +1,5 @@
 
-KeyPathwayMiner 5.0
+Standalone version of KeyPathwayMiner 5.0
 ============
 Given a biological network and a set of case-control studies, KeyPathwayMiner efficiently extracts all maximal connected sub-networks. These sub-networks contain the genes that are mainly dysregulated, e.g., differentially expressed, in most cases studied.
 
