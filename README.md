@@ -165,7 +165,7 @@ Input options basic parameters
      -K {integer}                
       Gene exceptions (only used for INES)
 
-     -LN {integer} 
+     -L<n> {integer} 
       The case (L) exceptions for the n-th matrix
 
      -strategy {'INES','GLONE'}  
@@ -412,19 +412,14 @@ Advanced options
       If set a batch run will be performed
       
      -kBatch {tripel of integers}
-        MIN_K
-        INC_K
-        MAX_K
+        Ranged gene exceptions s(only used for INES)
+        MIN_K: Integer, starting value of k range or k value if k is not ranged
+        INC_K: Integer, how k should be increased within the range
+        MAX_K: Integer, the maximum k value, i.e. the upper limit of the range
 
-     -L[1-2]_batch
-        MIN_L
-        INC_L
-        MAX_L
-
-    
-     
-
-     
-             
-
- 
+        
+     -L<n>_batch {triple of integers}
+        The ranged case (L) exceptions for the n-th matrix
+        MIN_L: Integer, starting value of l range or l value if l is not ranged
+        INC_L: Integer, how l should be increased within the range
+        MAX_L: Integer, the maximum l value, i.e. the upper limit of the range
