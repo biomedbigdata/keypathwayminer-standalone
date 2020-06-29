@@ -370,7 +370,7 @@ public class ArgsParametersParser {
                 params.GRAPHS_PER_STEP = Integer.parseInt(values[3]);
             }
             // Added setting for batch K
-            else if (options[0].equals("-kBatch")) {
+            else if (options[0].equals("-K_batch")) {
                 String[] values = options[1].split(",");
 
                 if (values.length != 3) {
@@ -381,7 +381,7 @@ public class ArgsParametersParser {
                 kpmSettings.INC_K = Integer.parseInt(values[1]);
                 kpmSettings.MAX_K = Integer.parseInt(values[2]);
 
-            } else if (options[0].matches("L[1-9][0-9]*[_]+batch")) {
+            } else if (options[0].matches("-L[1-9][0-9]*[_]batch")) {
                 // If batch option is set assign ranged L value to n th matrix
                 String id = options[0].substring(1, options[0].indexOf('_')); // get number of nth L parmeter
                 String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);

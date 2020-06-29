@@ -34,14 +34,24 @@ Usage
       java -jar [jvm options] KPM-5.0.jar [-KEY1=VAL1] .... [-KEYN=VALN] 
 
    Execution examples:
-
+       
+    Simple executions:
       java -jar -Xmx2G KPM-5.0.jar -strategy=INES -algo=GREEDY -K=2 -L1=5
+      
       java -jar KPM-5.0.jar -strategy=GLONE -algo=GREEDY -L1=5
-
-      java -jar KPM-5.0.jar -strategy=GLONE -algo=GREEDY -L1=5 -matrix1=resources/datasets/colon-gene-expression-DOWN-p0.05.txt -L2=6 -matrix2=resources/datasets/colon-gene-expression-UP-p0.05.txt
-
+      
       java -jar KPM-5.0.jar -strategy=GLONE -algo=ACO -datasetsFile=resources/datasets_file.txt
+
+    Combine multiple datasets:
+      java -jar KPM-5.0.jar -strategy=GLONE -algo=GREEDY -L1=5 -matrix1=resources/datasets/colon-gene-expression-DOWN-p0.05.txt -L2=6 -matrix2=resources/datasets/colon-gene-expression-UP-p0.05.txt
     
+    Use ranged values with batch:
+      java -jar KPM-5.0.jar -batch  -L1_batch=1,2,3 -L2_batch=1,2,3 -K_batch=1,2,3 -strategy=INES -algo=GREEDY -matrix1=resources/datasets/colon-gene-expression-DOWN-p0.05.txt -matrix2=resources/datasets/colon-gene-expression-UP-p0.05.txt 
+    
+    Use perturbation:
+      java -jar KPM-5.0.jar -strategy=INES -algo=GREEDY -K=2 -L1=5 -perturbation=10,10,20,1 -perturbation_technique=nodeswap
+        
+    Note: For the examples used the data from the resources folder.
    For Help:
 
          java -jar KPM-5.0.jar -help
@@ -411,11 +421,12 @@ Advanced options
      -batch {flag}
       If set a batch run will be performed
       
-     -kBatch {tripel of integers}
+     -k_batch {tripel of integers}
         Ranged gene exceptions s(only used for INES)
         MIN_K: Integer, starting value of k range or k value if k is not ranged
         INC_K: Integer, how k should be increased within the range
         MAX_K: Integer, the maximum k value, i.e. the upper limit of the range
+      Example: -K_batch=1,2,3 
 
         
      -L<n>_batch {triple of integers}
@@ -423,3 +434,4 @@ Advanced options
         MIN_L: Integer, starting value of l range or l value if l is not ranged
         INC_L: Integer, how l should be increased within the range
         MAX_L: Integer, the maximum l value, i.e. the upper limit of the range
+     Example:  -L1_batch=1,2,3 -L2_batch=1,2,3
