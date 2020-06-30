@@ -421,7 +421,7 @@ Advanced options
      -batch {flag}
       If set a batch run will be performed
       
-     -k_batch {tripel of integers}
+     -K_batch {tripel of integers}
         Ranged gene exceptions s(only used for INES)
         MIN_K: Integer, starting value of k range or k value if k is not ranged
         INC_K: Integer, how k should be increased within the range

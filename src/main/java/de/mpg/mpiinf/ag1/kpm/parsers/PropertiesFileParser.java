@@ -38,41 +38,41 @@ public class PropertiesFileParser {
             Properties props = new Properties();
             props.load(is);
             is.close();
-            /* ----- INPUT FILES ---------*/
+
+            /* ---- INPUT FILES ---- */
             params.GRAPH_FILE = datasetFolder + props.getProperty("graph_file");
             params.IS_GRAPH_DIRECTED = Boolean.parseBoolean(props.getProperty("is_graph_directed"));
             params.GRAPH_FILE_HAS_HEADER = Boolean.parseBoolean(props.getProperty("graph_file_has_header"));
             params.GRAPH_FILE_SEPARATOR = Separator.valueOf(props.getProperty("graph_file_separator"));
+
             params.DATASETS_FILE = datasetFolder + props.getProperty("datasets_file");
             params.DATASETS_FILE_HAS_HEADER = Boolean.parseBoolean(props.getProperty("datasets_file_has_header"));
             params.DATASETS_FILE_SEPARATOR = Separator.valueOf(props.getProperty("datasets_file_separator"));
+
             params.POSITIVE_FILE = datasetFolder + props.getProperty("positive_file");
             params.NEGATIVE_FILE = datasetFolder + props.getProperty("negative_file");
+
             params.MATRIX_FILES_HAVE_HEADER = Boolean.parseBoolean(props.getProperty("matrix_files_have_header"));
             params.MATRIX_FILES_SEPARATOR = Separator.valueOf(props.getProperty("matrix_files_separator"));
+
             params.VALIDATION_FILE = datasetFolder + props.getProperty("validation_file");
 
-            /* ---- KPM OUTPUT FILES -------*/
+            /* ---- KPM OUTPUT FILES ---- */
             params.FILE_EXTENSION = props.getProperty("file_extension");
             params.RESULTS_FOLDER = props.getProperty("results_folder");
-            OutputSettings.SUMMARY_FILE = props.getProperty("summary_file");
-            //           KPMParameters.SUMMARY_FILE = Globals.RESULTS_FOLDER + Globals.FILE_SEPARATOR +KPMParameters.SUMMARY_FILE;
-            OutputSettings.PATHWAYS_FILE = props.getProperty("pathways_file");
-            //         KPMParameters.PATHWAYS_FILE = Globals.RESULTS_FOLDER + Globals.FILE_SEPARATOR +KPMParameters.PATHWAYS_FILE;
-            OutputSettings.PATHWAYS_STATS_FILE = props.getProperty("pathways_stats_file");
-            //           KPMParameters.PATHWAYS_STATS_FILE = Globals.RESULTS_FOLDER + Globals.FILE_SEPARATOR +KPMParameters.PATHWAYS_STATS_FILE;
-            OutputSettings.GENE_STATS_FILE = props.getProperty("gene_stats_file");
-            //           KPMParameters.GENE_STATS_FILE = Globals.RESULTS_FOLDER + Globals.FILE_SEPARATOR +KPMParameters.GENE_STATS_FILE;
-            OutputSettings.DATASETS_STATS_FILE = props.getProperty("datasets_stats_file");
-            //            Globals.DATASETS_STATS_FILE = Globals.RESULTS_FOLDER + Globals.FILE_SEPARATOR + Globals.DATASETS_STATS_FILE;
-
             params.PATHWAYS_IN_SINGLE_FILE = Boolean.parseBoolean(props.getProperty("pathways_single_file"));
+            params.SUFFIX = props.getProperty("suffix");
+
+            OutputSettings.SUMMARY_FILE = props.getProperty("summary_file");
+            OutputSettings.PATHWAYS_FILE = props.getProperty("pathways_file");
+            OutputSettings.PATHWAYS_STATS_FILE = props.getProperty("pathways_stats_file");
+            OutputSettings.GENE_STATS_FILE = props.getProperty("gene_stats_file");
+            OutputSettings.DATASETS_STATS_FILE = props.getProperty("datasets_stats_file");
             OutputSettings.GENERATE_SUMMARY_FILE = Boolean.parseBoolean(props.getProperty("generate_summary_file"));
             OutputSettings.GENERATE_PATHWAYS_FILE = Boolean.parseBoolean(props.getProperty("generate_pathways_file"));
             OutputSettings.GENERATE_PATHWAYS_STATS_FILE = Boolean.parseBoolean(props.getProperty("generate_pathways_stats_file"));
             OutputSettings.GENERATE_GENE_STATS_FILE = Boolean.parseBoolean(props.getProperty("generate_gene_stats_file"));
             OutputSettings.GENERATE_DATASETS_STATS_FILE = Boolean.parseBoolean(props.getProperty("generate_datasets_stats_file"));
-            params.SUFFIX = props.getProperty("suffix");
 
             /* ---- SHORTEST PATHS OUTPUT FILES ---- */
 
