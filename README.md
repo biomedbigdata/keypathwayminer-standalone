@@ -31,30 +31,32 @@ Usage
 =================
    General structure:
       
-      java -jar [jvm options] KPM-5.0.jar [-KEY1=VAL1] .... [-KEYN=VALN] 
+    java -jar [jvm options] KPM-5.0.jar [-KEY1=VAL1] .... [-KEYN=VALN] 
 
-   Execution examples:
-       
-    Simple executions:
-      java -jar -Xmx2G KPM-5.0.jar -strategy=INES -algo=GREEDY -K=2 -L1=5
+   Simple executions examples:
+   
+    java -jar -Xmx2G KPM-5.0.jar -strategy=INES -algo=GREEDY -K=2 -L1=5
       
-      java -jar KPM-5.0.jar -strategy=GLONE -algo=GREEDY -L1=5
+    java -jar KPM-5.0.jar -strategy=GLONE -algo=GREEDY -L1=5
       
-      java -jar KPM-5.0.jar -strategy=GLONE -algo=ACO -datasetsFile=resources/datasets_file.txt
+    java -jar KPM-5.0.jar -strategy=GLONE -algo=ACO -datasetsFile=resources/datasets_file.txt
 
-    Combine multiple datasets:
-      java -jar KPM-5.0.jar -strategy=GLONE -algo=GREEDY -L1=5 -matrix1=resources/datasets/colon-gene-expression-DOWN-p0.05.txt -L2=6 -matrix2=resources/datasets/colon-gene-expression-UP-p0.05.txt
+   Combine multiple datasets:
+   
+    java -jar KPM-5.0.jar -strategy=GLONE -algo=GREEDY -L1=5 -matrix1=resources/datasets/colon-gene-expression-DOWN-p0.05.txt -L2=6 -matrix2=resources/datasets/colon-gene-expression-UP-p0.05.txt
     
-    Use ranged values with batch:
-      java -jar KPM-5.0.jar -batch  -L1_batch=1,2,3 -L2_batch=1,2,3 -K_batch=1,2,3 -strategy=INES -algo=GREEDY -matrix1=resources/datasets/colon-gene-expression-DOWN-p0.05.txt -matrix2=resources/datasets/colon-gene-expression-UP-p0.05.txt 
+   Use ranged values with batch:
+   
+    java -jar KPM-5.0.jar -batch  -L1_batch=1,2,3 -L2_batch=1,2,3 -K_batch=1,2,3 -strategy=INES -algo=GREEDY -matrix1=resources/datasets/colon-gene-expression-DOWN-p0.05.txt -matrix2=resources/datasets/colon-gene-expression-UP-p0.05.txt 
     
-    Use perturbation:
-      java -jar KPM-5.0.jar -strategy=INES -algo=GREEDY -K=2 -L1=5 -perturbation=10,10,20,1 -perturbation_technique=nodeswap
+   Use perturbation:
+   
+    java -jar KPM-5.0.jar -strategy=INES -algo=GREEDY -K=2 -L1=5 -perturbation=10,10,20,1 -perturbation_technique=nodeswap
         
     Note: For the examples used the data from the resources folder.
    For Help:
 
-         java -jar KPM-5.0.jar -help
+    java -jar KPM-5.0.jar -help
 
    Note: If the input is large and/or complex then the java virtual machine options must be set.
 
