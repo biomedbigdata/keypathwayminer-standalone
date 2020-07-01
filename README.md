@@ -53,7 +53,6 @@ Usage
    
     java -jar KPM-5.0.jar -strategy=INES -algo=GREEDY -K=2 -L1=5 -perturbation=10,10,20,1 -perturbation_technique=nodeswap
         
-    Note: For the examples used the data from the resources folder.
    For Help:
 
     java -jar KPM-5.0.jar -help
