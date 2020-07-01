@@ -25,15 +25,21 @@ import dk.sdu.kpm.algo.glone.RhoDecay;
 public class PropertiesFileParser {
 
     private volatile KPMSettings kpmSettings;
+    private String propertiesFile;
 
     public PropertiesFileParser(KPMSettings settings) {
         this.kpmSettings = settings;
     }
 
+    public PropertiesFileParser(KPMSettings kpmSettings, String propertiesFile) {
+        this.kpmSettings = kpmSettings;
+        this.propertiesFile = propertiesFile;
+    }
+
     public Parameters parse(String datasetFolder) {
         Parameters params = new Parameters();
         try {
-            InputStream is = new FileInputStream("kpm.properties");
+            InputStream is = new FileInputStream(propertiesFile);
             //Properties props = new Properties(setDefaultProperties());
             Properties props = new Properties();
             props.load(is);

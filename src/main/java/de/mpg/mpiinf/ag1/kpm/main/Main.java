@@ -19,26 +19,39 @@ import dk.sdu.kpm.KPMSettings;
 
 public class Main {
 
-    private volatile KPMSettings kpmSettings;
-
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Main main = new Main();
         main.run(args);
     }
 
+    //Runner method for calling KeyPathwayMiner
     public void run(String[] args) {
-        //Used memory in mb
-        System.out.println("Used Memory:" + (Runtime.getRuntime().freeMemory()) / (1024 * 1024));
-
-        //Path to folder with input files, output files .
         String datasetFolder = "resources/";
-        System.out.println("Properties file:" + "kpm.properties");
+        String propertiesFile = "kpm.properties";
 
+        System.out.println("Running KeyPathWayMiner standalone.");
+        System.out.println("Properties file:" + propertiesFile);
+        System.out.println("Default datasets from: " + datasetFolder);
+        kpm(args, datasetFolder, propertiesFile);
+    }
+
+    //Runner method for calling KeyPathwayMiner from R
+    public void runR(String[] args, String datasetFolder, String propertiesFile) {
+        System.out.println("Running KeyPathWayMiner standalone via R.");
+        System.out.println("Properties file: " + propertiesFile);
+        System.out.println("Default datasets from: " + datasetFolder);
+        kpm(args, datasetFolder, propertiesFile);
+
+    }
+
+    // Prepares objects, parses arguments and runs KeyPathwayMiner
+    private void kpm(String[] args, String datasetFolder, String propertiesFile) {
         //KPM default settings
-        kpmSettings = new KPMSettings();
+        KPMSettings kpmSettings = new KPMSettings();
 
-        //Parse parameters from the kpm.properties file, initialize default parameters
-        PropertiesFileParser pfp = new PropertiesFileParser(kpmSettings);
+        //Parse parameters from the kpm.properties file, initialize default parameters and runs KeyPathwayMiner
+        PropertiesFileParser pfp = new PropertiesFileParser(kpmSettings, propertiesFile);
+
         Parameters params = pfp.parse(datasetFolder);
 
         try {
@@ -51,20 +64,18 @@ public class Main {
             params = ifp.parse(params);
 
             //Start KeyPathwayMiner
-            start(params);
+            if (params.PROGRAM == Program.SP) {
+                System.out.println("PROGRAM SELECTED: Shortest Paths");
+                ShortestPathAlgorithms.shortestPathways(params.GRAPH_FILE, params);
+            } else {
+                KPMRunHandler kpmHandler = new KPMRunHandler(kpmSettings);
+                kpmHandler.runBatch(params);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void start(Parameters params) {
-        if (params.PROGRAM == Program.SP) {
-            System.out.println("PROGRAM SELECTED: Shortest Paths");
-            ShortestPathAlgorithms.shortestPathways(params.GRAPH_FILE, params);
-        } else {
-            KPMRunHandler kpmHandler = new KPMRunHandler(kpmSettings);
-            kpmHandler.runBatch(params);
-        }
-    }
+
 }

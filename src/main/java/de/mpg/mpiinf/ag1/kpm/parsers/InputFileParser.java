@@ -28,13 +28,6 @@ public class InputFileParser {
 			}
 		}
 
-		//        if (Globals.DATASETS_FILE == null) {
-		//            System.out.println("ERROR: Please specify a datasets file !");
-		//        } else if (!(new File(Globals.DATASETS_FILE)).isFile()) {
-		//            System.out.println("ERROR: The specified datasets file does not exist !");
-		//            hasErrors = true;
-		//        }
-
 		if (hasErrors) {
 			System.exit(-1);
 		}
