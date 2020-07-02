@@ -177,4 +177,11 @@
         </dependency>
 
     </dependencies>
+    <distributionManagement>
+   <repository>
+     <id>github</id>
+     <name>GitHub baumbachlab Apache Maven Packages</name>
+     <url>https://maven.pkg.github.com/baumbachlab/keypathwayminer-standalone</url>
+   </repository>
+</distributionManagement>
 </project>
