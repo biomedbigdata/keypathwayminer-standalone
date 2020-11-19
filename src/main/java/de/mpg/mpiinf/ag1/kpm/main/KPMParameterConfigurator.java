@@ -1,5 +1,7 @@
-package de.mpg.mpiinf.ag1.kpm;
+package de.mpg.mpiinf.ag1.kpm.main;
 
+import de.mpg.mpiinf.ag1.kpm.main.KPMStrategy;
+import de.mpg.mpiinf.ag1.kpm.main.Parameters;
 import dk.sdu.kpm.KPMSettings;
 import dk.sdu.kpm.graph.KPMGraph;
 /*
@@ -15,7 +17,6 @@ public class KPMParameterConfigurator {
     public KPMParameterConfigurator(Parameters params, KPMSettings settings) {
         this.kpmSettings = settings;
         this.graph = kpmSettings.MAIN_GRAPH;
-        KPMAlgorithm algorithm = params.ALGORITHM;
         this.strategy = params.STRATEGY;
     }
 

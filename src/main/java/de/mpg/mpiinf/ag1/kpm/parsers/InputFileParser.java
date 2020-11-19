@@ -2,7 +2,7 @@ package de.mpg.mpiinf.ag1.kpm.parsers;
 
 import java.io.File;
 
-import de.mpg.mpiinf.ag1.kpm.Parameters;
+import de.mpg.mpiinf.ag1.kpm.main.Parameters;
 import de.mpg.mpiinf.ag1.kpm.utils.OutputSettings;
 import dk.sdu.kpm.Algo;
 import dk.sdu.kpm.KPMSettings;

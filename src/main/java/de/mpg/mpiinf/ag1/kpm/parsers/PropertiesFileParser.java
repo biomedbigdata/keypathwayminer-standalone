@@ -9,8 +9,8 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import de.mpg.mpiinf.ag1.kpm.Parameters;
-import de.mpg.mpiinf.ag1.kpm.Program;
+import de.mpg.mpiinf.ag1.kpm.main.Parameters;
+import de.mpg.mpiinf.ag1.kpm.main.Program;
 import de.mpg.mpiinf.ag1.kpm.main.Main;
 import de.mpg.mpiinf.ag1.kpm.utils.OutputSettings;
 import de.mpg.mpiinf.ag1.kpm.utils.Separator;

@@ -1,7 +1,7 @@
 package de.mpg.mpiinf.ag1.kpm.main;
 
-import de.mpg.mpiinf.ag1.kpm.*;
 import de.mpg.mpiinf.ag1.kpm.parsers.PriorityFileParser;
+import de.mpg.mpiinf.ag1.kpm.utils.KPMStandaloneTaskMonitor;
 import de.mpg.mpiinf.ag1.kpm.utils.Parser;
 import de.mpg.mpiinf.ag1.kpm.utils.StatisticsUtility;
 import de.mpg.mpiinf.ag1.kpm.utils.OutputSettings;
@@ -42,8 +42,6 @@ public class KPMRunHandler implements IKPMRunListener {
     /**
      * Starts the runs, ensures the settings are correctly set up.
      * Assumes all other parameters has already been set.
-     *
-     * @param params
      */
     public void runBatch(Parameters params) {
         this.params = params;
@@ -140,7 +138,6 @@ public class KPMRunHandler implements IKPMRunListener {
             return;
         }
 
-
         System.out.println("\n*************** RUNNING " + params.STRATEGY + " (" + params.ALGORITHM + ") " + " ***************");
         if (params.IS_PERTURBATION_RUN) {
             runBatchWithPerturbation(params);
@@ -160,7 +157,6 @@ public class KPMRunHandler implements IKPMRunListener {
         this.params = params;
         KPMStandaloneTaskMonitor monitor = new KPMStandaloneTaskMonitor();
         try {
-
             System.out.println("params.GRAPHS_PER_STEP = " + params.GRAPHS_PER_STEP);
 
             String formattedTime = new SimpleDateFormat("HH.mm.ss").format(Calendar.getInstance().getTime());
@@ -216,8 +212,7 @@ public class KPMRunHandler implements IKPMRunListener {
     }
 
     @Override
-    public void runCancelled(String reason, String runID) {
-        System.out.println("The run was cancelled. \n" + reason);
+    public void runCancelled(String reason, String runID) { System.out.println("The run was cancelled. \n" + reason);
     }
 
     @Override

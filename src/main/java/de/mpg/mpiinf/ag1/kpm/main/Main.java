@@ -4,8 +4,6 @@
  */
 package de.mpg.mpiinf.ag1.kpm.main;
 
-import de.mpg.mpiinf.ag1.kpm.Parameters;
-import de.mpg.mpiinf.ag1.kpm.Program;
 import de.mpg.mpiinf.ag1.kpm.parsers.ArgsParametersParser;
 import de.mpg.mpiinf.ag1.kpm.parsers.InputFileParser;
 import de.mpg.mpiinf.ag1.kpm.parsers.PropertiesFileParser;

@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import de.mpg.mpiinf.ag1.kpm.Parameters;
+import de.mpg.mpiinf.ag1.kpm.main.Parameters;
 import dk.sdu.kpm.Algo;
 import dk.sdu.kpm.KPMSettings;
 import dk.sdu.kpm.graph.GeneEdge;
@@ -24,7 +24,6 @@ import dk.sdu.kpm.graph.KPMGraph;
 import dk.sdu.kpm.graph.Result;
 import dk.sdu.kpm.results.IKPMResultItem;
 import dk.sdu.kpm.results.IKPMResultSet;
-import edu.uci.ics.jung.graph.SparseGraph;
 
 public class StatisticsUtility {
 

@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import au.com.bytecode.opencsv.CSVReader;
-import de.mpg.mpiinf.ag1.kpm.Parameters;
+import de.mpg.mpiinf.ag1.kpm.main.Parameters;
 import de.mpg.mpiinf.ag1.kpm.main.Main;
 import dk.sdu.kpm.KPMSettings;
 

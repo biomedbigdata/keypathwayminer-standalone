@@ -1,8 +1,11 @@
-package de.mpg.mpiinf.ag1.kpm;
+package de.mpg.mpiinf.ag1.kpm.main;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import de.mpg.mpiinf.ag1.kpm.main.KPMAlgorithm;
+import de.mpg.mpiinf.ag1.kpm.main.KPMStrategy;
+import de.mpg.mpiinf.ag1.kpm.main.Program;
 import de.mpg.mpiinf.ag1.kpm.shortestpath.SortShortestPaths;
 import de.mpg.mpiinf.ag1.kpm.utils.Parser;
 import de.mpg.mpiinf.ag1.kpm.utils.Separator;
@@ -91,7 +94,7 @@ public class Parameters {
 
         // The program to execute: KPM - KeyPathwayMiner, SP - Shortest paths, 
         // KPM_SP - KPM followed by SP of the resulting pathways
-        public Program PROGRAM = Program.KPM;   
+        public Program PROGRAM = Program.KPM;
        
         // Default strategy
         public KPMStrategy STRATEGY = KPMStrategy.INES;

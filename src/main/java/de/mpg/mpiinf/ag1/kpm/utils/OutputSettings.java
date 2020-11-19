@@ -1,6 +1,6 @@
 package de.mpg.mpiinf.ag1.kpm.utils;
 
-public class OutputSettings {
+public class  OutputSettings {
 	/* ------ OUTPUT FILES ------------ */
 
     public static String SUMMARY_FILE = "summary.txt";

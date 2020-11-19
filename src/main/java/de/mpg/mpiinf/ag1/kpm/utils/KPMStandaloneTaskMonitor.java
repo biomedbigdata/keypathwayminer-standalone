@@ -1,9 +1,9 @@
-package de.mpg.mpiinf.ag1.kpm;
+package de.mpg.mpiinf.ag1.kpm.utils;
 
 import dk.sdu.kpm.taskmonitors.IKPMTaskMonitor;
 
 public class KPMStandaloneTaskMonitor implements IKPMTaskMonitor {
-	private int nextToPrint = 0;
+	//private int nextToPrint = 0;
 
 	@Override
 	public void setTitle(String title) {

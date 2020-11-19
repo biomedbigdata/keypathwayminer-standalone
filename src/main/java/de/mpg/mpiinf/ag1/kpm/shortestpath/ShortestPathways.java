@@ -4,7 +4,7 @@
  */
 package de.mpg.mpiinf.ag1.kpm.shortestpath;
 
-import de.mpg.mpiinf.ag1.kpm.Parameters;
+import de.mpg.mpiinf.ag1.kpm.main.Parameters;
 import de.mpg.mpiinf.ag1.kpm.graph.Edge;
 import de.mpg.mpiinf.ag1.kpm.graph.LinearPath;
 import de.mpg.mpiinf.ag1.kpm.graph.Node;
