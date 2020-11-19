@@ -52,6 +52,13 @@ public class InputFileParser {
 			}
 		}
 
+		if(params.VALIDATION_FILE != null) {
+			if (!(new File(params.VALIDATION_FILE)).exists()) {
+				System.out.println("WARNING: The specified validation file does not exist.");
+				params.VALIDATION_FILE = null;
+			}
+		}
+
 		if (OutputSettings.SUMMARY_FILE != null) {
 			int count = 0;
 			while ((new File(OutputSettings.SUMMARY_FILE + "-"
@@ -77,7 +84,7 @@ public class InputFileParser {
 					//                    int index = name.lastIndexOf(".");
 					//                   KPMParameters.PATHWAYS_FILE = name.substring(0, index) + "(" + String.valueOf(count) + ")"
 					//                            + name.substring(index, name.length());
-					OutputSettings.PATHWAYS_FILE += "(" + String.valueOf(count) + ")";
+					OutputSettings.PATHWAYS_FILE += "(" + count + ")";
 				} else {
 					int aux = count - 1;
 					OutputSettings.PATHWAYS_FILE = name.replace("(" + aux + ")", "(" + count + ")");

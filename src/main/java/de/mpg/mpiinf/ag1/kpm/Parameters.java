@@ -16,10 +16,11 @@ public class Parameters {
 
 	/* ------ INPUT FILES ------------ */
 
-    // Map storing the paths to the multipe expression files
-    // NOTE1: The key ID's must be the same as the key ID's in
-    // CASE_EXCEPTIONS_MAP
-    // NOTE2: Will only be used if MULTI == True
+    /**
+     *     Map storing the paths to the multipe expression files
+     *     NOTE1: The key ID's must be the same as the key ID's in CASE_EXCEPTIONS_MAP
+     *     NOTE2: Will only be used if MULTI == True
+     */
         public volatile Map<String, String> MATRIX_FILES_MAP = new HashMap<String, String>();
 	
         // Where the graph file is located
@@ -83,7 +84,7 @@ public class Parameters {
         
         public boolean PRINT_DATASETS_STATS = true;
                 
-        public String RUN_ID = "";
+        public String   RUN_ID = "";
  
         
         /* ------ BASIC PARAMETERS ------------ */

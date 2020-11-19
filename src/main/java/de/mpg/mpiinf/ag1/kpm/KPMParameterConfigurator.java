@@ -2,35 +2,32 @@ package de.mpg.mpiinf.ag1.kpm;
 
 import dk.sdu.kpm.KPMSettings;
 import dk.sdu.kpm.graph.KPMGraph;
-
+/*
+    Class which checks if all setting provided for the run are valid.
+ */
 public class KPMParameterConfigurator {
     private volatile KPMGraph graph;
 
-    private volatile KPMAlgorithm algorithm;
-
     private volatile KPMStrategy strategy;
-
-    private String prefix = "Configuration is incorrect:\t";
 
     private volatile KPMSettings kpmSettings;
 
     public KPMParameterConfigurator(Parameters params, KPMSettings settings) {
         this.kpmSettings = settings;
         this.graph = kpmSettings.MAIN_GRAPH;
-        this.algorithm = params.ALGORITHM;
+        KPMAlgorithm algorithm = params.ALGORITHM;
         this.strategy = params.STRATEGY;
     }
 
     public boolean areSettingsValid() {
         kpmSettings.STARTING_TIME = System.nanoTime();
 
+        String prefix = "Configuration is incorrect:\t";
         if (graph == null) {
             System.out.println(prefix + "No graph loaded.");
             return false;
         }
-
-        int maxNumberOfGeneExceptions = graph.getNodeIdSet().size();
-
+        //Validity Checks for Batch Run
         if (kpmSettings.IS_BATCH_RUN) {
             if (strategy == KPMStrategy.INES) {
                 if (kpmSettings.MAX_K <= 0) {
@@ -81,6 +78,8 @@ public class KPMParameterConfigurator {
                 }
             }
         } else {
+        //Validity Checks for normal Run
+            int maxNumberOfGeneExceptions = graph.getNodeIdSet().size();
             if (strategy == KPMStrategy.INES) {
                 if (maxNumberOfGeneExceptions < kpmSettings.GENE_EXCEPTIONS) {
                     System.out.println(prefix + "Invalid number of GENE_EXCEPTIONS. Must be less than the number of nodes.");

@@ -139,6 +139,7 @@ public class ArgsParametersParser {
         }
 
         // Custom combine formula for combining the different datasets
+        // TODO: Konstantinos: Add option for all operators
         if (kpmSettings.COMBINE_OPERATOR.toString().equals("CUSTOM")) {
             System.out.println("Combine Formula : " + kpmSettings.COMBINE_FORMULA);
         }
@@ -159,6 +160,8 @@ public class ArgsParametersParser {
             } else if (options[0].startsWith("-matrix")) {
                 String id = "L" + options[0].substring(7);
                 String path = options[1];
+                System.out.println("Saving matrix for");
+                System.out.print("->");
                 String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
                 id2path.put(internalID, path);
             } else if (options[0].equals("-gfHeader")) {
@@ -245,6 +248,8 @@ public class ArgsParametersParser {
             } else if (options[0].equals("-K")) {
                 kpmSettings.GENE_EXCEPTIONS = Integer.parseInt(options[1]);
             } else if (options[0].startsWith("-L") && !options[0].contains("batch")) {
+                System.out.println("Saving case exceptions for\t");
+                System.out.print("->");
                 String id = "L" + options[0].substring(2);
                 int l = Integer.parseInt(options[1]);
                 String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
@@ -382,6 +387,8 @@ public class ArgsParametersParser {
                 kpmSettings.MAX_K = Integer.parseInt(values[2]);
 
             } else if (options[0].matches("-L[1-9][0-9]*[_]batch")) {
+                System.out.println("Saving case exceptions for");
+                System.out.print("->");
                 // If batch option is set assign ranged L value to n th matrix
                 String id = options[0].substring(1, options[0].indexOf('_')); // get number of nth L parmeter
                 String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);

@@ -4,7 +4,6 @@
  */
 package de.mpg.mpiinf.ag1.kpm.main;
 
-import de.mpg.mpiinf.ag1.kpm.KPMRunHandler;
 import de.mpg.mpiinf.ag1.kpm.Parameters;
 import de.mpg.mpiinf.ag1.kpm.Program;
 import de.mpg.mpiinf.ag1.kpm.parsers.ArgsParametersParser;
@@ -29,19 +28,18 @@ public class Main {
         String datasetFolder = "resources/";
         String propertiesFile = "kpm.properties";
 
-        System.out.println("Running KeyPathWayMiner standalone.");
-        System.out.println("Properties file:" + propertiesFile);
+        System.out.println("********** KEYPATHWAYMINER STANDALONE VERSION 5 **********");
+        System.out.println("Properties file: " + propertiesFile);
         System.out.println("Default datasets from: " + datasetFolder);
         kpm(args, datasetFolder, propertiesFile);
     }
 
     //Runner method for calling KeyPathwayMiner from R
     public void runR(String[] args, String datasetFolder, String propertiesFile) {
-        System.out.println("Running KeyPathWayMiner standalone via R.");
+        System.out.println("********** KEYPATHWAYMINER STANDALONE VERSION 5 VIA R **********");
         System.out.println("Properties file: " + propertiesFile);
         System.out.println("Default datasets from: " + datasetFolder);
         kpm(args, datasetFolder, propertiesFile);
-
     }
 
     // Prepares objects, parses arguments and runs KeyPathwayMiner
@@ -49,9 +47,8 @@ public class Main {
         //KPM default settings
         KPMSettings kpmSettings = new KPMSettings();
 
-        //Parse parameters from the kpm.properties file, initialize default parameters and runs KeyPathwayMiner
+        //Parse parameters from the kpm.properties file
         PropertiesFileParser pfp = new PropertiesFileParser(kpmSettings, propertiesFile);
-
         Parameters params = pfp.parse(datasetFolder);
 
         try {
@@ -63,6 +60,7 @@ public class Main {
             InputFileParser ifp = new InputFileParser(kpmSettings);
             params = ifp.parse(params);
 
+            System.out.println("Path to the graph file:\t"+params.GRAPH_FILE);
             //Start KeyPathwayMiner
             if (params.PROGRAM == Program.SP) {
                 System.out.println("PROGRAM SELECTED: Shortest Paths");
@@ -71,7 +69,6 @@ public class Main {
                 KPMRunHandler kpmHandler = new KPMRunHandler(kpmSettings);
                 kpmHandler.runBatch(params);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,5 +1,6 @@
-package de.mpg.mpiinf.ag1.kpm;
+package de.mpg.mpiinf.ag1.kpm.main;
 
+import de.mpg.mpiinf.ag1.kpm.*;
 import de.mpg.mpiinf.ag1.kpm.parsers.PriorityFileParser;
 import de.mpg.mpiinf.ag1.kpm.utils.Parser;
 import de.mpg.mpiinf.ag1.kpm.utils.StatisticsUtility;
@@ -18,7 +19,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +40,8 @@ public class KPMRunHandler implements IKPMRunListener {
     }
 
     /**
-     * Starts the runs, ensures the settings are correctly set up. Assumes all other parameters has already been set.
+     * Starts the runs, ensures the settings are correctly set up.
+     * Assumes all other parameters has already been set.
      *
      * @param params
      */
@@ -51,8 +52,7 @@ public class KPMRunHandler implements IKPMRunListener {
         kpmSettings.STARTING_TIME = System.nanoTime();
         start = System.currentTimeMillis();
 
-
-        System.out.println("\n*********** CREATING GRAPH ***************\n");
+        System.out.println("\n********** CREATING GRAPH **********");
         // Parse the graph and matrix files
         params.PARSER = new Parser(params.GRAPH_FILE, kpmSettings.MATRIX_FILES_MAP, Parser.TAB);
 
@@ -61,13 +61,12 @@ public class KPMRunHandler implements IKPMRunListener {
 
         // Print graph statistics
         if (params.PRINT_GRAPH_STATS) {
-            System.out.println("\n NETWORK STATS: \n");
+            System.out.print("--------------\nNETWORK STATS|\n--------------\n");
             StatisticsUtility.printGraphStatistics(params.INPUT_GRAPH);
         }
-
         // Print dataset statistics
         if (params.PRINT_DATASETS_STATS) {
-            System.out.println("\n DATASETS STATS: \n");
+            System.out.println("--------------\nDATASETS STATS|\n--------------");
             StatisticsUtility.printMatrixStatistics(params.PARSER, params.INPUT_GRAPH);
         }
 
@@ -84,7 +83,7 @@ public class KPMRunHandler implements IKPMRunListener {
 
         // Add validation to the search, if any file was set.
         try {
-            if (!params.VALIDATION_FILE.isEmpty()) {
+            if (params.VALIDATION_FILE != null) {
                 params = setValidationFile(params);
             }
         } catch (FileNotFoundException e) {
@@ -102,7 +101,6 @@ public class KPMRunHandler implements IKPMRunListener {
         kpmSettings.INCLUDE_CHARTS = kpmSettings.IS_BATCH_RUN;
 
         // Check which strategy and algorithm to use
-
         switch (kpmSettings.ALGO) {
             case GREEDY:
                 params.STRATEGY = KPMStrategy.INES;
@@ -143,9 +141,9 @@ public class KPMRunHandler implements IKPMRunListener {
         }
 
 
-        System.out.println("\n********* RUNNING " + params.STRATEGY + " (" + params.ALGORITHM + ") " + "... *************\n");
+        System.out.println("\n*************** RUNNING " + params.STRATEGY + " (" + params.ALGORITHM + ") " + " ***************");
         if (params.IS_PERTURBATION_RUN) {
-            runBatchWithPertubation(params);
+            runBatchWithPerturbation(params);
         } else {
             runStandard(params);
         }
@@ -158,7 +156,7 @@ public class KPMRunHandler implements IKPMRunListener {
         kpmSettings.TOTAL_RUNNING_TIME = time;
     }
 
-    private void runBatchWithPertubation(Parameters params) {
+    private void runBatchWithPerturbation(Parameters params) {
         this.params = params;
         KPMStandaloneTaskMonitor monitor = new KPMStandaloneTaskMonitor();
         try {
@@ -236,7 +234,7 @@ public class KPMRunHandler implements IKPMRunListener {
         if (Files.exists(Paths.get(params.RESULTS_FOLDER))) {
             Path resultsChartsFolder = Paths.get(params.RESULTS_FOLDER + File.separator + "charts");
             try {
-                    Files.createDirectories(resultsChartsFolder);
+                Files.createDirectories(resultsChartsFolder);
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
@@ -268,7 +266,7 @@ public class KPMRunHandler implements IKPMRunListener {
 
         // saving result tables to files
 
-        Path resultTableFolder = Paths.get(params.RESULTS_FOLDER + File.separator + "tables" + File.separator + params.STRATEGY+"_" +  results.getKpmSettings().ALGO +"_"+kpmSettings.getKpmRunID() + "_"+time);
+        Path resultTableFolder = Paths.get(params.RESULTS_FOLDER + File.separator + "tables" + File.separator + params.STRATEGY + "_" + results.getKpmSettings().ALGO + "_" + kpmSettings.getKpmRunID() + "_" + time);
         System.out.println(resultTableFolder.toString());
         try {
             Files.createDirectories(resultTableFolder);
@@ -304,17 +302,9 @@ public class KPMRunHandler implements IKPMRunListener {
             StatisticsUtility.writePathwaysStatsFile(resultPathwayStatsFile, results, kpmSettings.MAIN_GRAPH);
         }
 
-        if(OutputSettings.GENERATE_GENERAL_STATS_FILE){
-            StatisticsUtility.writeResultsStats(resultTableFolder.toString(),results,kpmSettings.MAIN_GRAPH,params);
+        if (OutputSettings.GENERATE_GENERAL_STATS_FILE) {
+            StatisticsUtility.writeResultsStats(resultTableFolder.toString(), results, kpmSettings.MAIN_GRAPH, params);
         }
-
-        // String resultFile2= resultTableFolder.toString()+File.separator+"results2.txt";
-        //StatisticsUtility.writeResultsToFile2(resultFile2);
-        //String resultMatrixStatisics= resultTableFolder.toString()+File.separator+"resultSummary.txt";
-        StatisticsUtility.printMatrixStatistics(params.PARSER, kpmSettings.MAIN_GRAPH);
-        //String resultGraphicsStatistics= resultTableFolder.toString()+File.separator+"resultSummary.txt";
-        //StatisticsUtility.printGraphStatistics(resultGraphicsStatistics,);
-        //StatisticsUtility.generateHistogramLValues();
     }
 
 }

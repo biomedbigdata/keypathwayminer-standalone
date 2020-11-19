@@ -259,22 +259,23 @@ public class StatisticsUtility {
         System.out.print("AVG_EXP_CASES_p_GENE" + "\t");
         System.out.print("AVG_EXP_GENES_p_CASE" + "\t");
         System.out.print("NODES_WITH_EXPRESSION_MAPPINGS" + "\n");
-//        System.out.print("EXPRESSION_MAPPED" + "\n");
+//      System.out.print("EXPRESSION_MAPPED" + "\n");
 
         DecimalFormat df = new DecimalFormat("#.00");
         int totalNodes = g.getVertexCount();
         for (String expId : numCasesMap.keySet()) {
             int totalGenes = numGenesMap.get(expId);
-            System.out.print(expId + "\t");
-            System.out.print(String.valueOf(numCasesMap.get(expId)) + "\t");
-            System.out.print(String.valueOf(totalGenes) + "\t");
-            System.out.print(String.valueOf(avgCasesMap.get(expId)) + "\t");
-            System.out.print(String.valueOf(avgGenesMap.get(expId)) + "\t");
+            System.out.print(String.format("%-" + "MATRIX_ID".length() + "s", expId)+"\t");
+            System.out.print(String.format("%-" + "CASES".length() + "s", numCasesMap.get(expId))+"\t");
+            System.out.print(String.format("%-" + "GENES".length() + "s", totalGenes)+"\t");
+            System.out.print(String.format("%-" + "AVG_EXP_CASES_p_GENE".length() + "s", avgCasesMap.get(expId))+"\t");
+            System.out.print(String.format("%-" + "AVG_EXP_GENES_p_CASE".length() + "s", avgGenesMap.get(expId))+"\t");
             int backNodes = backNodesMap.get(expId).size();
             int mappedNodes = totalNodes - backNodes;
             double mappedNodesP = ((double) mappedNodes / (double) totalNodes) * 100.0;
             String mappedNodesPS = df.format(mappedNodesP);
-            System.out.print(String.valueOf(mappedNodes) + " (" + mappedNodesPS + "%)" + "\n");
+            System.out.print( mappedNodes + " (" + mappedNodesPS + "%)" + "\n");
+
 //            int backGenes = backGenesMap.get(expId).size();
 //            int mappedGenes = totalGenes - backGenes;
 //            double mappedGenesP = (double)mappedGenes / (double)totalGenes;
@@ -377,7 +378,6 @@ public class StatisticsUtility {
     }
 
     public static void writeIndividualPathwayFiles(String dir, IKPMResultSet results, KPMGraph g, Parameters params) {
-
         for (IKPMResultItem result : results.getResults()) { // list: order consistent
             String nodeFile = dir + params.FILE_SEPARATOR + "Pathway-k-" + result.getK() + "-l-" + result.getL()
                     + "-NODES-" + params.SUFFIX + params.FILE_EXTENSION;

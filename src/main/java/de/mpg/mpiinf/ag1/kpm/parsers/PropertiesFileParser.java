@@ -58,10 +58,10 @@ public class PropertiesFileParser {
             params.POSITIVE_FILE = datasetFolder + props.getProperty("positive_file");
             params.NEGATIVE_FILE = datasetFolder + props.getProperty("negative_file");
 
+            params.VALIDATION_FILE = datasetFolder + props.getProperty("validation_file");
+
             params.MATRIX_FILES_HAVE_HEADER = Boolean.parseBoolean(props.getProperty("matrix_files_have_header"));
             params.MATRIX_FILES_SEPARATOR = Separator.valueOf(props.getProperty("matrix_files_separator"));
-
-            params.VALIDATION_FILE = datasetFolder + props.getProperty("validation_file");
 
             /* ---- KPM OUTPUT FILES ---- */
             params.FILE_EXTENSION = props.getProperty("file_extension");
@@ -102,6 +102,7 @@ public class PropertiesFileParser {
             kpmSettings.GENE_EXCEPTIONS = Integer.parseInt(props.getProperty("gene_exceptions"));
             String strategy = props.getProperty("strategy");
             String algorithm = props.getProperty("algorithm");
+
             if (strategy.equals("INES")) {
                 if (algorithm.equals("GREEDY")) {
                     kpmSettings.ALGO = Algo.GREEDY;
@@ -122,7 +123,6 @@ public class PropertiesFileParser {
                 } else {
                     kpmSettings.ALGO = Algo.EXCEPTIONSUMGREEDY;
                 }
-
             } else {
                 if (algorithm.equals("GREEDY")) {
                     kpmSettings.ALGO = Algo.GREEDY;

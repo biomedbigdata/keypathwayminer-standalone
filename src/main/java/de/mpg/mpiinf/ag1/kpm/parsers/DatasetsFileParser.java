@@ -22,7 +22,6 @@ public class DatasetsFileParser {
 
 	public Parameters parse(char separator, boolean hasHeader, Parameters params) {
 		try {
-
             HashMap<String, String> id2path = new HashMap<String, String>();
             HashMap<String, Integer> id2param = new HashMap<String, Integer>();
 			CSVReader cr =
