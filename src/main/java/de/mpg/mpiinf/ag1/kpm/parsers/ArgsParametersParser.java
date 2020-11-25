@@ -1,10 +1,6 @@
 package de.mpg.mpiinf.ag1.kpm.parsers;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,15 +55,21 @@ public class ArgsParametersParser {
         if (params.PROGRAM == Program.SP) {
             // do nothing
         } else if (!id2path.isEmpty()) {
+            // Print all the filepaths to the matrices and the corresponding id
             for (String id : id2path.keySet()) {
                 String file = id2path.get(id);
                 System.out.println(id + ": " + file);
 
                 if (!(new File(file)).isFile()) {
-                    System.out.println(file + " not found !");
+                    System.err.println(file + " not found !");
                     System.exit(-1);
                 }
 
+            }
+            // Print all L parameters and the corresponding id
+            for (String id : kpmSettings.MIN_L.keySet()) {
+                int caseExceptions = kpmSettings.MIN_L.get(id);
+                System.out.println(id + ": " + caseExceptions);
             }
             kpmSettings.MATRIX_FILES_MAP = id2path;
 
@@ -96,15 +98,22 @@ public class ArgsParametersParser {
 
         //Compares the number of matrices against the number of given L parameters
         if (kpmSettings.MIN_L.keySet().size() != kpmSettings.MATRIX_FILES_MAP.size()) {
-            System.out.println(String.format(
+            System.err.println(String.format(
                     "\nThe were found setup for %d L-parameters, this amount does not match the %d found for the" +
-                            " matrix files map.\n\nKPM will now terminate.",
+                            " matrix files map.\n->\tKPM will now terminate.",
                     kpmSettings.MIN_L.keySet().size(),
                     kpmSettings.MATRIX_FILES_MAP.size()
             ));
             System.exit(-1);
         }
-
+        //Check if the identifiers for the matrices is the same as the identifier for the Case-Exceptions(L)
+        for (String parameterIdentifier : kpmSettings.MIN_L.keySet()) {
+            if (!kpmSettings.MATRIX_FILES_MAP.keySet().contains(parameterIdentifier)) {
+                System.err.println("No matrix was specified for identifier:\t" + parameterIdentifier + "\nMake sure numerical identifiers for matrices and" +
+                        " case-exception parameters are the same\n->\tKPM will now terminate.");
+                System.exit(-1);
+            }
+        }
         //Set the right algorithm depending on the strategy
         if (strategy.equals("INES")) {
             if (algorithm.equals("GREEDY")) {
@@ -137,16 +146,43 @@ public class ArgsParametersParser {
                 kpmSettings.ALGO = Algo.EXCEPTIONSUMGREEDY;
             }
         }
+        // Information on how the datasets will be combined if more than one dataset is used
+        if (kpmSettings.MATRIX_FILES_MAP.size() > 1) {
+            if (kpmSettings.COMBINE_OPERATOR == Combine.CUSTOM) {
+                //TODO validity checks for custom formula if. Or just remove try catch in KPM core
+                //If everything goes well print out custom formula
+                System.out.println("Combine Formula: " + kpmSettings.COMBINE_FORMULA);
+            }
+            else {
+                //In case OR or AND operator was selected
+                StringBuilder formula = new StringBuilder("Combine formula: ");
 
-        // Custom combine formula for combining the different datasets
-        // TODO: Konstantinos: Add option for all operators
-        if (kpmSettings.COMBINE_OPERATOR.toString().equals("CUSTOM")) {
-            System.out.println("Combine Formula : " + kpmSettings.COMBINE_FORMULA);
+                // Getting a Set of Key-value pairs
+                Set<String> keySet = kpmSettings.MATRIX_FILES_MAP.keySet();
+                int numOfVars = keySet.size();
+
+                // Determine operator
+                String operator = ((kpmSettings.COMBINE_OPERATOR == Combine.OR) ? "||" : "&&");
+                for (String indentifier : keySet) {
+                    if (numOfVars == 1) {
+                        //last identifier
+                        formula.append(indentifier);
+                        break;
+                    }
+                    formula.append(indentifier).append(operator);
+                    numOfVars--;
+                }
+
+                System.out.println(formula);
+            }
         }
 
         return params;
     }
 
+    /*
+        Method which goes through the command line arguments
+     */
     private void parseParameters(String[] args, Parameters params) throws Exception {
         for (String arg : args) {
             // Split argument on equals symbol
@@ -160,9 +196,12 @@ public class ArgsParametersParser {
             } else if (options[0].startsWith("-matrix")) {
                 String id = "L" + options[0].substring(7);
                 String path = options[1];
-                System.out.println("Saving matrix for");
-                System.out.print("->");
+
+                //Suppress command line output of getOrCreateInternalIdentifier Method
+                PrintStream out = System.out;
+                System.setOut(new PrintStream(OutputStream.nullOutputStream()));
                 String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
+                System.setOut(out);
                 id2path.put(internalID, path);
             } else if (options[0].equals("-gfHeader")) {
                 params.GRAPH_FILE_HAS_HEADER = Boolean.parseBoolean(options[1]);
@@ -248,13 +287,15 @@ public class ArgsParametersParser {
             } else if (options[0].equals("-K")) {
                 kpmSettings.GENE_EXCEPTIONS = Integer.parseInt(options[1]);
             } else if (options[0].startsWith("-L") && !options[0].contains("batch")) {
-                System.out.println("Saving case exceptions for\t");
-                System.out.print("->");
                 String id = "L" + options[0].substring(2);
                 int l = Integer.parseInt(options[1]);
+                //Suppress command line output of getOrCreateInternalIdentifier Method
+                PrintStream out = System.out;
+                System.setOut(new PrintStream(OutputStream.nullOutputStream()));
                 String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
+                System.setOut(out);
                 kpmSettings.MIN_L.put(internalID, l);
-                kpmSettings.INC_L.put(internalID, l);
+                kpmSettings.INC_L.put(internalID, 0);
                 kpmSettings.MAX_L.put(internalID, l);
                 id2param.put(internalID, l);
             } else if (options[0].equals("-algo")) {
@@ -391,7 +432,13 @@ public class ArgsParametersParser {
                 System.out.print("->");
                 // If batch option is set assign ranged L value to n th matrix
                 String id = options[0].substring(1, options[0].indexOf('_')); // get number of nth L parmeter
+
+                //Suppress command line output of getOrCreateInternalIdentifier Method
+                PrintStream out = System.out;
+                System.setOut(new PrintStream(OutputStream.nullOutputStream()));
                 String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
+                System.setOut(out);
+
                 String[] values = options[1].split(",");
 
                 if (values.length != 3) {
@@ -436,6 +483,11 @@ public class ArgsParametersParser {
         }
     }
 
+    /*
+        Helper - Methods
+     */
+
+    //Prints Readme on command line
     private static void printHelp() {
         BufferedReader br = null;
         try {
@@ -457,4 +509,6 @@ public class ArgsParametersParser {
             }
         }
     }
+
+
 }
