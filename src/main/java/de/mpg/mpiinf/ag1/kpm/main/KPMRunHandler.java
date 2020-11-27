@@ -175,8 +175,6 @@ public class KPMRunHandler implements IKPMRunListener {
             batcher.run();
 
             System.out.println("Finished runs.");
-            System.out.println("Started generating results:");
-
         } catch (Exception e) {
             Logger.getLogger(KPMRunHandler.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("An error occurred during the KPM run with perturbed graphs. Exiting.");
@@ -212,93 +210,111 @@ public class KPMRunHandler implements IKPMRunListener {
     }
 
     @Override
-    public void runCancelled(String reason, String runID) { System.out.println("The run was cancelled. \n" + reason);
+    public void runCancelled(String reason, String runID) {
+        System.out.println("The run was cancelled. \n" + reason);
     }
 
     @Override
     public void runFinished(IKPMResultSet results) {
-        String time = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(Calendar.getInstance().getTime());
-        int counter = 1;
-
+        System.out.println("\n********** SAVING RESULTS **********");
+        //Check if path for the RESULT_FOLDER was provided
+        if (params.RESULTS_FOLDER.isEmpty()) {
+            System.out.println("-> Name for the results folder is empty.\nSaving results process is aborted");
+            return;
+        }
+        //Create results folder if folder does not already exist
         try {
             Files.createDirectories(Paths.get(params.RESULTS_FOLDER));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if (Files.exists(Paths.get(params.RESULTS_FOLDER))) {
-            Path resultsChartsFolder = Paths.get(params.RESULTS_FOLDER + File.separator + "charts");
+        String time = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(Calendar.getInstance().getTime());
+
+        Path currentResultsFolder = Paths.get(params.RESULTS_FOLDER + File.separator + time + "_" + params.STRATEGY + "_" + results.getKpmSettings().ALGO);
+
+        //Create folder to save the tables and charts for the current run
+        try {
+            Files.createDirectories(currentResultsFolder);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        System.out.println("Results will be saved in: " + currentResultsFolder.toString());
+        /*
+             Saving the charts of the current run if charts were created
+         */
+        if (!results.getCharts().isEmpty()) {
+            System.out.print("--------------\nSAVING CHARTS|\n--------------\n");
+            Path resultsChartsFolder = Paths.get(currentResultsFolder + File.separator + "charts");
+            //Create folder to save the charts for the current run
             try {
                 Files.createDirectories(resultsChartsFolder);
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
-
-            File resultsChartsCurrentFolder = new File(params.RESULTS_FOLDER + File.separator + "charts" + File.separator + time + File.separator);
-
-            if (!results.getCharts().isEmpty() && !resultsChartsCurrentFolder.exists()) {
-                resultsChartsCurrentFolder.mkdir();
-            }
-
+            //Saving all charts
+            int chartNumber = 0;
             for (IChart chart : results.getCharts().values()) {
-                String chartFileName = resultsChartsCurrentFolder.getAbsolutePath() + File.separator + String.format("chart%d.png", counter);
-                System.out.println(chartFileName);
+                String chartFileName = resultsChartsFolder.toString() + File.separator + String.format("chart%d.png", chartNumber);
+                //System.out.println(chartFileName);
                 File chartsFile = new File(chartFileName);
                 try {
                     chart.saveAsPng(chartsFile, 1600, 1200);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                counter++;
+                chartNumber++;
             }
-
-            if (counter > 0) {
-                System.out.println(" - Saved charts to '" + resultsChartsFolder.toString() + "'");
+            if (chartNumber > 0) {
+                System.out.println("-> Saved " + chartNumber + " charts to: '" + resultsChartsFolder.toString() + "'");
             }
-        } else {
-            System.out.println(" - No path found, could not save charts.");
         }
 
-        // saving result tables to files
+        /*
+            Saving result tables to files
+         */
+        System.out.print("--------------\nSAVING TABLES|\n--------------\n");
 
-        Path resultTableFolder = Paths.get(params.RESULTS_FOLDER + File.separator + "tables" + File.separator + params.STRATEGY + "_" + results.getKpmSettings().ALGO + "_" + kpmSettings.getKpmRunID() + "_" + time);
-        System.out.println(resultTableFolder.toString());
+        Path resultsTableFolder = Paths.get(currentResultsFolder + File.separator + "table");
+
+        //Create folder to store the tables of the current run
         try {
-            Files.createDirectories(resultTableFolder);
+            Files.createDirectories(resultsTableFolder);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
 
-
-        if (OutputSettings.GENERATE_SUMMARY_FILE) { //(Done)
-            String resultSummary = resultTableFolder.toString() + File.separator + OutputSettings.SUMMARY_FILE;
+        // Start writing tables
+        if (OutputSettings.GENERATE_SUMMARY_FILE) {
+            String resultSummary = resultsTableFolder.toString() + File.separator + OutputSettings.SUMMARY_FILE;
             StatisticsUtility.writeSummaryFile(resultSummary, results, kpmSettings);
         }
 
-        if (OutputSettings.GENERATE_DATASETS_STATS_FILE) { //(Done)
-            String resultDatasetStats = resultTableFolder.toString() + File.separator + OutputSettings.DATASETS_STATS_FILE;
+        if (OutputSettings.GENERATE_DATASETS_STATS_FILE) {
+            String resultDatasetStats = resultsTableFolder.toString() + File.separator + OutputSettings.DATASETS_STATS_FILE;
             StatisticsUtility.writeDatasetsStats(resultDatasetStats, params.PARSER, kpmSettings.MAIN_GRAPH);
         }
 
-        if (OutputSettings.GENERATE_GENE_STATS_FILE) { //Done
-            String resultGeneStats = resultTableFolder.toString() + File.separator + OutputSettings.GENE_STATS_FILE;
+        if (OutputSettings.GENERATE_GENE_STATS_FILE) {
+            String resultGeneStats = resultsTableFolder.toString() + File.separator + OutputSettings.GENE_STATS_FILE;
             StatisticsUtility.writeGeneStatsFile(resultGeneStats, results, kpmSettings.MAIN_GRAPH, kpmSettings);
         }
 
-        if (OutputSettings.GENERATE_PATHWAYS_FILE) { // Done
-            String resultIndividualPathwaysFile = resultTableFolder.toString();
+        if (OutputSettings.GENERATE_PATHWAYS_FILE) {
+            String resultIndividualPathwaysFile = resultsTableFolder.toString();
             StatisticsUtility.writeIndividualPathwayFiles(resultIndividualPathwaysFile, results, kpmSettings.MAIN_GRAPH, params);
-            String resultPathwaysFile = resultTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_FILE;
+            String resultPathwaysFile = resultsTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_FILE;
             StatisticsUtility.writePathwaysFile(resultPathwaysFile, results, kpmSettings.MAIN_GRAPH, kpmSettings);
         }
 
-        if (OutputSettings.GENERATE_PATHWAYS_STATS_FILE) { //Done
-            String resultPathwayStatsFile = resultTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_STATS_FILE;
+        if (OutputSettings.GENERATE_PATHWAYS_STATS_FILE) {
+            String resultPathwayStatsFile = resultsTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_STATS_FILE;
             StatisticsUtility.writePathwaysStatsFile(resultPathwayStatsFile, results, kpmSettings.MAIN_GRAPH);
         }
 
         if (OutputSettings.GENERATE_GENERAL_STATS_FILE) {
-            StatisticsUtility.writeResultsStats(resultTableFolder.toString(), results, kpmSettings.MAIN_GRAPH, params);
+            StatisticsUtility.writeResultsStats(resultsTableFolder.toString(), results, kpmSettings.MAIN_GRAPH, params);
         }
     }
 
