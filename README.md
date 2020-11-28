@@ -51,7 +51,7 @@ Usage
     
    Use perturbation:
    
-    java -jar KPM-5.0.jar -strategy=INES -algo=GREEDY -K=2 -L1=5 -perturbation=10,10,20,1 -perturbation_technique=nodeswap
+    java -jar KPM-5.0.jar -strategy=INES -algo=GREEDY -K=2 -L1=5 -perturbation=10,10,20,1 -perturbationTechnique=nodeswap
         
    For Help:
 
@@ -80,13 +80,13 @@ Input files format
 
     GENE_ID   CASE1	  CASE2   CASE3
     10203         1	      0       1
-    3232          0           0       1
+    3232          0       0       1
     ...
     ...		
 
     -- DATASETS file:  This file contains the paths to each individual
-    indicator matrix file and it's corresponding L parameter. The format
-    should be the following:
+    indicator matrix file and it's corresponding L parameter. Does not support 
+    batch runs yet. The format should be the following:
 
     ID      L       PATH
     1       10      path/to/matrix1.txt
@@ -411,7 +411,7 @@ Advanced options
       Example: -perturbation=10,10,20,1
       
 
-     -perturbation_technique {'edgeremove','edgerewire','nodeswap','noderemove'}
+     -perturbationTechnique {'edgeremove','edgerewire','nodeswap','noderemove'}
       Perturbation technique:
         1. edgeremove 
         2. edgerewire

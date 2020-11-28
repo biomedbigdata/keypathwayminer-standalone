@@ -16,7 +16,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.mpg.mpiinf.ag1.kpm.main.Parameters;
+import de.mpg.mpiinf.ag1.kpm.main.Program;
 import dk.sdu.kpm.Algo;
+import dk.sdu.kpm.Combine;
 import dk.sdu.kpm.KPMSettings;
 import dk.sdu.kpm.graph.GeneEdge;
 import dk.sdu.kpm.graph.GeneNode;
@@ -29,7 +31,6 @@ public class StatisticsUtility {
 
     public static final boolean PRINT_GENE_LIST = false;
     public static boolean GENERATE_STATISTICS = false;
-    public static boolean GENERATE_MORE_STATISTICS = false;
     public static boolean GENERATE_HIST_LVALUES = false;
 
     public static void generateHistogramLValues(KPMGraph g) {
@@ -93,113 +94,7 @@ public class StatisticsUtility {
         }
     }
 
-    /**
-     * Prints the results of the ACO algorithm into a file.
-     */
-
-//    public static void writeResultsToFile(List<Result> results, KPMGraph g) {
-//        java.util.Date today = new java.util.Date();
-//        String stamp = new java.sql.Timestamp(today.getTime()).toString().replaceAll(" ", "_");
-//        stamp = stamp.replaceAll(":", "_");
-//
-//        File directory = new File("results");
-//        directory.mkdir();
-//
-//        String filename = stamp + "-summary.txt";
-//        File f = new File("results", filename);
-//        FileWriter fstream;
-//        HTTStats stats = new HTTStats();
-//
-//        try {
-//            fstream = new FileWriter(f);
-//            BufferedWriter out = new BufferedWriter(fstream);
-//            out.write("********** PARAMETERS ***************\n");
-//            out.write("GENE EXCEPTIONS: " + Globals.GENE_EXCEPTIONS + "\n");
-//            out.write("CASE EXCEPTIONS: " + Globals.CASE_EXCEPTIONS + "\n");
-//            //out.write("Data set: " + Globals.DIRECTORY + "\n");
-//            out.write("Number of Solutions per Iteration: "
-//                    + Globals.NUMBER_OF_SOLUTIONS_PER_ITERATION + "\n");
-//            out.write("alpha: " + Globals.ALPHA + "\n");
-//            out.write("beta: " + Globals.BETA + "\n");
-//            out.write("rho: " + Globals.RHO + "\n");
-//            out.write("randomness seed: " + Globals.SEED + "\n");
-//            out.write("iterations: " + Globals.MAX_ITERATIONS + "\n");
-//            out.write("algorithm: " + Globals.ALGO + "\n");
-//            out.write("runtime (in nanoseconds): "
-//                    + (System.nanoTime() - Globals.STARTING_TIME) + "\n");
-//            out.write("*************************************\n");
-//
-//            int rank = 1;
-//            for (Result result : results) {
-//                if (rank > Globals.NUM_SOLUTIONS) {
-//                    break;
-//                }
-//
-//                HashMap<String, LinkedList<String>> lists = stats.getStats(result.getVisitedNodes().keySet());
-//                out.write("Rank: " + rank + " Nodes: "
-//                        + result.getVisitedNodes().size()
-//                        + " Case Exceptions: "
-//                        + result.getNonDifferentiallyExpressedCases()
-//                        + " Avg. Expressed: "
-//                        + result.getAverageDiffExpressedCases()
-//                        + " Info gain: " + result.getInformationGainExpressed()
-//                        + "\n");
-//                out.write("Genes in KEGG: " + lists.get(HTTStats.KEGGID).size()
-//                        + ", CALCIUM: " + lists.get(HTTStats.CALCIUMID).size()
-//                        + ", INTERACTION: "
-//                        + lists.get(HTTStats.INTERACTID).size() + "\n");
-//                out.write("\n");
-//                result.flagExceptionNodes();
-//                for (GeneNode node : result.getVisitedNodes().values()) {
-//                    String isValid = "";
-//                    if (node.isValid()) {
-//                        isValid = "\tYES";
-//                    } else {
-//                        isValid = "\tNO";
-//                    }
-//                    out.write(node.getSymbol() + " " + isValid + "\t"
-//                            + node.getTotalNoDiffCases() + "\n");
-//                }
-//                out.write("\n");
-//                rank++;
-//            }
-//            out.close();
-//            rank = 0;
-//            for (Result result : results) {
-//                rank++;
-//                if (rank > Globals.NUM_SOLUTIONS) {
-//                    break;
-//                }
-//
-//                BufferedWriter nodeFile = new BufferedWriter(new FileWriter(
-//                        "results/" + stamp + "-rank" + rank + "-nodes.txt"));
-//                BufferedWriter edgeFile = new BufferedWriter(new FileWriter(
-//                        "results/" + stamp + "-rank-" + rank + "-edges.txt"));
-//
-//                for (GeneNode node : result.getVisitedNodes().values()) {
-//                    nodeFile.write(node.getNodeId() + " " + node.getSymbol()
-//                            + "\n");
-//                }
-//
-//                for (GeneNode node1 : result.getVisitedNodes().values()) {
-//                    for (GeneNode node2 : result.getVisitedNodes().values()) {
-//                        if (g.findEdge(node1, node2) != null) {
-//                            String fromNodeId = node1.getNodeId();
-//                            String toNodeId = node2.getNodeId();
-//                            edgeFile.write(fromNodeId + " " + toNodeId + "\n");
-//                        }
-//                    }
-//                }
-//                nodeFile.close();
-//                edgeFile.close();
-//            }
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-//
-//    }
-
-    /**
+    /*
      * Prints the results of the ACO algorithm into a file.
      */
     public static void writeResultsToFile2(String fileout, List<Result> results, KPMGraph g, KPMSettings kpmSettings) {
@@ -234,7 +129,6 @@ public class StatisticsUtility {
 
     public static void printGraphStatistics(KPMGraph g) {
         // Used for statistics...
-
         System.out.println("NUMBER OF NODES: " + g.getVertexCount());
         System.out.println("NUMBER OF INTERACTIONS: " + g.getEdgeCount());
         System.out.println("AVERAGE NODE DEGREE: " + g.getAverageDegree());
@@ -264,16 +158,16 @@ public class StatisticsUtility {
         int totalNodes = g.getVertexCount();
         for (String expId : numCasesMap.keySet()) {
             int totalGenes = numGenesMap.get(expId);
-            System.out.print(String.format("%-" + "MATRIX_ID".length() + "s", expId)+"\t");
-            System.out.print(String.format("%-" + "CASES".length() + "s", numCasesMap.get(expId))+"\t");
-            System.out.print(String.format("%-" + "GENES".length() + "s", totalGenes)+"\t");
-            System.out.print(String.format("%-" + "AVG_EXP_CASES_p_GENE".length() + "s", avgCasesMap.get(expId))+"\t");
-            System.out.print(String.format("%-" + "AVG_EXP_GENES_p_CASE".length() + "s", avgGenesMap.get(expId))+"\t");
+            System.out.print(String.format("%-" + "MATRIX_ID".length() + "s", expId) + "\t");
+            System.out.print(String.format("%-" + "CASES".length() + "s", numCasesMap.get(expId)) + "\t");
+            System.out.print(String.format("%-" + "GENES".length() + "s", totalGenes) + "\t");
+            System.out.print(String.format("%-" + "AVG_EXP_CASES_p_GENE".length() + "s", avgCasesMap.get(expId)) + "\t");
+            System.out.print(String.format("%-" + "AVG_EXP_GENES_p_CASE".length() + "s", avgGenesMap.get(expId)) + "\t");
             int backNodes = backNodesMap.get(expId).size();
             int mappedNodes = totalNodes - backNodes;
             double mappedNodesP = ((double) mappedNodes / (double) totalNodes) * 100.0;
             String mappedNodesPS = df.format(mappedNodesP);
-            System.out.print( mappedNodes + " (" + mappedNodesPS + "%)" + "\n");
+            System.out.print(mappedNodes + " (" + mappedNodesPS + "%)" + "\n");
 
 //            int backGenes = backGenesMap.get(expId).size();
 //            int mappedGenes = totalGenes - backGenes;
@@ -508,43 +402,67 @@ public class StatisticsUtility {
         }
     }
 
-    public static void writeSummaryFile(String file, IKPMResultSet results, KPMSettings kpmSettings) {
+    /*
+      Write summary file with general information on the current run
+    */
+    public static void writeSummaryFile(String file, IKPMResultSet results, KPMSettings kpmSettings, Parameters parameters) {
+        System.out.println(">Writing summary file");
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
-            bw.write("GENE EXCEPTIONS: " + kpmSettings.GENE_EXCEPTIONS + "\n");
-
-            bw.write("CASE EXCEPTIONS" + "\t" + "MATRIX" + "\n");
+            bw.write("Gene exceptions (K):\t" + kpmSettings.GENE_EXCEPTIONS + "\n");
 
             for (String expId : kpmSettings.CASE_EXCEPTIONS_MAP.keySet()) {
-                bw.write("Case exceptions: " + kpmSettings.CASE_EXCEPTIONS_MAP.get(expId)
-                        + "\tMatrix: " + kpmSettings.MATRIX_FILES_MAP.get(expId) + "\n");
+                bw.write(expId + ":\t[Case exceptions (L): " + kpmSettings.CASE_EXCEPTIONS_MAP.get(expId)
+                        + ", Matrix: " + kpmSettings.MATRIX_FILES_MAP.get(expId) + "]" + "\n");
             }
-
-
+            //In case several data sets were combined print information on how the data sets were combined
+            if (kpmSettings.MATRIX_FILES_MAP.size() > 1) {
+                bw.write("Combine Formula:\t" + kpmSettings.COMBINE_FORMULA + "\n");
+            }
+            //Write which strategy and algorithm was used
             if (kpmSettings.ALGO == Algo.GREEDY) {
-                bw.write("STRATEGY: " + "\t" + "INES" + "\n");
-                bw.write("ALGORITHM: " + "\t" + "GREEDY" + "\n");
+                bw.write("Strategy:\t" + "INES" + "\n");
+                bw.write("Algorithm:\t" + "GREEDY" + "\n");
             } else if (kpmSettings.ALGO == Algo.LCG) {
-                bw.write("STRATEGY: " + "\t" + "INES" + "\n");
-                bw.write("ALGORITHM: " + "\t" + "ACO" + "\n");
+                bw.write("Strategy:\t" + "INES" + "\n");
+                bw.write("Algorithm:\t" + "ACO" + "\n");
             } else if (kpmSettings.ALGO == Algo.OPTIMAL) {
-                bw.write("STRATEGY: " + "\t" + "INES" + "\n");
-                bw.write("ALGORITHM: " + "\t" + "OPTIMAL" + "\n");
+                bw.write("Strategy:\t" + "INES" + "\n");
+                bw.write("Algorithm:\t" + "OPTIMAL" + "\n");
             } else if (kpmSettings.ALGO == Algo.EXCEPTIONSUMGREEDY) {
-                bw.write("STRATEGY: " + "\t" + "GLONE" + "\n");
-                bw.write("ALGORITHM: " + "\t" + "GREEDY" + "\n");
+                bw.write("Strategy:\t" + "GLONE" + "\n");
+                bw.write("Algorithm:\t" + "GREEDY" + "\n");
             } else if (kpmSettings.ALGO == Algo.EXCEPTIONSUMACO) {
-                bw.write("STRATEGY: " + "\t" + "GLONE" + "\n");
-                bw.write("ALGORITHM: " + "\t" + "ACO" + "\n");
+                bw.write("Strategy:\t" + "GLONE" + "\n");
+                bw.write("Algorithm:\t" + "ACO" + "\n");
             } else if (kpmSettings.ALGO == Algo.EXCEPTIONSUMOPTIMAL) {
-                bw.write("STRATEGY: " + "\t" + "GLONE" + "\n");
-                bw.write("ALGORITHM: " + "\t" + "OPTIMAL" + "\n");
+                bw.write("Strategy:\t" + "GLONE" + "\n");
+                bw.write("Algorithm:\t" + "OPTIMAL" + "\n");
             }
+            //Program that was used
+            if (parameters.PROGRAM == Program.KPM) {
+                bw.write("Program:\t" + "KeyPathwayMiner" + "\n");
+            } else if (parameters.PROGRAM == Program.SP) {
+                bw.write("Program:\t" + "Shortest paths" + "\n");
+            } else if (parameters.PROGRAM == Program.KPM_SP) {
+                bw.write("Program:\t" + "KeyPathwayMiner followed by SP of the resulting pathways" + "\n");
+            }
+
+            //Perturbation information
+            if (parameters.IS_PERTURBATION_RUN) {
+                bw.write("Perturbation technique:\t" + parameters.PERTURBATION.getName() + "\n");
+                bw.write("Perturbation parameters:\t" +
+                        "[Start percent:" + parameters.MIN_PERCENTAGE +
+                        ", Step percent:" + parameters.STEP_PERCENTAGE +
+                        ", Max percent:" + parameters.MAX_PERCENTAGE +
+                        ", Graphs per step:" + parameters.GRAPHS_PER_STEP + "]\n");
+            }
+
             //TODO: check whether this is actually the best result aka. if resultList is ordered
             IKPMResultItem best = results.getResults().get(0);
-            bw.write("SIZE OF BEST RESULT: " + "\t" + best.getResultsInfoTable()[0][2] + "\n");
-            bw.write("TOTAL RUNNING TIME: " + "\t" + kpmSettings.TOTAL_RUNNING_TIME + "\n");
+            bw.write("Size of the best result:\t" + best.getResultsInfoTable()[0][2] + "\n");
+            bw.write("Total running time:\t" + kpmSettings.TOTAL_RUNNING_TIME + "\n");
             bw.close();
         } catch (IOException ex) {
             Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);

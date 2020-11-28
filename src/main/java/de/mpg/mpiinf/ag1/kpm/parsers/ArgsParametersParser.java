@@ -69,7 +69,7 @@ public class ArgsParametersParser {
             // Print all L parameters and the corresponding id
             for (String id : kpmSettings.MIN_L.keySet()) {
                 int caseExceptions = kpmSettings.MIN_L.get(id);
-                System.out.println(id + ": " + caseExceptions);
+                System.out.println(id + ":\t" + caseExceptions);
             }
             kpmSettings.MATRIX_FILES_MAP = id2path;
 
@@ -152,10 +152,9 @@ public class ArgsParametersParser {
                 //TODO validity checks for custom formula if. Or just remove try catch in KPM core
                 //If everything goes well print out custom formula
                 System.out.println("Combine Formula: " + kpmSettings.COMBINE_FORMULA);
-            }
-            else {
+            } else {
                 //In case OR or AND operator was selected
-                StringBuilder formula = new StringBuilder("Combine formula: ");
+                StringBuilder formula = new StringBuilder();
 
                 // Getting a Set of Key-value pairs
                 Set<String> keySet = kpmSettings.MATRIX_FILES_MAP.keySet();
@@ -172,8 +171,9 @@ public class ArgsParametersParser {
                     formula.append(indentifier).append(operator);
                     numOfVars--;
                 }
-
-                System.out.println(formula);
+                //Save formula to output it later when writing the output files
+                kpmSettings.COMBINE_FORMULA = formula.toString();
+                System.out.println("Combine formula:\t" + formula);
             }
         }
 
@@ -294,9 +294,11 @@ public class ArgsParametersParser {
                 System.setOut(new PrintStream(OutputStream.nullOutputStream()));
                 String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
                 System.setOut(out);
+
                 kpmSettings.MIN_L.put(internalID, l);
-                kpmSettings.INC_L.put(internalID, 0);
-                kpmSettings.MAX_L.put(internalID, l);
+                //only needed for batch runs
+                //kpmSettings.INC_L.put(id, 0);
+                //kpmSettings.MAX_L.put(id, lParam);
                 id2param.put(internalID, l);
             } else if (options[0].equals("-algo")) {
                 if (!algoList.contains(options[1])) {
@@ -451,7 +453,7 @@ public class ArgsParametersParser {
                 kpmSettings.VARYING_L_ID.add(internalID);
 
 
-            } else if (options[0].equals("-perturbation_technique")) {
+            } else if (options[0].equals("-perturbationTechnique")) {
                 if (options[1].equals("edgeremove")) {
                     params.PERTURBATION = PerturbationService.getPerturbation(PerturbationTags.EdgeRemoval);
 
@@ -482,10 +484,6 @@ public class ArgsParametersParser {
             }
         }
     }
-
-    /*
-        Helper - Methods
-     */
 
     //Prints Readme on command line
     private static void printHelp() {

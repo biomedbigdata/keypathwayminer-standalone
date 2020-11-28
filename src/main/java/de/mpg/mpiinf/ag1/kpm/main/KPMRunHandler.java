@@ -287,8 +287,8 @@ public class KPMRunHandler implements IKPMRunListener {
 
         // Start writing tables
         if (OutputSettings.GENERATE_SUMMARY_FILE) {
-            String resultSummary = resultsTableFolder.toString() + File.separator + OutputSettings.SUMMARY_FILE;
-            StatisticsUtility.writeSummaryFile(resultSummary, results, kpmSettings);
+            String resultSummary = resultsTableFolder.toString() + File.separator + OutputSettings.SUMMARY_FILE + params.FILE_EXTENSION;
+            StatisticsUtility.writeSummaryFile(resultSummary, results, kpmSettings, params);
         }
 
         if (OutputSettings.GENERATE_DATASETS_STATS_FILE) {
@@ -316,6 +316,9 @@ public class KPMRunHandler implements IKPMRunListener {
         if (OutputSettings.GENERATE_GENERAL_STATS_FILE) {
             StatisticsUtility.writeResultsStats(resultsTableFolder.toString(), results, kpmSettings.MAIN_GRAPH, params);
         }
+
+        System.out.println("-> Saved tables to: " + resultsTableFolder.toString());
+
     }
 
 }
