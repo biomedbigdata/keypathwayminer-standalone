@@ -148,7 +148,7 @@ public class KPMRunHandler implements IKPMRunListener {
         end = System.currentTimeMillis();
         time = (end - start) / 1000;
         // Do stats and post-processing stuff after obtaining the results
-        System.out.println("TOTAL RUNNING TIME: " + time + " seconds");
+        System.out.println("\n Finished with a total running time of: " + "\033[0;1m" + time + " seconds");
 
         kpmSettings.TOTAL_RUNNING_TIME = time;
     }
@@ -191,27 +191,6 @@ public class KPMRunHandler implements IKPMRunListener {
             Logger.getLogger(KPMRunHandler.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("An error occurred during the KPM run. Exiting.");
         }
-    }
-
-    private Parameters setValidationFile(Parameters params) throws IOException {
-
-        BufferedReader br = new BufferedReader(new FileReader(params.VALIDATION_FILE));
-        String line;
-
-        List<String> validationList = new ArrayList<String>();
-        while ((line = br.readLine()) != null) {
-            validationList.add(line.trim());
-        }
-        br.close();
-
-        kpmSettings.VALIDATION_GOLDSTANDARD_NODES = validationList;
-
-        return params;
-    }
-
-    @Override
-    public void runCancelled(String reason, String runID) {
-        System.out.println("The run was cancelled. \n" + reason);
     }
 
     @Override
@@ -276,7 +255,7 @@ public class KPMRunHandler implements IKPMRunListener {
          */
         System.out.print("--------------\nSAVING TABLES|\n--------------\n");
 
-        Path resultsTableFolder = Paths.get(currentResultsFolder + File.separator + "table");
+        Path resultsTableFolder = Paths.get(currentResultsFolder + File.separator + "tables");
 
         //Create folder to store the tables of the current run
         try {
@@ -290,17 +269,19 @@ public class KPMRunHandler implements IKPMRunListener {
             String resultSummary = resultsTableFolder.toString() + File.separator + OutputSettings.SUMMARY_FILE + params.FILE_EXTENSION;
             StatisticsUtility.writeSummaryFile(resultSummary, results, kpmSettings, params);
         }
-
+        // Start writing dataset statistics files for every dataset
         if (OutputSettings.GENERATE_DATASETS_STATS_FILE) {
-            String resultDatasetStats = resultsTableFolder.toString() + File.separator + OutputSettings.DATASETS_STATS_FILE;
+            String resultDatasetStats = resultsTableFolder.toString() + File.separator + OutputSettings.DATASETS_STATS_FILE + params.FILE_EXTENSION;
             StatisticsUtility.writeDatasetsStats(resultDatasetStats, params.PARSER, kpmSettings.MAIN_GRAPH);
         }
 
+        // Start writing gene statistics files for every dataset
         if (OutputSettings.GENERATE_GENE_STATS_FILE) {
             String resultGeneStats = resultsTableFolder.toString() + File.separator + OutputSettings.GENE_STATS_FILE;
             StatisticsUtility.writeGeneStatsFile(resultGeneStats, results, kpmSettings.MAIN_GRAPH, kpmSettings);
         }
 
+        // Start writing pathways file which contains node and interactions in one file
         if (OutputSettings.GENERATE_PATHWAYS_FILE) {
             String resultIndividualPathwaysFile = resultsTableFolder.toString();
             StatisticsUtility.writeIndividualPathwayFiles(resultIndividualPathwaysFile, results, kpmSettings.MAIN_GRAPH, params);
@@ -308,11 +289,12 @@ public class KPMRunHandler implements IKPMRunListener {
             StatisticsUtility.writePathwaysFile(resultPathwaysFile, results, kpmSettings.MAIN_GRAPH, kpmSettings);
         }
 
+        //Start writing pathway statistics file
         if (OutputSettings.GENERATE_PATHWAYS_STATS_FILE) {
-            String resultPathwayStatsFile = resultsTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_STATS_FILE;
+            String resultPathwayStatsFile = resultsTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_STATS_FILE + params.FILE_EXTENSION;
             StatisticsUtility.writePathwaysStatsFile(resultPathwayStatsFile, results, kpmSettings.MAIN_GRAPH);
         }
-
+        //Start writing general statistics file
         if (OutputSettings.GENERATE_GENERAL_STATS_FILE) {
             StatisticsUtility.writeResultsStats(resultsTableFolder.toString(), results, kpmSettings.MAIN_GRAPH, params);
         }
@@ -320,5 +302,28 @@ public class KPMRunHandler implements IKPMRunListener {
         System.out.println("-> Saved tables to: " + resultsTableFolder.toString());
 
     }
+
+    private Parameters setValidationFile(Parameters params) throws IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader(params.VALIDATION_FILE));
+        String line;
+
+        List<String> validationList = new ArrayList<String>();
+        while ((line = br.readLine()) != null) {
+            validationList.add(line.trim());
+        }
+        br.close();
+
+        kpmSettings.VALIDATION_GOLDSTANDARD_NODES = validationList;
+
+        return params;
+    }
+
+
+    @Override
+    public void runCancelled(String reason, String runID) {
+        System.out.println("The run was cancelled. \n" + reason);
+    }
+
 
 }

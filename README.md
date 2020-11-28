@@ -67,7 +67,7 @@ Input files format
     -- GRAPH file:  The file containing all the interactions
     of the protein interaction network.  This must be in sif format:
 
-    NODE1   INTERACTION_TYPE   NODE2
+    NODE1   INTERACTION_TYPE   NODE2w
     112 pp 342
     12  pp 342
     ...
