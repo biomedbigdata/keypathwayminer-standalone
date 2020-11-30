@@ -15,10 +15,10 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.mpg.mpiinf.ag1.kpm.main.KPMStrategy;
 import de.mpg.mpiinf.ag1.kpm.main.Parameters;
 import de.mpg.mpiinf.ag1.kpm.main.Program;
 import dk.sdu.kpm.Algo;
-import dk.sdu.kpm.Combine;
 import dk.sdu.kpm.KPMSettings;
 import dk.sdu.kpm.graph.GeneEdge;
 import dk.sdu.kpm.graph.GeneNode;
@@ -40,11 +40,36 @@ public class StatisticsUtility {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
-            bw.write("Gene exceptions (K):\t" + kpmSettings.GENE_EXCEPTIONS + "\n");
+            if (kpmSettings.IS_BATCH_RUN) {
+                if (parameters.STRATEGY == KPMStrategy.INES) {
+                    if (kpmSettings.MIN_K == kpmSettings.MAX_K && kpmSettings.INC_K == 0) {
+                        bw.write("Gene exceptions (K):\t" + kpmSettings.MIN_K + "\n");
+                    } else {
+                        bw.write("Gene exceptions (K):\t" + "{Min: " + kpmSettings.MIN_K + ", Max: "
+                                + kpmSettings.MAX_K + ", Step: " + kpmSettings.INC_K + "}"+"\n");
+                    }
+                }
+                for (String expId : kpmSettings.MIN_L.keySet()) {
+                    if (kpmSettings.MIN_L.get(expId).equals(kpmSettings.MAX_L.get(expId)) && kpmSettings.INC_L.get(expId).equals(0)) {
+                        bw.write(expId + ":\t[Case exceptions (L): " + kpmSettings.MIN_L.get(expId)
+                                + ", Matrix: " + kpmSettings.MATRIX_FILES_MAP.get(expId) + "]" + "\n");
+                    } else {
+                        bw.write(expId + ":\t[Case exceptions (L): " + "{Min: " + kpmSettings.MIN_L.get(expId) + ", Max: "
+                                + kpmSettings.MAX_L.get(expId) + ", Step: " + kpmSettings.INC_L.get(expId) + "}"
+                                + ", Matrix: " + kpmSettings.MATRIX_FILES_MAP.get(expId) + "]" + "\n");
+                    }
 
-            for (String expId : kpmSettings.CASE_EXCEPTIONS_MAP.keySet()) {
-                bw.write(expId + ":\t[Case exceptions (L): " + kpmSettings.CASE_EXCEPTIONS_MAP.get(expId)
-                        + ", Matrix: " + kpmSettings.MATRIX_FILES_MAP.get(expId) + "]" + "\n");
+                }
+            } else {
+                if (parameters.STRATEGY == KPMStrategy.INES) {
+                    bw.write("Gene exceptions (K):\t" + kpmSettings.GENE_EXCEPTIONS + "\n");
+                }
+
+                for (String expId : kpmSettings.CASE_EXCEPTIONS_MAP.keySet()) {
+                    bw.write(expId + ":\t[Case exceptions (L): " + kpmSettings.CASE_EXCEPTIONS_MAP.get(expId)
+                            + ", Matrix: " + kpmSettings.MATRIX_FILES_MAP.get(expId) + "]" + "\n");
+                }
+
             }
             //In case several data sets were combined print information on how the data sets were combined
             if (kpmSettings.MATRIX_FILES_MAP.size() > 1) {
@@ -222,11 +247,14 @@ public class StatisticsUtility {
         System.out.println(">Writing individual pathways files");
         for (IKPMResultItem result : results.getResults()) { // list: order consistent
             System.out.println("\t>Writing individual pathways file for: " + "Pathway-k-" + result.getK() + "-l-" + result.getL());
+
             String nodeFile = dir + params.FILE_SEPARATOR + "pathway-k-" + result.getK() + "-l-" + result.getL()
                     + "-nodes-" + params.SUFFIX + params.FILE_EXTENSION;
+
             nodeFile = checkFileName(nodeFile);
             String edgeFile = dir + params.FILE_SEPARATOR + "pathway-k-" + result.getK() + "-l-" + result.getL()
                     + "-interactions-" + params.SUFFIX + params.FILE_EXTENSION;
+
             edgeFile = checkFileName(edgeFile);
             int i = 0;
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(nodeFile))) {
@@ -492,6 +520,47 @@ public class StatisticsUtility {
 
     }
 
+    public static void writePathwaysStatsFile(String file, IKPMResultSet results, KPMGraph g) {
+        System.out.println(">Writing pathways statistics file");
+        DecimalFormat df = new DecimalFormat("#.###");
+        int size = results.getResults().size();
+        int zeros = (int) Math.floor(Math.log10(size)) + 1;
+        String f = "";
+        for (int i = 1; i <= zeros; i++) {
+            f += "0";
+        }
+        DecimalFormat df2 = new DecimalFormat(f);
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            bw.write("PATHWAY_ID" + "\t");
+            bw.write("k" + "\t");
+            bw.write("l" + "\t");
+            bw.write("# NODES" + "\t");
+            bw.write("# EDGES" + "\t");
+            bw.write("AVG. DIFF. EXP. CASES" + "\t");
+            bw.write("AVG. INFO. CONTENT" + "\n");
+            int j = 0; // Variable encoding Pathway ID
+            for (IKPMResultItem result : results.getResults()) { // List: order consistent
+                int i = 0;
+                for (Map<String, GeneNode> nodeSet : result.getAllComputedNodeSets()) { // List: order consistent
+                    String id = df2.format(j + 1);
+                    List<String[]> edges = g.getEdgesConnecting(nodeSet.values());
+                    bw.write(id + "\t");
+                    bw.write(result.getK() + "\t");
+                    bw.write(result.getL() + "\t");
+                    bw.write(nodeSet.size() + "\t");
+                    bw.write(edges.size() + "\t");
+                    bw.write(df.format(result.getResultsInfoTable()[i][3]) + "\t");
+                    bw.write(df.format(result.getResultsInfoTable()[i][4]) + "\n");
+                    i = i + 1;
+                    j = j + 1;
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+
     public static void printGraphStatistics(KPMGraph g) {
         // Used for statistics...
         System.out.println("NUMBER OF NODES: " + g.getVertexCount());
@@ -544,45 +613,6 @@ public class StatisticsUtility {
 
     }
 
-    public static void writePathwaysStatsFile(String file, IKPMResultSet results, KPMGraph g) {
-        System.out.println(">Writing pathways statistics file");
-        DecimalFormat df = new DecimalFormat("#.###");
-        int size = results.getResults().size();
-        int zeros = (int) Math.floor(Math.log10(size)) + 1;
-        String f = "";
-        for (int i = 1; i <= zeros; i++) {
-            f += "0";
-        }
-        DecimalFormat df2 = new DecimalFormat(f);
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-            bw.write("PATHWAY_ID" + "\t");
-            bw.write("k" + "\t");
-            bw.write("l" + "\t");
-            bw.write("# NODES" + "\t");
-            bw.write("# EDGES" + "\t");
-            bw.write("AVG. DIFF. EXP. CASES" + "\t");
-            bw.write("AVG. INFO. CONTENT" + "\n");
-            int j = 0; // Variable encoding Pathway ID
-            for (IKPMResultItem result : results.getResults()) { // List: order consistent
-                int i = 0;
-                for (Map<String, GeneNode> nodeSet : result.getAllComputedNodeSets()) { // List: order consistent
-                    String id = df2.format(j + 1);
-                    List<String[]> edges = g.getEdgesConnecting(nodeSet.values());
-                    bw.write(id + "\t");
-                    bw.write(result.getK() + "\t");
-                    bw.write(result.getL() + "\t");
-                    bw.write(nodeSet.size() + "\t");
-                    bw.write(edges.size() + "\t");
-                    bw.write(df.format(result.getResultsInfoTable()[i][3]) + "\t");
-                    bw.write(df.format(result.getResultsInfoTable()[i][4]) + "\n");
-                    i = i + 1;
-                    j = j + 1;
-                }
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     private static String checkFileName(String file) {
         String ret = file;

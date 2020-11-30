@@ -4,6 +4,7 @@ import de.mpg.mpiinf.ag1.kpm.main.KPMStrategy;
 import de.mpg.mpiinf.ag1.kpm.main.Parameters;
 import dk.sdu.kpm.KPMSettings;
 import dk.sdu.kpm.graph.KPMGraph;
+
 /*
     Class which checks if all setting provided for the run are valid.
  */
@@ -28,9 +29,10 @@ public class KPMParameterConfigurator {
             System.out.println(prefix + "No graph loaded.");
             return false;
         }
-        //Validity Checks for Batch Run
+        //Validity Checks for the batch run input parameters
         if (kpmSettings.IS_BATCH_RUN) {
             if (strategy == KPMStrategy.INES) {
+                // Checking K's
                 if (kpmSettings.MAX_K <= 0) {
                     System.out.println(prefix + "Invalid MAX_K.");
                     return false;
@@ -40,14 +42,8 @@ public class KPMParameterConfigurator {
                     System.out.println(prefix + "Invalid MIN_K. It is larger than MAX_K.");
                     return false;
                 }
-
-                if (kpmSettings.INC_K == 0) {
+                if (kpmSettings.INC_K == 0 && kpmSettings.MIN_K != kpmSettings.MAX_K) {
                     System.out.println(prefix + "Invalid INC_K. Must be larger than 0.");
-                    return false;
-                }
-
-                if (kpmSettings.MAX_K - kpmSettings.INC_K < kpmSettings.MIN_K) {
-                    System.out.println(prefix + "Invalid INC_K. Incrementation must be in range.");
                     return false;
                 }
             } else {
@@ -65,21 +61,13 @@ public class KPMParameterConfigurator {
                     return false;
                 }
 
-                if (kpmSettings.INC_L.get(internalId) == 0) {
+                if (kpmSettings.INC_L.get(internalId) < 0 && !kpmSettings.MIN_L.get(internalId).equals(kpmSettings.MAX_L.get(internalId))) {
                     System.out.println(prefix + "Invalid INC_L. Must be larger than 0.");
-                    return false;
-                }
-
-                if ((kpmSettings.MAX_L.get(internalId) - kpmSettings.INC_L.get(internalId) < kpmSettings.MIN_L.get(internalId))
-                        && !(kpmSettings.MAX_L.get(internalId).equals(kpmSettings.INC_L.get(internalId))
-                        && kpmSettings.MAX_L.get(internalId).equals(kpmSettings.MIN_L.get(internalId)))) {
-                    // IN case INC_L is not in range and L parameters are not equals
-                    System.out.println(prefix + "Invalid INC_L. Incrementation must be in range.");
                     return false;
                 }
             }
         } else {
-        //Validity Checks for normal Run
+            //Validity Checks for normal Run
             int maxNumberOfGeneExceptions = graph.getNodeIdSet().size();
             if (strategy == KPMStrategy.INES) {
                 if (maxNumberOfGeneExceptions < kpmSettings.GENE_EXCEPTIONS) {

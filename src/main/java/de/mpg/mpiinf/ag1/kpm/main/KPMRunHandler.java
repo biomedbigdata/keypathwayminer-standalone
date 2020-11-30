@@ -6,6 +6,7 @@ import de.mpg.mpiinf.ag1.kpm.utils.Parser;
 import de.mpg.mpiinf.ag1.kpm.utils.StatisticsUtility;
 import de.mpg.mpiinf.ag1.kpm.utils.OutputSettings;
 
+import dk.sdu.kpm.Combine;
 import dk.sdu.kpm.KPMSettings;
 import dk.sdu.kpm.charts.IChart;
 import dk.sdu.kpm.results.IKPMResultSet;
