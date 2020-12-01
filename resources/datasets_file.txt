@@ -1,3 +1,3 @@
-L1	42	resources/datasets/colon-gene-expression-DOWN-p0.05.txt
-L2	13	resources/datasets/huntington-gene-expression-UP.txt
+L1	22	resources/datasets/indicator-matrices/huntington-gene-expression-down-p005.txt
+L2	13	resources/datasets/indicator-matrices/huntington-gene-expression-up-p005.txt
 
