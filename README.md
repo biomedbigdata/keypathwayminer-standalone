@@ -31,7 +31,7 @@ Usage
 =================
    General structure:
       
-    java -jar [jvm options] KPM-5.0.jar [-KEY1=VAL1] .... [-KEYN=VALN] 
+    java -jar [jvm options] KPM-5.jar [-KEY1=VAL1] .... [-KEYN=VALN] 
 
    Simple executions examples:
    
