@@ -5,11 +5,10 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import de.mpg.mpiinf.ag1.kpm.main.KPMStrategy;
 import de.mpg.mpiinf.ag1.kpm.main.Parameters;
-import de.mpg.mpiinf.ag1.kpm.main.Program;
+import de.mpg.mpiinf.ag1.kpm.utils.Program;
 import de.mpg.mpiinf.ag1.kpm.main.Main;
-import de.mpg.mpiinf.ag1.kpm.utils.OutputSettings;
+import de.mpg.mpiinf.ag1.kpm.output.OutputSettings;
 import de.mpg.mpiinf.ag1.kpm.utils.Separator;
 import dk.sdu.kpm.Algo;
 import dk.sdu.kpm.Combine;
@@ -257,6 +256,7 @@ public class ArgsParametersParser {
                 System.setOut(out);
 
                 kpmSettings.MIN_L.put(internalID, l);
+                kpmSettings.VARYING_L_ID.add(internalID);
 
                 id2param.put(internalID, l);
             } else if (options[0].matches("-L[1-9][0-9]*[_]batch")) {
@@ -446,20 +446,50 @@ public class ArgsParametersParser {
 
         //Print dataset paths corresponding to the identifiers of the id2path map
         for (String id : id2path.keySet()) {
-            System.out.println(id + ": " + id2path.get(id));
+            System.out.println(kpmSettings.externalToInternalIDManager.getExternalIdentifier(id) + ": " + id2path.get(id));
         }
 
         // Print all case exception(L) parameters and the corresponding identifier
         for (String identifier : kpmSettings.MIN_L.keySet()) {
             if (kpmSettings.IS_BATCH_RUN) {
                 if (kpmSettings.MIN_L.get(identifier).equals(kpmSettings.MAX_L.get(identifier)) && kpmSettings.INC_L.get(identifier).equals(0)) {
-                    System.out.println(identifier + ":\t" + kpmSettings.MIN_L.get(identifier));
+                    System.out.println(kpmSettings.externalToInternalIDManager.getExternalIdentifier(identifier) + ":\t" + kpmSettings.MIN_L.get(identifier));
                 } else {
-                    System.out.println(identifier + ":\t" + "[Min: " + kpmSettings.MIN_L.get(identifier) + ", Max: "
+                    System.out.println(kpmSettings.externalToInternalIDManager.getExternalIdentifier(identifier) + ":\t" + "[Min: " + kpmSettings.MIN_L.get(identifier) + ", Max: "
                             + kpmSettings.MAX_L.get(identifier) + ", Step: " + kpmSettings.INC_L.get(identifier) + "]");
                 }
             } else {
-                System.out.println(identifier + ":\t" + kpmSettings.MIN_L.get(identifier));
+                System.out.println(kpmSettings.externalToInternalIDManager.getExternalIdentifier(identifier) + ":\t" + kpmSettings.MIN_L.get(identifier));
+            }
+        }
+
+        // Print information on how the datasets will be combined if more than one dataset is used
+        if (kpmSettings.MATRIX_FILES_MAP.size() > 1) {
+            if (kpmSettings.COMBINE_OPERATOR == Combine.CUSTOM) {
+                //TODO  checks for custom formula if. Or just remove try catch in KPM core
+                //If everything goes well print out custom formula
+                System.out.println("Combine Formula: " + kpmSettings.COMBINE_FORMULA);
+            } else {
+                //In case OR or AND operator was selected
+                StringBuilder formula = new StringBuilder("");
+
+                // Getting a Set of Key-value pairs
+                Set<String> keySet = kpmSettings.MATRIX_FILES_MAP.keySet();
+                int numOfVars = keySet.size();
+
+                // Determine operator
+                String operator = ((kpmSettings.COMBINE_OPERATOR == Combine.OR) ? "||" : "&&");
+                for (String indentifier : keySet) {
+                    if (numOfVars == 1) {
+                        //last identifier
+                        formula.append(kpmSettings.externalToInternalIDManager.getExternalIdentifier(indentifier));
+                        break;
+                    }
+                    formula.append(kpmSettings.externalToInternalIDManager.getExternalIdentifier(indentifier)).append(operator);
+                    numOfVars--;
+                }
+                kpmSettings.COMBINE_FORMULA = formula.toString();
+                System.out.println("Combine Formula:\t" + formula);
             }
         }
     }

@@ -1,13 +1,10 @@
 package de.mpg.mpiinf.ag1.kpm.main;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import de.mpg.mpiinf.ag1.kpm.main.KPMAlgorithm;
-import de.mpg.mpiinf.ag1.kpm.main.KPMStrategy;
-import de.mpg.mpiinf.ag1.kpm.main.Program;
 import de.mpg.mpiinf.ag1.kpm.shortestpath.SortShortestPaths;
-import de.mpg.mpiinf.ag1.kpm.utils.Parser;
+import de.mpg.mpiinf.ag1.kpm.parsers.Parser;
+import de.mpg.mpiinf.ag1.kpm.utils.KPMAlgorithm;
+import de.mpg.mpiinf.ag1.kpm.utils.KPMStrategy;
+import de.mpg.mpiinf.ag1.kpm.utils.Program;
 import de.mpg.mpiinf.ag1.kpm.utils.Separator;
 import dk.sdu.kpm.graph.KPMGraph;
 import dk.sdu.kpm.perturbation.IPerturbation;
@@ -17,15 +14,7 @@ public class Parameters {
 	public Parameters() {
 	}
 
-	/* ------ INPUT FILES ------------ */
-
-    /**
-     *     Map storing the paths to the multipe expression files
-     *     NOTE1: The key ID's must be the same as the key ID's in CASE_EXCEPTIONS_MAP
-     *     NOTE2: Will only be used if MULTI == True
-     */
-        public volatile Map<String, String> MATRIX_FILES_MAP = new HashMap<String, String>();
-	
+	    /* ------ INPUT FILES ------------ */
         // Where the graph file is located
         public String GRAPH_FILE = "sampleNetwork.sif";
         

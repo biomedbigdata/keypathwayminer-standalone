@@ -1,8 +1,6 @@
 package de.mpg.mpiinf.ag1.kpm.parsers;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +32,8 @@ public class DatasetsFileParser {
 
             int cols = nextLine.length;
             int row = 1;
+            //To suppress commandline output from KPM-core
+            PrintStream out = System.out;
             if (!hasHeader) {
                 String id = "";
                 String filePath = "";
@@ -47,8 +47,15 @@ public class DatasetsFileParser {
                     lParam = Integer.parseInt(nextLine[1]);
                     filePath = nextLine[2];
                 }
+
+
+                //Add to externalToInternalIdManager
+                System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+                String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
+                System.setOut(out);
+
                 //Check if extracted filepath exists
-                row = checkIfFileExists(row, id, filePath, lParam);
+                row = checkIfFileExists(row, internalID, filePath, lParam);
             }
             while ((nextLine = cr.readNext()) != null) {
                 String id;
@@ -67,8 +74,13 @@ public class DatasetsFileParser {
                     filePath = nextLine[2];
                 }
 
+                //Add to eternalToInternalIdManager
+                System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+                String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
+                System.setOut(out);
+
                 //Check if extracted filepath exists
-                row = checkIfFileExists(row, id, filePath, lParam);
+                row = checkIfFileExists(row, internalID, filePath, lParam);
             }
 
             kpmSettings.CASE_EXCEPTIONS_MAP = id2param;

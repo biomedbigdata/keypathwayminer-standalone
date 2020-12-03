@@ -1,4 +1,4 @@
-package de.mpg.mpiinf.ag1.kpm.utils;
+package de.mpg.mpiinf.ag1.kpm.parsers;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

@@ -1,4 +1,4 @@
-package de.mpg.mpiinf.ag1.kpm.utils;
+package de.mpg.mpiinf.ag1.kpm.output;
 
 public class  OutputSettings {
 	/* ------ OUTPUT FILES ------------ */

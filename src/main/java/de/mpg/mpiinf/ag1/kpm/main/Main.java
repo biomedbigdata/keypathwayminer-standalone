@@ -8,6 +8,7 @@ import de.mpg.mpiinf.ag1.kpm.parsers.ArgsParametersParser;
 import de.mpg.mpiinf.ag1.kpm.parsers.InputFileParser;
 import de.mpg.mpiinf.ag1.kpm.parsers.PropertiesFileParser;
 import de.mpg.mpiinf.ag1.kpm.shortestpath.ShortestPathAlgorithms;
+import de.mpg.mpiinf.ag1.kpm.utils.Program;
 import dk.sdu.kpm.KPMSettings;
 
 /**
@@ -51,17 +52,16 @@ public class Main {
 
         try {
             //Read commandline arguments
-            ArgsParametersParser argsParser = new ArgsParametersParser(kpmSettings);
-            params = argsParser.parse(args, params);
+            ArgsParametersParser argsParser = new ArgsParametersParser(kpmSettings, params);
+            params = argsParser.parse(args);
 
-            //Check if all input files are correct
+            //Check files and set output file names
             InputFileParser ifp = new InputFileParser(kpmSettings);
             params = ifp.parse(params);
 
-            System.out.println("Path to the graph file:\t"+params.GRAPH_FILE);
             //Start KeyPathwayMiner
             if (params.PROGRAM == Program.SP) {
-                System.out.println("PROGRAM SELECTED: Shortest Paths");
+                System.out.println("Program selected: Shortest Paths");
                 ShortestPathAlgorithms.shortestPathways(params.GRAPH_FILE, params);
             } else {
                 KPMRunHandler kpmHandler = new KPMRunHandler(kpmSettings);

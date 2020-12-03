@@ -1,12 +1,13 @@
 package de.mpg.mpiinf.ag1.kpm.main;
 
 import de.mpg.mpiinf.ag1.kpm.parsers.PriorityFileParser;
+import de.mpg.mpiinf.ag1.kpm.utils.KPMAlgorithm;
 import de.mpg.mpiinf.ag1.kpm.utils.KPMStandaloneTaskMonitor;
-import de.mpg.mpiinf.ag1.kpm.utils.Parser;
-import de.mpg.mpiinf.ag1.kpm.utils.StatisticsUtility;
-import de.mpg.mpiinf.ag1.kpm.utils.OutputSettings;
+import de.mpg.mpiinf.ag1.kpm.parsers.Parser;
+import de.mpg.mpiinf.ag1.kpm.output.StatisticsUtility;
+import de.mpg.mpiinf.ag1.kpm.output.OutputSettings;
 
-import dk.sdu.kpm.Combine;
+import de.mpg.mpiinf.ag1.kpm.utils.KPMStrategy;
 import dk.sdu.kpm.KPMSettings;
 import dk.sdu.kpm.charts.IChart;
 import dk.sdu.kpm.results.IKPMResultSet;
@@ -66,7 +67,7 @@ public class KPMRunHandler implements IKPMRunListener {
         // Print dataset statistics
         if (params.PRINT_DATASETS_STATS) {
             System.out.println("--------------\nDATASETS STATS|\n--------------");
-            StatisticsUtility.printMatrixStatistics(params.PARSER, params.INPUT_GRAPH);
+            StatisticsUtility.printMatrixStatistics(params.PARSER, params.INPUT_GRAPH, kpmSettings);
         }
 
         // We set the positive and negative lists of genes in the graph
@@ -264,40 +265,33 @@ public class KPMRunHandler implements IKPMRunListener {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-
+        StatisticsUtility statisticsUtility = new StatisticsUtility(kpmSettings, params, results);
         // Start writing tables
         if (OutputSettings.GENERATE_SUMMARY_FILE) {
-            String resultSummary = resultsTableFolder.toString() + File.separator + OutputSettings.SUMMARY_FILE + params.FILE_EXTENSION;
-            StatisticsUtility.writeSummaryFile(resultSummary, results, kpmSettings, params);
+            statisticsUtility.writeSummaryFile(resultsTableFolder.toString() + File.separator + OutputSettings.SUMMARY_FILE + params.FILE_EXTENSION);
         }
         // Start writing dataset statistics files for every dataset
         if (OutputSettings.GENERATE_DATASETS_STATS_FILE) {
-            String resultDatasetStats = resultsTableFolder.toString() + File.separator + OutputSettings.DATASETS_STATS_FILE + params.FILE_EXTENSION;
-            StatisticsUtility.writeDatasetsStats(resultDatasetStats, params.PARSER, kpmSettings.MAIN_GRAPH);
+            statisticsUtility.writeDatasetsStats(resultsTableFolder.toString() + File.separator + OutputSettings.DATASETS_STATS_FILE + params.FILE_EXTENSION);
         }
-
         // Start writing gene statistics files for every dataset
         if (OutputSettings.GENERATE_GENE_STATS_FILE) {
-            String resultGeneStats = resultsTableFolder.toString() + File.separator + OutputSettings.GENE_STATS_FILE;
-            StatisticsUtility.writeGeneStatsFile(resultGeneStats, results, kpmSettings.MAIN_GRAPH, kpmSettings);
+            statisticsUtility.writeGeneStatsFile(resultsTableFolder.toString() + File.separator + OutputSettings.GENE_STATS_FILE);
         }
 
         // Start writing pathways file which contains node and interactions in one file
         if (OutputSettings.GENERATE_PATHWAYS_FILE) {
-            String resultIndividualPathwaysFile = resultsTableFolder.toString();
-            StatisticsUtility.writeIndividualPathwayFiles(resultIndividualPathwaysFile, results, kpmSettings.MAIN_GRAPH, params);
-            String resultPathwaysFile = resultsTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_FILE;
-            StatisticsUtility.writePathwaysFile(resultPathwaysFile, results, kpmSettings.MAIN_GRAPH, kpmSettings);
+            statisticsUtility.writeIndividualPathwayFiles(resultsTableFolder.toString());
+            statisticsUtility.writePathwaysFile(resultsTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_FILE);
         }
 
         //Start writing pathway statistics file
         if (OutputSettings.GENERATE_PATHWAYS_STATS_FILE) {
-            String resultPathwayStatsFile = resultsTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_STATS_FILE + params.FILE_EXTENSION;
-            StatisticsUtility.writePathwaysStatsFile(resultPathwayStatsFile, results, kpmSettings.MAIN_GRAPH);
+            statisticsUtility.writePathwaysStatsFile(resultsTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_STATS_FILE + params.FILE_EXTENSION);
         }
         //Start writing general statistics file
         if (OutputSettings.GENERATE_GENERAL_STATS_FILE) {
-            StatisticsUtility.writeResultsStats(resultsTableFolder.toString(), results, kpmSettings.MAIN_GRAPH, params);
+            statisticsUtility.writeResultsStats(resultsTableFolder.toString());
         }
 
         System.out.println("-> Saved tables to: " + resultsTableFolder.toString());

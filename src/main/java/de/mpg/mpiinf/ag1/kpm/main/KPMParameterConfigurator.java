@@ -1,7 +1,6 @@
 package de.mpg.mpiinf.ag1.kpm.main;
 
-import de.mpg.mpiinf.ag1.kpm.main.KPMStrategy;
-import de.mpg.mpiinf.ag1.kpm.main.Parameters;
+import de.mpg.mpiinf.ag1.kpm.utils.KPMStrategy;
 import dk.sdu.kpm.KPMSettings;
 import dk.sdu.kpm.graph.KPMGraph;
 
@@ -61,7 +60,7 @@ public class KPMParameterConfigurator {
                     return false;
                 }
 
-                if (kpmSettings.INC_L.get(internalId) < 0 && !kpmSettings.MIN_L.get(internalId).equals(kpmSettings.MAX_L.get(internalId))) {
+                if (kpmSettings.INC_L.get(internalId) == 0 && !kpmSettings.MIN_L.get(internalId).equals(kpmSettings.MAX_L.get(internalId))) {
                     System.out.println(prefix + "Invalid INC_L. Must be larger than 0.");
                     return false;
                 }
