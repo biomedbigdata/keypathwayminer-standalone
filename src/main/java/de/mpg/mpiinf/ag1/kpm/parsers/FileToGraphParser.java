@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.mpg.mpiinf.ag1.kpm.utils;
+package de.mpg.mpiinf.ag1.kpm.parsers;
 
 import de.mpg.mpiinf.ag1.kpm.graph.Edge;
 import de.mpg.mpiinf.ag1.kpm.graph.Node;
@@ -15,9 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

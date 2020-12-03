@@ -22,22 +22,15 @@ public class FloydMarshallAlgorithm {
     private double[][] dist;
  
     private Edge[][] edgeTo;
- 
-    private int n;
- 
-    private int m;
- 
+
     ArrayList<Node> nodeList;
  
     ShortestPathways shortestPaths;
- 
-    private boolean isDirected;
 
     public FloydMarshallAlgorithm(Graph<Node, Edge> g, boolean isDirected) {
         this.g = g;
-        this.isDirected = isDirected;
-        n = g.getVertexCount();
-        m = g.getEdgeCount();
+        int n = g.getVertexCount();
+        int m = g.getEdgeCount();
         dist = new double[n][n];
         edgeTo = new Edge[n][n];
         nodeList = new ArrayList<Node>(g.getVertices());

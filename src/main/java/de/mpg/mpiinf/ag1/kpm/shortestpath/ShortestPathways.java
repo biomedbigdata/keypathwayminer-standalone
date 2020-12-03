@@ -4,11 +4,11 @@
  */
 package de.mpg.mpiinf.ag1.kpm.shortestpath;
 
-import de.mpg.mpiinf.ag1.kpm.Parameters;
+import de.mpg.mpiinf.ag1.kpm.main.Parameters;
 import de.mpg.mpiinf.ag1.kpm.graph.Edge;
 import de.mpg.mpiinf.ag1.kpm.graph.LinearPath;
 import de.mpg.mpiinf.ag1.kpm.graph.Node;
-import de.mpg.mpiinf.ag1.kpm.utils.StatisticsUtility;
+import de.mpg.mpiinf.ag1.kpm.output.StatisticsUtility;
 import edu.uci.ics.jung.graph.util.Pair;
 
 import java.io.BufferedWriter;

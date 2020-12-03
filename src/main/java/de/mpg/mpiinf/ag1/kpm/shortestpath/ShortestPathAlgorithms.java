@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.mpg.mpiinf.ag1.kpm.Parameters;
+import de.mpg.mpiinf.ag1.kpm.main.Parameters;
 import de.mpg.mpiinf.ag1.kpm.graph.Edge;
 import de.mpg.mpiinf.ag1.kpm.graph.LinearPath;
 import de.mpg.mpiinf.ag1.kpm.graph.Node;
-import de.mpg.mpiinf.ag1.kpm.utils.FileToGraphParser;
-import de.mpg.mpiinf.ag1.kpm.utils.StatisticsUtility;
+import de.mpg.mpiinf.ag1.kpm.parsers.FileToGraphParser;
+import de.mpg.mpiinf.ag1.kpm.output.StatisticsUtility;
 import dk.sdu.kpm.KPMSettings;
 import dk.sdu.kpm.graph.GeneEdge;
 import dk.sdu.kpm.graph.GeneNode;
