@@ -1,7 +1,7 @@
 
 Standalone version of KeyPathwayMiner 5.0
 ============
-Given a biological network and a set of case-control studies, KeyPathwayMiner efficiently extracts all maximal connected sub-networks. These sub-networks contain the genes that are mainly dysregulated, e.g., differentially expressed, in most cases studied.
+Given a biological network and a set of case-control studies, KeyPathwayMiner efficiently extracts all maximal connected sub-networks. These sub-networks contain the genes that are mainly dysregulated, e.g., differentially expressed, in most cases studied. Get started by downloading our newest version from [here](https://github.com/baumbachlab/keypathwayminer-standalone/releases/tag/v5.0).
 
 For more information please visit our website [(Key Pathway Miner website)](https://exbio.wzw.tum.de/keypathwayminer/).
 
