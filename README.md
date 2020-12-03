@@ -35,27 +35,27 @@ Usage
 
    Simple executions examples:
    
-    java -jar -Xmx2G KPM-5.0.jar -strategy=INES -algo=GREEDY -K=2 -L1=5
+    java -jar -Xmx2G KPM-5.jar -strategy=INES -algo=GREEDY -K=5 -L1=20 -matrix1=resources/datasets/indicator-matrices/huntington-gene-expression-down-p005.txt
       
-    java -jar KPM-5.0.jar -strategy=GLONE -algo=GREEDY -L1=5
-      
-    java -jar KPM-5.0.jar -strategy=GLONE -algo=ACO -datasetsFile=resources/datasets_file.txt
-
+    java -jar KPM-5.jar -strategy=GLONE -algo=ACO -datasetsFile=resources/datasets_file.txt
+    
    Combine multiple datasets:
    
-    java -jar KPM-5.0.jar -strategy=GLONE -algo=GREEDY -L1=5 -matrix1=resources/datasets/colon-gene-expression-DOWN-p0.05.txt -L2=6 -matrix2=resources/datasets/colon-gene-expression-UP-p0.05.txt
+    java -jar KPM-5.jar -combineOp=AND -strategy=INES -algo=GREEDY -K=0 -L1=15 -L2=16 -matrix1=resources/datasets/indicator-matrices/colon-gene-expression-DOWN-p005.txt  -matrix2=resources/datasets/indicator-matrices/colon-gene-expression-UP-p005.txt    
     
-   Use ranged values with batch:
+    java -jar KPM-5.jar -combineOp=CUSTOM -combineFormula="((L1||L2)&&~L1)" -strategy=INES -algo=GREEDY -K=4 -datasetsFile=resources/datasets_file.txt
+    
+   Use ranged values (batch rum):
    
-    java -jar KPM-5.0.jar -batch  -L1_batch=1,2,3 -L2_batch=1,2,3 -K_batch=1,2,3 -strategy=INES -algo=GREEDY -matrix1=resources/datasets/colon-gene-expression-DOWN-p0.05.txt -matrix2=resources/datasets/colon-gene-expression-UP-p0.05.txt 
+    java -jar KPM-5.jar -batch -L1_batch=14,2,16 -K_batch=5,1,7 -strategy=INES -algo=GREEDY -matrix1=resources/datasets/indicator-matrices/colon-gene-expression-down-p005.txt 
     
    Use perturbation:
    
-    java -jar KPM-5.0.jar -strategy=INES -algo=GREEDY -K=2 -L1=5 -perturbation=10,10,20,1 -perturbationTechnique=nodeswap
+    java -jar KPM-5.jar -strategy=INES -algo=GREEDY -L1=20 -K=5 -perturbation=10,10,50,10 -perturbationTechnique=edgeremove -matrix1=resources/datasets/indicator-matrices/huntington-gene-expression-down-p005.txt -graphFile=resources/sampleNetwork.sif 
         
    For Help:
 
-    java -jar KPM-5.0.jar -help
+    java -jar KPM-5.jar -help
 
    Note: If the input is large and/or complex then the java virtual machine options must be set.
 
@@ -321,12 +321,13 @@ Advanced options
 
      -combineFormula {string}
       The boolean formula used to combine the different datasets. Used
-      only if combineOp == CUSTOM
+      only if combineOp == CUSTOM. The formula must be in quotation marks.
+      e.g.  "((L1||L2)&&~L1)".
 
       Valid operators: 
       && = AND, 
       || = OR, 
-      ! = negation, 
+      ~ = negation, 
       () = parenthesis
 
      -eval {boolean}
@@ -413,7 +414,7 @@ Advanced options
 
      -perturbationTechnique {'edgeremove','edgerewire','nodeswap','noderemove'}
       Perturbation technique:
-        1. edgeremove 
+        1. edgeremove
         2. edgerewire
         3. nodeswap
         4. noderemove

@@ -315,7 +315,7 @@ public class ArgsParametersParser {
             } else if (options[0].equals("-combineOp")) {
                 kpmSettings.COMBINE_OPERATOR = Combine.valueOf(options[1]);
             } else if (options[0].equals("-combineFormula")) {
-                kpmSettings.COMBINE_FORMULA = options[1];
+                kpmSettings.COMBINE_FORMULA = options[1].replace('~','!');
             } else if (options[0].equals("-eval")) {
                 kpmSettings.EVAL = Boolean.parseBoolean(options[1]);
             } else if (options[0].equals("-maxSolutions")) {
