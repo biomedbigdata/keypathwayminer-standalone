@@ -4,6 +4,7 @@
  */
 package de.mpg.mpiinf.ag1.kpm.main;
 
+import de.mpg.mpiinf.ag1.kpm.output.OutputSettings;
 import de.mpg.mpiinf.ag1.kpm.parsers.ArgsParametersParser;
 import de.mpg.mpiinf.ag1.kpm.parsers.InputFileParser;
 import de.mpg.mpiinf.ag1.kpm.parsers.PropertiesFileParser;
@@ -19,7 +20,7 @@ public class Main {
 
     public static void main(String[] args) {
         Main main = new Main();
-        main.run(args);
+        main.runR(args, "resources/","kpm.properties");
     }
 
     //Runner method for calling KeyPathwayMiner
@@ -34,11 +35,12 @@ public class Main {
     }
 
     //Runner method for calling KeyPathwayMiner from R
-    public void runR(String[] args, String datasetFolder, String propertiesFile) {
+    public String runR(String[] args, String datasetFolder, String propertiesFile) {
         System.out.println("********** KEYPATHWAYMINER STANDALONE VERSION 5 VIA R **********");
         System.out.println("Properties file: " + propertiesFile);
         System.out.println("Default datasets from: " + datasetFolder);
         kpm(args, datasetFolder, propertiesFile);
+        return OutputSettings.CURRENT_OUTPUT_FOLDER;
     }
 
     // Prepares objects, parses arguments and runs KeyPathwayMiner

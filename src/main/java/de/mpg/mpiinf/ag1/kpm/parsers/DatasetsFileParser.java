@@ -32,8 +32,6 @@ public class DatasetsFileParser {
 
             int cols = nextLine.length;
             int row = 1;
-            //To suppress commandline output from KPM-core
-            PrintStream out = System.out;
             if (!hasHeader) {
                 String id = "";
                 String filePath = "";
@@ -48,12 +46,7 @@ public class DatasetsFileParser {
                     filePath = nextLine[2];
                 }
 
-
-                //Add to externalToInternalIdManager
-                System.setOut(new PrintStream(OutputStream.nullOutputStream()));
                 String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
-                System.setOut(out);
-
                 //Check if extracted filepath exists
                 row = checkIfFileExists(row, internalID, filePath, lParam);
             }
@@ -74,10 +67,7 @@ public class DatasetsFileParser {
                     filePath = nextLine[2];
                 }
 
-                //Add to eternalToInternalIdManager
-                System.setOut(new PrintStream(OutputStream.nullOutputStream()));
                 String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
-                System.setOut(out);
 
                 //Check if extracted filepath exists
                 row = checkIfFileExists(row, internalID, filePath, lParam);

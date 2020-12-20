@@ -367,7 +367,7 @@ public class StatisticsUtility {
         DecimalFormat df = new DecimalFormat("#.###");
         int size = results.size();
         int zeros = (int) Math.floor(Math.log10(size)) + 1;
-        DecimalFormat df2 = new DecimalFormat("0".repeat(Math.max(0, zeros)));
+        DecimalFormat df2 = new DecimalFormat(String.join("", Collections.nCopies(Math.max(0, zeros), "0")));
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
             bw.write("PATHWAY_ID" + "\t");
@@ -384,11 +384,10 @@ public class StatisticsUtility {
             bw.write("# EDGES" + "\t");
             bw.write("AVG. DIFF. EXP. CASES" + "\t");
             bw.write("AVG. INFO. CONTENT" + "\n");
-            int j = 0; // Variable encoding Pathway ID
             for (BatchResult result : results) { // List: order consistent
                 int i = 0;
                 for (Map<String, GeneNode> nodeSet : result.getAllComputedNodeSets()) { // List: order consistent
-                    String id = df2.format(j + 1);
+                    String id = df2.format(i + 1);
                     List<String[]> edges = graph.getEdgesConnecting(nodeSet.values());
                     bw.write(id + "\t");
                     bw.write(result.getK() + "\t");
@@ -400,7 +399,6 @@ public class StatisticsUtility {
                     bw.write(df.format(result.getResultsInfoTable()[i][3]) + "\t");
                     bw.write(df.format(result.getResultsInfoTable()[i][4]) + "\n");
                     i = i + 1;
-                    j = j + 1;
                 }
             }
         } catch (IOException ex) {
@@ -572,7 +570,7 @@ public class StatisticsUtility {
      * Determines parameter configuration for specific results
      */
     private StringBuilder determineConfiguration(BatchResult result) {
-        StringBuilder configuration = new StringBuilder("k-").append(result.getK()).append("-");
+        StringBuilder configuration = new StringBuilder("K-").append(result.getK()).append("-");
         int numIdentifiers = result.getLmap().size();
 
         for (String identifier : result.getLmap().keySet()) {

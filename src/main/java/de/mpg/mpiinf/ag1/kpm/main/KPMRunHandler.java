@@ -222,6 +222,7 @@ public class KPMRunHandler implements IKPMRunListener {
         }
 
         System.out.println("Results will be saved in: " + currentResultsFolder.toString());
+
         /*
              Saving the charts of the current run if charts were created
          */
@@ -258,6 +259,9 @@ public class KPMRunHandler implements IKPMRunListener {
         System.out.print("--------------\nSAVING TABLES|\n--------------\n");
 
         Path resultsTableFolder = Paths.get(currentResultsFolder + File.separator + "tables");
+
+        // Save path to output folder (Information is need in the R-package)
+        OutputSettings.CURRENT_OUTPUT_FOLDER = resultsTableFolder.toString();
 
         //Create folder to store the tables of the current run
         try {

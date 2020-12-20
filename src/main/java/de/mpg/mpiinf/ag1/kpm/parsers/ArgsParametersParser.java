@@ -141,12 +141,8 @@ public class ArgsParametersParser {
             } else if (options[0].startsWith("-matrix")) {
                 String id = "L" + options[0].substring(7);
                 String path = options[1];
-
-                //Suppress command line output of getOrCreateInternalIdentifier Method
-                PrintStream out = System.out;
-                System.setOut(new PrintStream(OutputStream.nullOutputStream()));
                 String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
-                System.setOut(out);
+
                 id2path.put(internalID, path);
             } else if (options[0].equals("-gfHeader")) {
                 params.GRAPH_FILE_HAS_HEADER = Boolean.parseBoolean(options[1]);
@@ -249,11 +245,8 @@ public class ArgsParametersParser {
             } else if (options[0].startsWith("-L") && !options[0].contains("batch")) {
                 String id = "L" + options[0].substring(2);
                 int l = Integer.parseInt(options[1]);
-                //Suppress command line output of getOrCreateInternalIdentifier Method
-                PrintStream out = System.out;
-                System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+
                 String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
-                System.setOut(out);
 
                 kpmSettings.MIN_L.put(internalID, l);
                 kpmSettings.VARYING_L_ID.add(internalID);
@@ -263,11 +256,7 @@ public class ArgsParametersParser {
                 // If batch option is set assign ranged L value to n th matrix
                 String id = options[0].substring(1, options[0].indexOf('_'));
 
-                //Suppress command line output of getOrCreateInternalIdentifier Method
-                PrintStream out = System.out;
-                System.setOut(new PrintStream(OutputStream.nullOutputStream()));
                 String internalID = kpmSettings.externalToInternalIDManager.getOrCreateInternalIdentifier(id);
-                System.setOut(out);
 
                 String[] values = options[1].split(",");
 

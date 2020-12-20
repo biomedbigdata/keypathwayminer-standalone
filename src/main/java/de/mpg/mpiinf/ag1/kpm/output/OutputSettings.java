@@ -1,7 +1,7 @@
 package de.mpg.mpiinf.ag1.kpm.output;
 
-public class  OutputSettings {
-	/* ------ OUTPUT FILES ------------ */
+public class OutputSettings {
+    /* ------ OUTPUT FILES ------------ */
 
     public static String SUMMARY_FILE = "summary.txt";
 
@@ -14,6 +14,8 @@ public class  OutputSettings {
     public static String DATASETS_STATS_FILE = "datasets_stats.txt";
 
     public static String GENERAL_STATS_FILE = "stats.txt";
+
+    public static String CURRENT_OUTPUT_FOLDER = "";
 
     public static boolean GENERATE_SUMMARY_FILE = true;
 
