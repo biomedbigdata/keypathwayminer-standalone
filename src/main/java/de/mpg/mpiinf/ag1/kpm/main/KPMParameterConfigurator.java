@@ -32,7 +32,7 @@ public class KPMParameterConfigurator {
         if (kpmSettings.IS_BATCH_RUN) {
             if (strategy == KPMStrategy.INES) {
                 // Checking K's
-                if (kpmSettings.MAX_K <= 0) {
+                if (kpmSettings.MAX_K < 0) {
                     System.out.println(prefix + "Invalid MAX_K.");
                     return false;
                 }
@@ -51,7 +51,7 @@ public class KPMParameterConfigurator {
             }
             // Checking L's
             for (String internalId : kpmSettings.MIN_L.keySet()) {
-                if (kpmSettings.MAX_L.get(internalId) <= 0) {
+                if (kpmSettings.MAX_L.get(internalId) < 0) {
                     System.out.println(prefix + "Invalid MAX_L.");
                     return false;
                 }
