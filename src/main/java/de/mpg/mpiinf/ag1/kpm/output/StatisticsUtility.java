@@ -128,7 +128,10 @@ public class StatisticsUtility {
             //TODO: check whether this is actually the best result aka. if resultList is ordered
             IKPMResultItem best = results.get(0);
             bw.write("Size of the best result:\t" + best.getResultsInfoTable()[0][2] + "\n");
+
+
             bw.close();
+
         } catch (IOException ex) {
             Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -193,19 +196,6 @@ public class StatisticsUtility {
         System.out.println(">Writing gene statistics files");
         DecimalFormat df = new DecimalFormat("#.00");
         boolean isInes = parameters.STRATEGY == KPMStrategy.INES;
-//        try {
-//            //legacy code
-//            /*Map<String, Integer> nodeCount = new HashMap<String, Integer>();
-//            for (IKPMResultItem result : results.getResults()) {
-//                //TODO:  unionNode set
-//                for (String nodeId : result.getUnionNodeSet().keySet()) {
-//                    if (!nodeCount.containsKey(nodeId)) {
-//                        nodeCount.put(nodeId, 1);
-//                    } else {
-//                        nodeCount.put(nodeId, nodeCount.get(nodeId) + 1);
-//                    }
-//                }
-//            }*/
 
         //Writing all in one file
         BatchResult result = results.get(0);
@@ -243,46 +233,6 @@ public class StatisticsUtility {
         } catch (IOException ex) {
             Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-//        for (BatchResult result : results) {
-//            StringBuilder configuration = determineConfiguration(result);
-//            try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName + ".txt"))) {
-//                System.out.println("\t>Writing gene statistics file for: " + configuration);
-//                bw.write("ID" + "\t");
-//                bw.write("# PATHWAYS CONTAINING" + "\t");
-//                bw.write("AVG. DIFF. EXP. CASES" + "\t");
-//                bw.write("DEGREE");
-//                if (isInes) bw.write("\t" + "IS EXCEPTION?");
-//                bw.newLine();
-//
-//                for (GeneNode node : graph.getVertices()) {
-//                    String nodeId = node.getNodeId();
-//                    bw.write(nodeId + "\t");
-//
-//                    if (result.getUnionNodeSetCounts().containsKey(nodeId)) {
-//                        bw.write(result.getUnionNodeSetCounts().get(nodeId) + "\t");
-//                    } else {
-//                        bw.write("0" + "\t");
-//                    }
-//
-//                    if (node.getAverageExpressedCases() != 0) {
-//                        bw.write(df.format(node.getAverageExpressedCases()) + "\t");
-//                    } else {
-//                        bw.write(0 + "\t");
-//                    }
-//
-//                    bw.write(String.valueOf(graph.degree(node)));
-//                    if (isInes) {
-//                        bw.write("\t" + String.valueOf(!node.isValid()));
-//                    }
-//                    bw.write("\n");
-//                }
-//            } catch (IOException ex) {
-//                Logger.getLogger(StatisticsUtility.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//
-//        }
     }
 
 
@@ -689,7 +639,6 @@ public class StatisticsUtility {
      * Prints the results of the ACO algorithm into a file.
      */
     public static void writeResultsToFile2(String fileout, List<Result> results, KPMGraph g, KPMSettings kpmSettings) {
-
         try {
             FileOutputStream fos = new FileOutputStream(fileout, true);
             DataOutputStream dos = new DataOutputStream(fos);

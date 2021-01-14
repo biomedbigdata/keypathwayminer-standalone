@@ -198,11 +198,14 @@ public class KPMRunHandler implements IKPMRunListener {
     @Override
     public void runFinished(IKPMResultSet results) {
         System.out.println("\n********** SAVING RESULTS **********");
-        //Check if path for the RESULT_FOLDER was provided
-        if (params.RESULTS_FOLDER.isEmpty()) {
-            System.out.println("-> Name for the results folder is empty.\nSaving results process is aborted");
-            return;
-        }
+        // IF at leas one pathway was extracted proceed to save results
+        // Else finish run
+        if (results.getResults().size() >= 1){
+            //Check if path for the RESULT_FOLDER was provided
+            if (params.RESULTS_FOLDER.isEmpty()) {
+                System.out.println("-> Name for the results folder is empty.\nSaving results process is aborted");
+                return;
+            }
         //Create results folder if folder does not already exist
         try {
             Files.createDirectories(Paths.get(params.RESULTS_FOLDER));
@@ -239,7 +242,6 @@ public class KPMRunHandler implements IKPMRunListener {
             int chartNumber = 0;
             for (IChart chart : results.getCharts().values()) {
                 String chartFileName = resultsChartsFolder.toString() + File.separator + String.format("chart%d.png", chartNumber);
-                //System.out.println(chartFileName);
                 File chartsFile = new File(chartFileName);
                 try {
                     chart.saveAsPng(chartsFile, 1600, 1200);
@@ -288,7 +290,6 @@ public class KPMRunHandler implements IKPMRunListener {
             statisticsUtility.writeIndividualPathwayFiles(resultsTableFolder.toString());
             statisticsUtility.writePathwaysFile(resultsTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_FILE);
         }
-
         //Start writing pathway statistics file
         if (OutputSettings.GENERATE_PATHWAYS_STATS_FILE) {
             statisticsUtility.writePathwaysStatsFile(resultsTableFolder.toString() + File.separator + OutputSettings.PATHWAYS_STATS_FILE + params.FILE_EXTENSION);
@@ -299,6 +300,9 @@ public class KPMRunHandler implements IKPMRunListener {
         }
 
         System.out.println("-> Saved tables to: " + resultsTableFolder.toString());
+        }else{
+            System.out.println("No results found. Finishing run.");
+        }
 
     }
 
