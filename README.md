@@ -437,3 +437,11 @@ Advanced options
         INC_L: Integer, how l should be increased within the range
         MAX_L: Integer, the maximum l value, i.e. the upper limit of the range
      Example:  -L1_batch=1,2,3 -L2_batch=1,2,3
+
+### Advanced options for execution
+     -processors {integer or MAX}
+          Number of cores/processors used for parallel computing.
+          Can take values between 1 and MAX (where MAX equals the maximum
+          number of available threads in the system. In case value is numeric
+          and larger than MAX, then it will default to MAX.
+    

@@ -54,6 +54,8 @@ public class ArgsParametersParser {
     public Parameters parse(String[] args) throws Exception {
         //Read command line arguments
         parseParameters(args, parameters);
+        // Number of processors used
+        System.out.println("Processors used: " + kpmSettings.NUMBER_OF_PROCESSORS+"/"+Runtime.getRuntime().availableProcessors());
 
         if (parameters.PROGRAM == Program.SP) {
             // do nothing
@@ -263,7 +265,6 @@ public class ArgsParametersParser {
                 if (values.length != 3) {
                     throw new Exception("Invalid settings for " + options[0]);
                 }
-
                 kpmSettings.MIN_L.put(internalID, Integer.parseInt(values[0]));
                 kpmSettings.INC_L.put(internalID, Integer.parseInt(values[1]));
                 kpmSettings.MAX_L.put(internalID, Integer.parseInt(values[2]));
@@ -304,7 +305,7 @@ public class ArgsParametersParser {
             } else if (options[0].equals("-combineOp")) {
                 kpmSettings.COMBINE_OPERATOR = Combine.valueOf(options[1]);
             } else if (options[0].equals("-combineFormula")) {
-                kpmSettings.COMBINE_FORMULA = options[1].replace('~','!');
+                kpmSettings.COMBINE_FORMULA = options[1].replace('~', '!');
             } else if (options[0].equals("-eval")) {
                 kpmSettings.EVAL = Boolean.parseBoolean(options[1]);
             } else if (options[0].equals("-maxSolutions")) {
@@ -403,6 +404,18 @@ public class ArgsParametersParser {
                 }
 
                 System.out.println("Perturbation technique: " + params.PERTURBATION.getName());
+            } else if (options[0].equals("-processors")) {
+                // Number of the processors to be used in the current run
+                // Maximal number of available processors
+                int max = Runtime.getRuntime().availableProcessors();
+                if (options[1].equals("MAX")) {
+                    kpmSettings.NUMBER_OF_PROCESSORS = max;
+                } else {
+                    int val = Integer.parseInt(options[1]);
+                    if (val > max) {
+                        kpmSettings.NUMBER_OF_PROCESSORS = max;
+                    } else kpmSettings.NUMBER_OF_PROCESSORS = Math.max(val, 1);
+                }
             } else if (options[0].equals("-help")) {
                 printHelp();
                 System.exit(0);
