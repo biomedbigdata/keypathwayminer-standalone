@@ -2,14 +2,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kpm.library.version>5.0.0.001</kpm.library.version>
+        <kpm.library.version>5.1</kpm.library.version>
 
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.mpg.mpiinf</groupId>
     <artifactId>KPM</artifactId>
-    <version>5</version>
+    <version>5.1</version>
     <name>KPMStandalone</name>
     <description>Standalone for KPM</description>
     <url>http://maven.apache.org</url>
