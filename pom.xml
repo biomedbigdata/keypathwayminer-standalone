@@ -180,7 +180,7 @@
         <dependency>
             <groupId>com.github.baumbachlab</groupId>
             <artifactId>keypathwayminer-core</artifactId>
-            <version>standalone-support</version>
+            <version>standalone-support-5.1</version>
         </dependency>
 
     </dependencies>
