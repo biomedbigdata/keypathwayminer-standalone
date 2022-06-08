@@ -8,7 +8,7 @@ For more information please visit our website [(Key Pathway Miner website)](http
 About
 =================
     KeyPathwayMiner version 5.1
-    Copyright 2016 by
+    Copyright 2022 by
     Nicolas Alcaraz: nalcaraz@binf.ku.dk 
     Jan Baumbach: jan.baumbach@wzw.tum.de
     Markus List: markus.list@wzw.tum.de
